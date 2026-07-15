@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arkansas Charter Schools — K-12 enrollment</title>
+<style>
+  :root {
+    --surface-1:      #fcfcfb;
+    --page-plane:     #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --border:         rgba(11,11,11,0.44);
+    --link:           #2a78d6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface-1:      #1a1a19;
+      --page-plane:     #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --border:         rgba(255,255,255,0.33);
+      --link:           #3987e5;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--page-plane);
+    color: var(--text-primary);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  /* Same override school-districts.html uses and for the same reason -- a
+     multi-column table reads better without the ~880px prose-width
+     constraint every other (non-table) view uses. Widened from an
+     earlier 960px once the table grew from 5 to 8 columns (3 new
+     year-over-year columns + EFA-era change) -- re-measured rather than
+     left at the old value, per this project's own established discipline
+     of confirming table width rather than assuming a prior number still
+     fits. Re-measured again after the Enrollment header grew to
+     "Enrollment (2025-26)" (moving the year out of every cell and into
+     the header once) -- counterintuitively, that made the table WIDER,
+     not narrower: the header text is now the actual width driver for
+     that column, same reason school-districts.html's own header-width comment
+     already documents for its columns, so shorter cell values didn't
+     translate into a shorter column. Table content measures ~1171px at
+     this column count; 1260px gives real headroom (this project's own
+     stated bar is "comfortably fits," not razor-tight -- an
+     exactly-fitted number was tried and rejected once already for this
+     same page). Below the width this needs, the same overflow-x:auto on
+     .viz-root below contains the scroll, same as every other table view
+     in this project. */
+  .page { max-width: 1260px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  h1 { font-size: 22px; font-weight: 600; margin: 0 0 6px; }
+  .subtitle { color: var(--text-secondary); margin: 0 0 28px; max-width: 60ch; }
+
+  .view-nav { font-size: 13px; color: var(--text-muted); margin: 0 0 18px; }
+  .view-nav a { color: var(--link); }
+  .view-nav .current { color: var(--text-primary); font-weight: 600; }
+
+  .viz-root {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 24px 16px;
+    overflow-x: auto;
+  }
+
+  /* Same convention as every other view's persistent note -- explains
+     the Trajectory sparkline and, per shared.js's GLOSSARY comment, the
+     YoY change column's definition (also applied as that header's own
+     hover tooltip; keep in sync if either changes). */
+  .table-note {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin: 10px 0 0;
+    max-width: 68ch;
+  }
+
+  /* Table chrome copied verbatim from school-districts.html's own rules --
+     same sortable-header/active-column/visually-hidden conventions, not
+     a parallel reimplementation of them. See that file for the full
+     design writeup on each piece (the fixed-width sort-arrow slot, the
+     text-shadow-not-font-weight active-column emphasis, etc.). */
+  table.charter-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  table.charter-table th, table.charter-table td {
+    text-align: center;
+    padding: 5px 7px;
+    border-bottom: 1px solid var(--gridline);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  table.charter-table th:first-child, table.charter-table td:first-child {
+    text-align: left;
+    font-variant-numeric: normal;
+  }
+  table.charter-table th {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    user-select: none;
+  }
+  table.charter-table th:hover { color: var(--text-primary); }
+  table.charter-table th:focus-visible { outline: 2px solid var(--link); outline-offset: -2px; }
+  table.charter-table th .sort-arrow {
+    display: inline-block;
+    width: 12px;
+    margin-left: 3px;
+    text-align: center;
+    opacity: 0.35;
+  }
+  table.charter-table th .sort-arrow.active { opacity: 1; }
+
+  /* Trajectory is the one non-sortable header, same reasoning as
+     school-districts.html's own Trajectory column (a sparkline has no
+     derivable sort order a reader could predict from the header alone). */
+  table.charter-table th.col-header-static {
+    cursor: default;
+  }
+  table.charter-table th.col-header-static:hover { color: var(--text-muted); }
+
+  table.charter-table th.col-sorted {
+    color: var(--text-primary);
+    text-shadow: 0 0 0.6px currentColor, 0 0 0.6px currentColor;
+  }
+  table.charter-table td.col-sorted {
+    background: var(--page-plane);
+  }
+
+  .cell-trajectory {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+  .spark-svg { display: block; overflow: visible; }
+  .spark-line {
+    fill: none;
+    stroke-width: 1.3;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  /* Notes column -- a single-mark icon (multiCampusIcon(), charter-
+     schools.js), not the district data table's 3-icon set: charters only
+     ever have ONE possible caveat (a multi-campus network's enrollment
+     being network-wide, not per-campus), so a small icon set built to
+     distinguish three DIFFERENT caveat types would solve a problem that
+     doesn't exist here -- but the ONE mark that does exist uses the same
+     visual family (14x14, currentColor, mark-icon class) and the same
+     hover-target/accessibility wrapper (.mark-hit, makeCaveatsMark() in
+     shared.js) the district table's three marks already established,
+     not a one-off. Genuinely empty (no icon, no dash) for a
+     single-campus charter, matching that same precedent. Full detail
+     (which other campuses) lives in the mark's own title + the cell's
+     visually-hidden span, same hover/keyboard/screen-reader split every
+     other cell-level detail in this project uses. */
+  td.cell-notes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Copied verbatim from school-districts.html's own .mark-hit/.mark-icon
+     rules -- same hit-target-padding fix (the visual mark is only 14px;
+     without this wrapper's own padding, a real mouse aiming "at" it
+     often lands a pixel or two off and falls through to the cell's
+     combined title instead of the mark's own), same currentColor
+     tracking so the icon follows var(--text-primary) automatically in
+     both themes with no separate dark-mode override needed. */
+  .mark-hit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2px;
+  }
+  .mark-icon {
+    display: block;
+    color: var(--text-primary);
+    flex: none;
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .meta-links { margin-top: 28px; font-size: 13px; color: var(--text-muted); }
+  .meta-links a { color: var(--text-secondary); }
+</style>
+</head>
+<body>
+  <div class="page">
+    <nav class="view-nav">
+      <a href="index.html">Overview</a> · <a href="statewide.html">Statewide Trend</a> · <a href="map.html">Map</a> · <a href="district-rankings.html">District Rankings</a> · <a href="school-districts.html">School Districts</a> · <span class="current">Charter Schools</span> · <a href="find-a-district.html">Find a District</a>
+    </nav>
+    <h1>Arkansas Charter Schools</h1>
+    <p class="subtitle">
+      All 22 of Arkansas's public charter school systems (LEAs) with SIS enrollment data, sortable
+      by column except Trajectory (a visual, not a value to rank by). This is a simpler table than
+      the district views on purpose — charters aren't classified by trajectory shape or split into
+      baseline/EFA eras the way districts are; most have far less history to classify from in the
+      first place. The year-over-year and EFA-era change columns cover only the EFA era itself
+      (2022-23 onward), each charter measured from its own first year of data within that era —
+      which for the newest charters is later than 2022-23. One map point is deliberately absent
+      here: Imboden Charter operates as its own school district and gets full treatment in the
+      district views instead.
+    </p>
+
+    <div class="viz-root">
+      <table class="charter-table" id="charter-table">
+        <thead>
+          <tr id="table-head-row"></tr>
+        </thead>
+        <tbody id="charter-table-body"></tbody>
+      </table>
+      <!-- charterEfaEraChange wording matches shared.js's
+           GLOSSARY.charterEfaEraChange (also applied as that header's own
+           hover tooltip, see charter-schools.js's renderHead()) -- keep
+           in sync if either changes. -->
+      <p class="table-note">
+        Trajectory sparklines cover each charter's own full available history — as short as 2
+        years for a charter that opened in 2024-25, up to all 13 years for the longest-running ones;
+        a short line is the real available window, not an error. The three year-over-year columns
+        each cover one adjacent pair of EFA-era years; a charter that opened mid-era shows "—" in
+        columns predating its own data — hover or focus a "—" cell for its opening year. EFA-era
+        change is the cumulative percent change from each charter's own first available EFA-era year
+        to its most recent year — unlike the district views' EFA change, which is anchored at
+        2022-23 for every district uniformly; neither figure is a CAGR. Where a charter has only one
+        year-over-year comparison, its EFA-era change rests on that single pair — hover or focus the
+        cell for a note when this applies. A mark in the Notes column means the charter operates more
+        than one campus and the enrollment shown is network-wide — hover or focus the mark for the
+        other campuses.
+      </p>
+    </div>
+
+    <p class="meta-links">
+      Data sources, era definitions, and known limitations: <a href="methodology.html">Methodology</a>.
+    </p>
+  </div>
+
+  <script type="module" src="charter-schools.js"></script>
+</body>
+</html>

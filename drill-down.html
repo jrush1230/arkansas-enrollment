@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>District Detail — Arkansas K-12 enrollment</title>
+<style>
+  :root {
+    --surface-1:      #fcfcfb;
+    --page-plane:     #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --baseline-axis:  #c3c2b7;
+    --border:         rgba(11,11,11,0.44);
+    --link:           #2a78d6;
+    --band-covid:     rgba(208, 59, 59, 0.08);
+    --band-efa:       rgba(27, 175, 122, 0.09);
+    --seam:           #52514e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface-1:      #1a1a19;
+      --page-plane:     #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --baseline-axis:  #383835;
+      --border:         rgba(255,255,255,0.33);
+      --link:           #3987e5;
+      --band-covid:     rgba(230, 103, 103, 0.10);
+      --band-efa:       rgba(25, 158, 112, 0.12);
+      --seam:           #c3c2b7;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--page-plane);
+    color: var(--text-primary);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  .page { max-width: 880px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  h1 { font-size: 22px; font-weight: 600; margin: 0 0 6px; }
+
+  .view-nav { font-size: 13px; color: var(--text-muted); margin: 0 0 18px; }
+  .view-nav a { color: var(--link); }
+  .view-nav .current { color: var(--text-primary); font-weight: 600; }
+
+  .viz-root {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 24px 16px;
+  }
+
+  /* --- identity row: swatch + typology label + boundary badge --- */
+  .identity-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 0 0 18px;
+  }
+  .identity-swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+  .identity-typology { font-size: 14px; font-weight: 600; }
+  .caveat-badge {
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--page-plane);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 2px 8px;
+    white-space: nowrap;
+  }
+
+  /* --- chart (same conventions as the statewide line) --- */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 0 0 18px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .legend-item { display: flex; align-items: center; gap: 7px; }
+  .legend-swatch { width: 11px; height: 11px; border-radius: 3px; flex: none; }
+  .legend-swatch.baseline { background: var(--surface-1); border: 1px solid var(--baseline-axis); }
+  .legend-swatch.covid { background: var(--band-covid); border: 1px solid rgba(208,59,59,0.35); }
+  .legend-swatch.efa { background: var(--band-efa); border: 1px solid rgba(27,175,122,0.35); }
+  .legend-swatch.seam { background: none; border: none; position: relative; }
+  .legend-swatch.seam::before {
+    content: "";
+    position: absolute; left: 50%; top: 0; bottom: 0; width: 0;
+    border-left: 2px dashed var(--seam);
+  }
+
+  svg.chart { width: 100%; height: auto; display: block; overflow: visible; }
+  .axis-label { fill: var(--text-muted); font-size: 11px; }
+  .band-label { fill: var(--text-muted); font-size: 11px; }
+  .gridline { stroke: var(--gridline); stroke-width: 1; }
+  .baseline-rule { stroke: var(--baseline-axis); stroke-width: 1; }
+  .line-mark { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .line-mark.pre-merger { stroke-dasharray: 4 3; opacity: 0.55; }
+  .end-dot { stroke: var(--surface-1); stroke-width: 2; }
+  .end-label { fill: var(--text-primary); font-size: 13px; font-weight: 600; }
+  .seam-line { stroke: var(--seam); stroke-width: 1.5; stroke-dasharray: 4 3; }
+  .seam-label { fill: var(--text-secondary); font-size: 10.5px; }
+  .hit-point { fill: transparent; cursor: pointer; }
+  .hit-point:focus { outline: none; }
+  .crosshair { stroke: var(--baseline-axis); stroke-width: 1; pointer-events: none; opacity: 0; }
+  .hover-dot { stroke: var(--surface-1); stroke-width: 2; pointer-events: none; opacity: 0; }
+
+  .tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12.5px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    opacity: 0;
+    transition: opacity 80ms ease;
+    white-space: nowrap;
+  }
+  .tooltip .t-year { color: var(--text-secondary); margin-bottom: 2px; }
+  .tooltip .t-value { color: var(--text-primary); font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .tooltip .t-era { color: var(--text-muted); margin-top: 2px; }
+
+  /* --- key stats: fixed 5-column single row, centered under each
+     heading (was auto-fill-wrapping stacked list; always exactly 5
+     cells now that reversal_magnitude moved to the identity row, so a
+     fixed 5-column grid is correct rather than auto-fill). Narrow
+     breakpoint below. */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px 8px;
+    margin: 22px 0 0;
+    padding: 0;
+  }
+  .stat { margin: 0; text-align: center; }
+  .stat dt {
+    color: var(--text-muted);
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin: 0 0 3px;
+  }
+  .stat dd {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  /* Below this, 5 equal columns crush both the uppercase labels (several
+     wrap mid-word, e.g. "COVID" / "RECOVERY" splitting) and the CAGR
+     values ("+2.8%/yr" clipping) -- confirmed by rendering at 375px, not
+     assumed. Two rows of ~2-3 reads cleanly at that width with room to
+     spare, so this wraps rather than shrinking text further (10.5px
+     labels are already near the floor for legibility) or introducing
+     horizontal scroll (all 5 values are meant to be seen together, not
+     panned through one at a time). */
+  @media (max-width: 480px) {
+    .stat-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px 8px;
+    }
+  }
+  /* Same convention as the other views' .table-note -- persistent,
+     always-visible definitions for the 5 stat-row terms above (the
+     Notes-column-style hover tooltip on each dt reaches mouse/keyboard/
+     screen-reader users; this reaches anyone else, e.g. a screenshot or
+     a touch device with no hover). */
+  .stat-note {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin: 8px 0 0;
+    max-width: 68ch;
+  }
+
+  /* --- summary + boundary note --- */
+  /* Tightened from 20px to 6px top margin now that this sits right after
+     .identity-row (which has its own 18px bottom margin) instead of
+     after the chart/key-stats block -- the point of moving it up was
+     visual adjacency to the category name it explains, so the gap here
+     needs to read as "together," not just "nearby." Bottom margin added
+     so the legend/chart below still has clear separation. */
+  .summary-text {
+    margin: 6px 0 18px;
+    font-size: 14.5px;
+    max-width: 68ch;
+  }
+  .boundary-note {
+    color: var(--text-secondary);
+    font-size: 13px;
+    background: var(--page-plane);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin: 14px 0 0;
+    max-width: 68ch;
+  }
+
+  /* --- error state --- */
+  .error-state { max-width: 60ch; }
+  .error-state h2 { font-size: 17px; margin: 0 0 8px; }
+  .error-state p { color: var(--text-secondary); }
+
+  /* Same convention as school-districts.html's own .visually-hidden -- carries
+     glossary definition text (attachGlossaryNote(), shared.js) for
+     keyboard/screen-reader users on the stat-row dt's above, invisible
+     but present for assistive tech, not display:none (which would remove
+     it from the accessible tree entirely). */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .meta-links { margin-top: 28px; font-size: 13px; color: var(--text-muted); }
+  .meta-links a { color: var(--text-secondary); }
+</style>
+</head>
+<body>
+  <div class="page">
+    <nav class="view-nav">
+      <a href="index.html">Overview</a> · <a href="statewide.html">Statewide Trend</a> · <a href="map.html">Map</a> · <a href="district-rankings.html">District Rankings</a> · <a href="school-districts.html">School Districts</a> · <a href="charter-schools.html">Charter Schools</a> · <a href="find-a-district.html">Find a District</a>
+    </nav>
+    <h1 id="page-title">District Detail</h1>
+
+    <div id="content-root"></div>
+
+    <p class="meta-links">
+      Data sources, era definitions, and known limitations: <a href="methodology.html">Methodology</a>.
+    </p>
+  </div>
+
+  <script type="module" src="drill-down.js"></script>
+</body>
+</html>

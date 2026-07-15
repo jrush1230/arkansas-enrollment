@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methodology — Arkansas K-12 enrollment</title>
+<style>
+  :root {
+    --surface-1:      #fcfcfb;
+    --page-plane:     #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --border:         rgba(11,11,11,0.44);
+    --link:           #2a78d6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface-1:      #1a1a19;
+      --page-plane:     #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --border:         rgba(255,255,255,0.33);
+      --link:           #3987e5;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--page-plane);
+    color: var(--text-primary);
+    font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  /* Same narrow 720px width index.html and find-a-district.html use (not
+     the 880px chart views use) -- this page is long-form prose, and the
+     landing page's own reading width is the established convention for
+     prose-first pages on this site. */
+  .page { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .view-nav { font-size: 13px; color: var(--text-muted); margin: 0 0 18px; }
+  .view-nav a { color: var(--link); }
+
+  h1 { font-size: 26px; font-weight: 700; margin: 0 0 14px; line-height: 1.25; }
+  .lede { font-size: 17px; font-weight: 600; color: var(--text-primary); margin: 0 0 16px; }
+  p { margin: 0 0 16px; color: var(--text-secondary); }
+  p a, li a { color: var(--link); }
+  strong { color: var(--text-primary); }
+
+  /* Section headings: same muted-uppercase treatment index.html's own h2
+     sections use, so this reads as the same site, not a new document
+     style. */
+  h2 {
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
+    margin: 36px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--gridline);
+  }
+
+  ul { margin: 0 0 16px; padding-left: 22px; color: var(--text-secondary); }
+  li { margin: 0 0 8px; }
+
+  /* Same bordered-panel treatment index.html's "can't tell" box uses,
+     reused here for the closing pointer to the technical version. */
+  .technical-pointer {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 36px;
+  }
+  .technical-pointer p { margin: 0; color: var(--text-secondary); }
+
+  .meta-links { margin-top: 28px; font-size: 13px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+  <div class="page">
+    <nav class="view-nav">
+      <a href="index.html">Overview</a> · <a href="statewide.html">Statewide Trend</a> · <a href="map.html">Map</a> · <a href="district-rankings.html">District Rankings</a> · <a href="school-districts.html">School Districts</a> · <a href="charter-schools.html">Charter Schools</a> · <a href="find-a-district.html">Find a District</a>
+    </nav>
+
+    <h1>Methodology</h1>
+
+    <p class="lede">
+      How the numbers in this tool were put together — and how much to trust them.
+    </p>
+
+    <h2>Where the enrollment numbers come from</h2>
+
+    <p>
+      Every enrollment figure in this tool comes from one source: the <strong>Arkansas
+      Department of Education's own student data system</strong> (the Statewide Information
+      System, or SIS), as published in the state's public enrollment reports. We use the number
+      the state itself publishes and treats as the official enrollment count for each district
+      and each charter school system, for every school year from 2013–14 through 2025–26.
+    </p>
+    <p>
+      We should be upfront about one thing: <strong>we have not independently verified how
+      Arkansas computes this number internally</strong>, and the state's own labeling is not a
+      reliable guide. One ADE report that carries this figure is titled as an "October 1"
+      enrollment count, but our testing found it is identical — to the student — to a figure
+      that behaves like an <em>average</em> of enrollment over part of the year, not a
+      single-day headcount. What we can say with confidence:
+    </p>
+    <ul>
+      <li>It is <strong>not</strong> a single-day fall headcount of the kind the federal
+      government publishes (see the next section) — it consistently runs a few percent below
+      that kind of count.</li>
+      <li>It closely tracks (within about 1%) the state's "average daily membership" figure for
+      the first quarter of the school year, but it is not exactly equal to it, and we do not
+      know its precise day-to-day definition.</li>
+      <li>It <strong>reconciles exactly</strong> with the statewide totals Arkansas publishes.
+      For every one of the thirteen years shown, the sum of every entity in this tool's data
+      matches the state's own published statewide enrollment count <strong>to the
+      student</strong> (see "What has been verified" below).</li>
+    </ul>
+    <p>
+      We chose this number because it is what Arkansas itself publishes and stands behind — not
+      because we have audited its internal computation.
+    </p>
+
+    <h2>Why we use the state's numbers instead of the federal ones</h2>
+
+    <p>
+      There is a second candidate source: the U.S. Department of Education's Common Core of
+      Data (CCD), which publishes a fall headcount for every district in the country. We
+      compared the two, district by district, for every overlapping year. The federal count
+      runs consistently about 3.5–4% <strong>higher</strong> than the state's figure — every
+      year, in a stable and predictable way. (One year, 2023–24, the two nearly converge; we
+      found no explanation for that anomaly and flag it as unresolved.)
+    </p>
+    <p>
+      This gap is not an error in either source. They measure different things: the federal
+      number is a snapshot of who is enrolled on a single day in the fall; the state number
+      behaves like membership measured over time, which runs lower whenever students leave
+      during the year. But it does mean the two cannot be mixed in one time series without a
+      hidden few-percent jump wherever the sources switch. We tried two hybrid designs, found
+      both baked that bias into long-term trend measurements, and abandoned them in favor of
+      using the state source alone.
+    </p>
+    <p>
+      Two practical points also favored the state data. First, it matches what Arkansans
+      actually see: the state's published district figures and news coverage of them agree with
+      our numbers exactly (for example, Springdale's 21,097 and Little Rock's 18,964 for
+      2025–26). Second, the federal file simply lost track of two real, continuously operating
+      Arkansas districts (Cross County, and the Imboden Charter district), while the state data
+      covers both without interruption.
+    </p>
+
+    <h2>The three eras</h2>
+
+    <p>The tool divides 2013–2026 into three eras, shaded on every chart:</p>
+    <ul>
+      <li><strong>Baseline</strong> — school years 2013–14 through 2019–20. Ordinary
+      pre-pandemic conditions; the "compared to what" for everything after.</li>
+      <li><strong>COVID shock</strong> — 2020–21 and 2021–22. Statewide enrollment dropped
+      sharply in fall 2020 and had only partly rebounded by fall 2021.</li>
+      <li><strong>EFA era</strong> — 2022–23 onward. Named for Education Freedom Accounts, the
+      education savings account program created by the LEARNS Act, which Governor Sanders
+      signed on <strong>March 8, 2023</strong> (Act 237 of 2023).</li>
+    </ul>
+    <p>
+      One timing detail worth being precise about: the EFA era starts with the <strong>2022–23
+      school year — the year during which the LEARNS Act was passed</strong>. Fall 2022
+      enrollment was counted a few months <em>before</em> the law was signed, and the first EFA
+      students didn't enroll until fall 2023 (the program then phased in: limited eligibility
+      in 2023–24, expanded in 2024–25, and open to all students in 2025–26). So the era
+      boundary marks "the school year Arkansas's policy landscape changed," not "the first year
+      EFA money was flowing." Anyone attributing enrollment changes specifically to the EFA
+      program should keep that offset in mind — and should also read the "What this tool cannot
+      tell you" section below.
+    </p>
+
+    <h2>Districts whose boundaries changed</h2>
+
+    <p>
+      Comparing a district to itself over thirteen years only works if the district
+      <em>is</em> the same thing over those thirteen years. For 228 of Arkansas's 235
+      districts, it is. Seven districts absorbed a neighboring district somewhere along the
+      way, and for those seven, this tool is careful not to pretend otherwise:
+    </p>
+    <ul>
+      <li><strong>Smackover Norphlet</strong> (absorbed Norphlet, 2014), <strong>Camden
+      Fairview</strong>, <strong>Magnolia</strong>, and <strong>Nevada</strong> (which split
+      the Stephens district three ways, 2014), <strong>Hackett</strong> (absorbed Hartford,
+      2015), <strong>West Memphis</strong> (absorbed Hughes, 2015), and <strong>Pine
+      Bluff</strong> (absorbed Dollarway, 2021).</li>
+    </ul>
+    <p>
+      For these seven, the years before the merger show the district <em>as it existed
+      then</em> — smaller, without the absorbed district's students. We never add the two
+      predecessors' enrollments together to fake a longer history, because real students are
+      lost in every merger transition and a stitched-together number would invent a history no
+      district actually had. On these districts' charts, the merger year is marked with a
+      visible seam, the pre-merger years are drawn in a distinct dashed style, and a note
+      explains that the jump at the seam is the merger itself — not a sudden change in the
+      underlying population. Their long-term growth classifications are computed only from
+      years where the comparison is apples-to-apples. (Pine Bluff is the one necessary
+      exception: its merger came so late, 2021, that it has no consistent-boundary years at all
+      in the baseline era, so its baseline is measured on its own pre-merger history — clearly
+      flagged wherever it appears.)
+    </p>
+    <p>
+      One more short-history case: the Jacksonville North Pulaski district didn't exist until
+      2016–17, so its pre-EFA history is genuinely shorter, and the tool flags it accordingly.
+    </p>
+
+    <h2>The map</h2>
+
+    <p>
+      District boundaries on the map come from the U.S. Census Bureau's 2024 TIGER school
+      district boundary files, simplified so the map loads quickly in a browser. Boundary
+      shapes are current boundaries — for the seven merger districts above, the shape shown is
+      today's (post-merger) boundary. One district, Imboden Charter, has no boundary in the
+      Census file at all and appears as a point marker at its school's location instead,
+      alongside Arkansas's charter schools.
+    </p>
+
+    <h2>Charter schools</h2>
+
+    <p>
+      The tool tracks all 22 public charter school systems reporting enrollment to the state in
+      2025–26. Charters are shown more simply than districts — no trajectory classifications,
+      no baseline-versus-EFA comparisons — because most charters are too new for a pre-2020
+      baseline to mean anything. Where a charter system operates several campuses, the
+      enrollment shown is for the whole system, not the single mapped location, and the table
+      says so on the affected rows. Charters that opened mid-way through the EFA era show
+      change figures computed from their own first year of data, and the table flags any figure
+      that rests on a single year-over-year comparison.
+    </p>
+
+    <h2>What has been verified — and what hasn't</h2>
+
+    <p>
+      <strong>Verified:</strong> For all thirteen years, the statewide total in this tool
+      matches Arkansas's own officially published statewide enrollment count exactly — to the
+      student. Ten years (2016–17 through 2025–26) were checked against ADE's State Report Card
+      system and ADE's public enrollment-count reports; the three earliest years (2013–14
+      through 2015–16) were checked against ADE's "Enrollment Count by State" report; and the
+      most recent year (2025–26) was re-confirmed against ADE's live public report during this
+      audit (465,421 — exact match). As an internal consistency check, the tool's district,
+      charter, and other components sum exactly to that verified total in every year, with zero
+      residual. Spot checks of individual districts against the state's published
+      district-level report also match exactly.
+    </p>
+    <p>
+      <strong>Verified with limits:</strong> Individual district-level figures all come from
+      the same state data file whose totals reconcile exactly, and every district-level spot
+      check we have made matches the state's published figure — but we have not individually
+      cross-checked all 235 districts in all 13 years against a second publication. The
+      comparison against federal data, and the finding that the state's figure is not a
+      single-day count, are our own analysis, reproducible from public data.
+    </p>
+    <p>
+      <strong>Not verified:</strong> The state's internal method for computing its enrollment
+      figure (see the first section). The cause of the 2023–24 federal/state convergence
+      anomaly. News-media attributions for a small number of figures were recorded second-hand
+      and match our data exactly. Several of these (Springdale's 21,097, Little Rock's 18,964,
+      the LEARNS Act's March 8, 2023 signing date, and the Pine Bluff–Dollarway merger) have
+      since been independently re-confirmed against original external sources; the remainder
+      have not.
+    </p>
+
+    <h2>What this tool cannot tell you</h2>
+
+    <p>
+      Enrollment counts show <strong>what</strong> changed, not <strong>why</strong>. This tool
+      does not track where departing students went — EFA participation, private school,
+      homeschooling, or a move out of state — and does not include private school or EFA
+      program data. A district losing students in the EFA era is a fact; the reason is not
+      something these counts alone can establish. Claims about causes need evidence beyond
+      enrollment numbers, and this tool deliberately does not make them.
+    </p>
+
+    <div class="technical-pointer">
+      <p>
+        Looking for more depth? The <a href="methodology-technical.html">technical version</a> covers
+        the same ground with source-by-source verification detail — what was tested, how, and
+        exactly which claims are confirmed, approximate, or open.
+      </p>
+    </div>
+
+    <!-- Same byline as index.html, same two-page-only scope -- see the
+         comment there for the plain-text-until-live reasoning. -->
+    <p class="meta-links">
+      Built by Joel Rush · a sidetown.io project.
+    </p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,4 @@
+d3-array 3.2.4
+d3-geo 3.1.1
+topojson-client 3.1.0
+(downloaded from cdn.jsdelivr.net, 2026-07-15, same @3 majors map.html previously loaded from CDN)

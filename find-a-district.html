@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find a District — Arkansas K-12 enrollment</title>
+<style>
+  :root {
+    --surface-1:      #fcfcfb;
+    --page-plane:     #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --border:         rgba(11,11,11,0.44);
+    --link:           #2a78d6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface-1:      #1a1a19;
+      --page-plane:     #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --border:         rgba(255,255,255,0.33);
+      --link:           #3987e5;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--page-plane);
+    color: var(--text-primary);
+    font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  /* Same narrow 720px width index.html uses (not the 880px most other
+     views use) -- this page's whole purpose is one centered action, and
+     the same "focused hero, not a wide multi-column layout" reasoning
+     that picked 720px for the landing page's own hero applies here even
+     more directly. */
+  .page { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .view-nav { font-size: 13px; color: var(--text-muted); margin: 0 0 18px; }
+  .view-nav a { color: var(--link); }
+  .view-nav .current { color: var(--text-primary); font-weight: 600; }
+
+  h1 { font-size: 26px; font-weight: 700; margin: 0 0 14px; line-height: 1.25; }
+  .subtitle { font-size: 16px; color: var(--text-secondary); margin: 0 0 28px; max-width: 60ch; }
+
+  /* Real prominence, not the landing page's old small embedded form --
+     this page exists for exactly one action, so the search box gets the
+     page's main visual weight: a large bordered panel, centered content,
+     bigger type than any other form on the site. Same "recessed field on
+     a raised panel" look every other search-like input on this project
+     uses (input sits on --page-plane, nested inside this panel's own
+     --surface-1), just scaled up. */
+  .find-search {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 28px;
+    margin: 0 0 8px;
+    text-align: center;
+  }
+  .find-search label {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+  }
+  .find-search-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .find-search input[type="text"] {
+    flex: 1 1 260px;
+    min-width: 0;
+    font: inherit;
+    font-size: 18px;
+    color: var(--text-primary);
+    background: var(--page-plane);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .find-search input[type="text"]:focus-visible { outline: 2px solid var(--link); outline-offset: 1px; }
+  .find-search button {
+    font: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background: var(--link);
+    border: none;
+    border-radius: 8px;
+    padding: 14px 26px;
+    cursor: pointer;
+    flex: none;
+  }
+  .find-search button:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  .find-search button:hover { opacity: 0.9; }
+
+  /* Same result-region conventions the landing page's old embedded
+     search used (result-none / result-multi-label / plain <ul>), just
+     centered to match this page's own centered search panel above it. */
+  .find-search-result {
+    font-size: 15px;
+    margin: 0 0 32px;
+    min-height: 1.6em;
+    text-align: center;
+  }
+  .find-search-result:empty { margin: 0 0 24px; }
+  .find-search-result .result-none { color: var(--text-secondary); }
+  .find-search-result .result-multi-label { color: var(--text-secondary); margin-bottom: 6px; }
+  .find-search-result ul { list-style: none; margin: 0; padding: 0; }
+  .find-search-result li { margin: 4px 0; }
+
+  .meta-links { margin-top: 28px; font-size: 13px; color: var(--text-muted); }
+  .meta-links a { color: var(--text-secondary); }
+</style>
+</head>
+<body>
+  <div class="page">
+    <nav class="view-nav">
+      <a href="index.html">Overview</a> · <a href="statewide.html">Statewide Trend</a> · <a href="map.html">Map</a> · <a href="district-rankings.html">District Rankings</a> · <a href="school-districts.html">School Districts</a> · <a href="charter-schools.html">Charter Schools</a> · <span class="current">Find a District</span>
+    </nav>
+
+    <h1>Find a District</h1>
+    <p class="subtitle">
+      Search any of Arkansas's 235 public school districts or 22 charter school systems by
+      name to go straight to its detail page.
+    </p>
+
+    <form class="find-search" id="find-search-form">
+      <label for="find-search-input">District or charter school name</label>
+      <div class="find-search-row">
+        <input type="text" id="find-search-input" name="q" list="find-search-datalist"
+               placeholder="e.g. Bentonville, Haas Hall Academy" autocomplete="off" autofocus>
+        <datalist id="find-search-datalist"></datalist>
+        <button type="submit">Go</button>
+      </div>
+    </form>
+    <div class="find-search-result" id="find-search-result" role="status" aria-live="polite"></div>
+
+    <p class="meta-links">
+      Data sources, era definitions, and known limitations: <a href="methodology.html">Methodology</a>.
+    </p>
+  </div>
+
+  <script type="module" src="find-a-district.js"></script>
+</body>
+</html>

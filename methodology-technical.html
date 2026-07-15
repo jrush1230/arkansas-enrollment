@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Technical methodology — Arkansas K-12 enrollment</title>
+<!-- Content ported from METHODOLOGY.md (2026-07-15, post-scrub version) so
+     the technical methodology renders as a real page on any static host
+     instead of a raw .md download. METHODOLOGY.md stays in the private
+     working tree as the editable source -- if it changes, re-port here;
+     keep the two in sync. One deliberate content deviation from the .md:
+     the "ranked list's row design is settled" bullet's design-iteration
+     history (dev-log commentary, not methodology) is trimmed to its
+     descriptive core. -->
+<style>
+  :root {
+    --surface-1:      #fcfcfb;
+    --page-plane:     #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --border:         rgba(11,11,11,0.44);
+    --link:           #2a78d6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface-1:      #1a1a19;
+      --page-plane:     #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --border:         rgba(255,255,255,0.33);
+      --link:           #3987e5;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--page-plane);
+    color: var(--text-primary);
+    font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  /* Same 720px prose-width convention methodology.html uses. */
+  .page { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .view-nav { font-size: 13px; color: var(--text-muted); margin: 0 0 18px; }
+  .view-nav a { color: var(--link); }
+
+  h1 { font-size: 26px; font-weight: 700; margin: 0 0 14px; line-height: 1.25; }
+  .lede { font-size: 17px; font-weight: 600; color: var(--text-primary); margin: 0 0 16px; }
+  .lede a { color: var(--link); }
+  p { margin: 0 0 16px; color: var(--text-secondary); }
+  p a, li a { color: var(--link); }
+  strong { color: var(--text-primary); }
+
+  h2 {
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
+    margin: 36px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--gridline);
+  }
+
+  ul { margin: 0 0 16px; padding-left: 22px; color: var(--text-secondary); }
+  li { margin: 0 0 10px; }
+
+  code {
+    font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: var(--surface-1);
+    border: 1px solid var(--gridline);
+    border-radius: 4px;
+    padding: 1px 4px;
+    color: var(--text-primary);
+    overflow-wrap: break-word;
+  }
+
+  .plain-pointer {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 36px;
+  }
+  .plain-pointer p { margin: 0; color: var(--text-secondary); }
+
+  .meta-links { margin-top: 28px; font-size: 13px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+  <div class="page">
+    <nav class="view-nav">
+      <a href="index.html">Overview</a> · <a href="statewide.html">Statewide Trend</a> · <a href="map.html">Map</a> · <a href="district-rankings.html">District Rankings</a> · <a href="school-districts.html">School Districts</a> · <a href="charter-schools.html">Charter Schools</a> · <a href="find-a-district.html">Find a District</a>
+    </nav>
+
+    <h1>Technical methodology</h1>
+
+    <p class="lede">
+      The compact, field-level version — for the plain-language explanation, see the
+      <a href="methodology.html">methodology</a> page.
+    </p>
+
+    <h2>Source data</h2>
+
+    <p>
+      Enrollment figures come from Arkansas's SIS (Student Information System), not NCES CCD.
+      <code>data/districts.json</code> and <code>data/typology_output.csv</code> are produced
+      by an upstream data pipeline (maintained separately, not part of this site) that builds
+      the district panel from the state's published SIS enrollment reports and classifies each
+      district's trajectory.
+    </p>
+    <p>
+      <strong>Coverage:</strong> fall 2013 through fall 2025 (13 years), 235 current-boundary
+      districts.
+    </p>
+
+    <h2>Why SIS instead of CCD</h2>
+
+    <p>
+      CCD's fall headcount runs a stable ~3.5–4% <em>higher</em> than SIS across every year
+      2013-14 through 2024-25 (except an unexplained 2023-24 convergence). This is a real
+      measurement difference, not an error, though SIS's own exact day-to-day methodology
+      isn't fully pinned down. What's confirmed: SIS is not a CCD-style single-day headcount —
+      a differently-named ADE report ("Enrollment by District on October 1") was tested and
+      found byte-identical to this same SIS figure across every year checked, which a true
+      single-day snapshot should not be (it should diverge from SIS by roughly the same
+      ~3.5–4% CCD does). SIS also matches ADE's own published figures and independent media
+      reporting to the exact student (e.g., Springdale 21,097 and Little Rock 18,964, both
+      2025-26, matched exactly). What's confirmed only approximately: SIS's total resembles
+      the state's first-quarter average-daily-membership figure (<code>adm_q1</code>) within
+      about 0.82% mean deviation, from a limited sample comparison — a resemblance, not a
+      proven equivalence. What's not confirmed: the exact technical definition of what SIS's
+      total column measures day-to-day; ADE's own "October 1" naming does not appear to
+      describe this number's real methodology, given the byte-identical result above. SIS was
+      chosen for the reason that's actually confirmed: it's the number ADE itself publishes
+      and treats as authoritative for each district, matching what's independently reported —
+      not because its internal methodology was independently verified. It also resolves two
+      real CCD coverage gaps (Cross County, Imboden Charter) that would otherwise require
+      workaround logic.
+    </p>
+    <p>
+      The full investigation — the year-by-year offset table and two abandoned CCD/SIS blend
+      designs — is documented in the upstream pipeline's working notes (available on request).
+    </p>
+
+    <h2>Eras</h2>
+
+    <ul>
+      <li><strong>Baseline:</strong> fall 2013 – fall 2019 ("2013-14" through "2019-20")</li>
+      <li><strong>COVID shock:</strong> fall 2020 – fall 2021 ("2020-21", "2021-22")</li>
+      <li><strong>EFA era:</strong> fall 2022 onward ("2022-23"–), named for the Arkansas
+      LEARNS Education Freedom Account program</li>
+    </ul>
+    <p>
+      <code>baseline_cagr</code> and <code>efa_cagr</code> use only the first and last
+      available year within each district's own era window. <code>typology</code> classifies
+      each district's baseline-era vs. EFA-era trajectory shape (10 categories, e.g.
+      <code>sustained_decline</code>, <code>reversal_upward</code>).
+    </p>
+
+    <h2>Known limitations</h2>
+
+    <ul>
+      <li><strong>7 districts have a current-boundary history shorter than 2013</strong>,
+      because their boundary itself postdates 2013 (a crosswalk merger absorbed a predecessor
+      district): Smackover Norphlet, Camden Fairview, Magnolia, Nevada (all start 2014),
+      Hackett, West Memphis (both start 2015), and Pine Bluff (starts 2021). A related case,
+      Jacksonville North Pulaski, defaults to a 2013 <code>current_boundary_since</code> but
+      has no real SIS rows before 2016-17 (the district's actual creation date) — its thin
+      baseline is caught by <code>baseline_years_thin</code>/<code>n_baseline_years</code>,
+      not by <code>current_boundary_since</code>.</li>
+      <li><strong>Pine Bluff is one of the 7 boundary-change districts above (2021), not a
+      special case.</strong> An earlier version of this doc said Pine Bluff had zero
+      baseline-era years and <code>typology: null</code> — that was true before a fix pulled
+      its own pre-merger enrollment into a continuous record (context-only, not fed into
+      classification, same treatment as the other 6). Pine Bluff now has a full 2013-2025
+      series, <code>data_status: "ok"</code>, and a real <code>typology</code> like every
+      other district.</li>
+      <li><strong><code>districts.json</code>'s own <code>geo</code> field is unused, not
+      missing.</strong> It's <code>null</code> for all 235 districts and was never populated.
+      The map instead joins district polygons from a separate boundary file,
+      <code>data/arkansas_districts.topojson</code> (Census TIGER 2024, simplified for the
+      web), to each district's <code>districts.json</code> record by GEOID at render time —
+      not a blocker for anything; every view, including the map, is fully functional.</li>
+      <li><strong>The District Rankings row encodes several things at once, by design.</strong>
+      Each row shows a rank number, a gradient-colored dot keyed to
+      <code>pct_change_efa_era</code> (the same magnitude scale the map's fill uses), a
+      2013-2025 trajectory sparkline, the district name, up to three caveat icons (thin
+      baseline / boundary changed / reversal magnitude), and the EFA-era percentage change
+      itself. Rows filter into a Declining/Stable/Growing bucket by that same percentage
+      (±2% thresholds) and sort by it, default most-declining-first.</li>
+    </ul>
+
+    <p>
+      Crosswalk-edge-level detail, confidence tiers, and the full audit trail live in the
+      upstream pipeline's documentation (available on request).
+    </p>
+
+    <div class="plain-pointer">
+      <p>
+        Prefer plain English? The <a href="methodology.html">methodology page</a> covers the
+        same ground for a general reader — where the numbers come from, what the eras mean,
+        and exactly what has and hasn't been verified.
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arkansas district map — K-12 enrollment</title>
+<style>
+  :root {
+    --surface-1:      #fcfcfb;
+    --page-plane:     #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --border:         rgba(11,11,11,0.44);
+    --link:           #2a78d6;
+    --series-charter: #eb6834;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface-1:      #1a1a19;
+      --page-plane:     #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --border:         rgba(255,255,255,0.33);
+      --link:           #3987e5;
+      --series-charter: #d95926;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--page-plane);
+    color: var(--text-primary);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  .page { max-width: 880px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  h1 { font-size: 22px; font-weight: 600; margin: 0 0 6px; }
+  .subtitle { color: var(--text-secondary); margin: 0 0 28px; max-width: 60ch; }
+
+  .view-nav { font-size: 13px; color: var(--text-muted); margin: 0 0 18px; }
+  .view-nav a { color: var(--link); }
+  .view-nav .current { color: var(--text-primary); font-weight: 600; }
+
+  .viz-root {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 24px 16px;
+  }
+
+  /* --- continuous gradient legend: fill is now pct_change_efa_era, not
+     typology, so the legend is a color bar + tick labels rather than
+     the ranked list's discrete category chips. Charter/boundary marks
+     are still genuinely discrete, so they keep the chip treatment,
+     just in their own row below the bar rather than merged into it. --- */
+  .gradient-legend {
+    margin: 0 0 14px;
+    padding: 10px 10px 8px;
+    background: var(--page-plane);
+    border-radius: 8px;
+  }
+  .gradient-bar {
+    height: 14px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .gradient-ticks {
+    display: flex;
+    justify-content: space-between;
+    margin: 4px 2px 0;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .gradient-note {
+    color: var(--text-muted);
+    font-size: 11.5px;
+    margin: 6px 0 0;
+  }
+  .marker-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 8px 0 0;
+  }
+  .legend-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 10px 4px 8px;
+  }
+  .legend-chip .chip-swatch { width: 9px; height: 9px; border-radius: 3px; flex: none; }
+  .legend-chip.charter .chip-swatch { border-radius: 50%; background: var(--series-charter); }
+  .legend-chip.boundary .chip-swatch {
+    border-radius: 50%;
+    background: none;
+    border: 1.5px solid var(--text-primary);
+    width: 7px; height: 7px;
+  }
+
+  .keyboard-note {
+    color: var(--text-muted);
+    font-size: 12.5px;
+    margin: 0 0 14px;
+    max-width: 68ch;
+  }
+  .keyboard-note a { color: var(--link); }
+
+  svg.map-svg { width: 100%; height: auto; display: block; overflow: visible; background: var(--page-plane); border-radius: 8px; }
+  .district-poly-link { cursor: pointer; }
+  .district-poly-link:focus { outline: none; }
+  .district-poly-link:focus-visible .district-poly { stroke: var(--link); stroke-width: 3; }
+  .boundary-marker { fill: none; stroke: var(--text-primary); stroke-width: 1.5; opacity: 0.75; }
+  .charter-point { cursor: pointer; }
+  .charter-point:focus { outline: none; }
+  .charter-point:focus-visible { stroke: var(--link) !important; stroke-width: 3 !important; }
+
+  .tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12.5px;
+    max-width: 240px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    opacity: 0;
+    transition: opacity 80ms ease;
+  }
+  .tooltip .t-name { color: var(--text-primary); font-weight: 700; font-size: 13.5px; margin-bottom: 2px; }
+  .tooltip .t-typology { font-weight: 600; margin-bottom: 2px; }
+  .tooltip .t-pct { color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+  .tooltip .t-note { color: var(--text-muted); font-size: 11.5px; margin-top: 4px; }
+
+  .chart-footnote {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin: 14px 0 0;
+    max-width: 68ch;
+  }
+
+  .meta-links { margin-top: 28px; font-size: 13px; color: var(--text-muted); }
+  .meta-links a { color: var(--text-secondary); }
+</style>
+</head>
+<body>
+  <div class="page">
+    <nav class="view-nav">
+      <a href="index.html">Overview</a> · <a href="statewide.html">Statewide Trend</a> · <span class="current">Map</span> · <a href="district-rankings.html">District Rankings</a> · <a href="school-districts.html">School Districts</a> · <a href="charter-schools.html">Charter Schools</a> · <a href="find-a-district.html">Find a District</a>
+    </nav>
+    <h1>Arkansas district map</h1>
+    <p class="subtitle">
+      234 of Arkansas's 235 current-boundary districts are colored by EFA-era enrollment change (green =
+      growth, yellow = near zero, red = decline); click a district to open its detail page, or hover/focus
+      one for a plain-language description of its enrollment trajectory. The 235th, Imboden Charter, has
+      no district boundary of its own and appears instead as an orange point at its school location,
+      alongside Arkansas's other charter schools.
+    </p>
+
+    <div class="viz-root" id="map-root">
+      <div class="gradient-legend">
+        <div class="gradient-bar" id="gradient-bar"></div>
+        <div class="gradient-ticks">
+          <span>-15%</span><span>-10%</span><span>-5%</span><span>0%</span><span>+5%</span><span>+10%</span><span>+15%</span>
+        </div>
+        <p class="gradient-note">
+          Fill shows EFA-era enrollment change; districts beyond ±15% saturate at the endpoint color
+          rather than stretching the scale further.
+        </p>
+        <div class="marker-legend" id="marker-legend"></div>
+      </div>
+
+      <!-- Mark count is JS-rendered (map.js), not hardcoded -- it was
+           previously a stale "258" here (235 districts + 23 charter
+           points), wrong because Imboden Charter is one of the 235
+           districts.json entries but has no polygon of its own (it's
+           one of the 23 charter points instead), so the real district-
+           polygon count is 234, not 235. Deriving this from the actual
+           rendered geo.features.length/charterPoints.length at runtime
+           means it can't drift out of sync with the data again. -->
+      <p class="keyboard-note">
+        This map has <span id="focusable-mark-count"></span> individually focusable marks — for
+        keyboard or screen-reader browsing, the <a href="district-rankings.html">district rankings</a> reach
+        any specific district faster.
+      </p>
+
+      <div style="position: relative;">
+        <svg class="map-svg" id="map-svg" viewBox="0 0 880 620" role="img" aria-label="Choropleth map of Arkansas school district enrollment trajectories, with charter school locations overlaid"></svg>
+        <div class="tooltip" id="tooltip"></div>
+      </div>
+
+      <p class="chart-footnote" id="footnote">
+        District fill is EFA-era percent change, on the same magnitude gradient the district rankings page's row
+        swatch uses. Hovering or focusing a district shows a plain-language description of its
+        baseline-to-EFA trajectory shape, along with boundary-change status where it applies. Boundary
+        lines are Census TIGER 2024, simplified for the web; see the methodology page for the 7 districts
+        whose current boundary postdates 2013.
+      </p>
+    </div>
+
+    <p class="meta-links">
+      Data sources, era definitions, and known limitations: <a href="methodology.html">Methodology</a>.
+    </p>
+  </div>
+
+  <!-- Vendored locally (src/vendor/, see VERSIONS.txt: d3-array 3.2.4,
+       d3-geo 3.1.1, topojson-client 3.1.0) -- previously the site's only
+       CDN dependency; vendoring removes the last external request so the
+       public deployment is fully self-contained. -->
+  <script src="vendor/d3-array.min.js"></script>
+  <script src="vendor/d3-geo.min.js"></script>
+  <script src="vendor/topojson-client.min.js"></script>
+  <script type="module" src="map.js"></script>
+</body>
+</html>

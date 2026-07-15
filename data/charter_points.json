@@ -1,0 +1,1213 @@
+[
+  {
+    "id": "0500059",
+    "name": "MAUMELLE CHARTER ELEMENTARY SCHOOL",
+    "lat": 34.865497,
+    "lon": -92.403858,
+    "source": "NCES EDGE",
+    "note": "Representative point for the Academics Plus Public Charter Schools LEA (SIS state_leaid 6040700), a multi-campus network (also operates Maumelle Charter Middle/High and Scott Charter School) -- shown at its Maumelle Charter Elementary campus. Joined via crosswalk_lea_nces.csv's LEAID (0500059), not name -- NCES's school-level names for charter networks routinely diverge from the authorizer/LEA name, so a name search for 'Academics Plus' finds nothing even though NCES has full records.",
+    "map_caveat": "This marker represents Academics Plus Public Charter Schools, which also operates campuses in Maumelle (middle and high school) and at Scott Charter School -- enrollment shown is for the whole network, not just this location.",
+    "series": [
+      {
+        "year": 2013,
+        "enrollment": 650
+      },
+      {
+        "year": 2014,
+        "enrollment": 749
+      },
+      {
+        "year": 2015,
+        "enrollment": 853
+      },
+      {
+        "year": 2016,
+        "enrollment": 1099
+      },
+      {
+        "year": 2017,
+        "enrollment": 1252
+      },
+      {
+        "year": 2018,
+        "enrollment": 1408
+      },
+      {
+        "year": 2019,
+        "enrollment": 1552
+      },
+      {
+        "year": 2020,
+        "enrollment": 1645
+      },
+      {
+        "year": 2021,
+        "enrollment": 1685
+      },
+      {
+        "year": 2022,
+        "enrollment": 1825
+      },
+      {
+        "year": 2023,
+        "enrollment": 1921
+      },
+      {
+        "year": 2024,
+        "enrollment": 1993
+      },
+      {
+        "year": 2025,
+        "enrollment": 2001
+      }
+    ],
+    "latest_enrollment": 2001,
+    "latest_year": 2025,
+    "pct_change_yoy": 0.004014049172102358
+  },
+  {
+    "id": "0500411",
+    "name": "EXALT ACADEMY OF SOUTHWEST LITTLE ROCK",
+    "lat": 34.674032,
+    "lon": -92.345821,
+    "source": "NCES EDGE",
+    "note": "Single-campus charter LEA (SIS state_leaid 6055700). Joined via crosswalk_lea_nces.csv's LEAID (0500411), not name.",
+    "series": [
+      {
+        "year": 2014,
+        "enrollment": 112
+      },
+      {
+        "year": 2015,
+        "enrollment": 233
+      },
+      {
+        "year": 2016,
+        "enrollment": 307
+      },
+      {
+        "year": 2017,
+        "enrollment": 375
+      },
+      {
+        "year": 2018,
+        "enrollment": 406
+      },
+      {
+        "year": 2019,
+        "enrollment": 486
+      },
+      {
+        "year": 2020,
+        "enrollment": 518
+      },
+      {
+        "year": 2021,
+        "enrollment": 539
+      },
+      {
+        "year": 2022,
+        "enrollment": 638
+      },
+      {
+        "year": 2023,
+        "enrollment": 749
+      },
+      {
+        "year": 2024,
+        "enrollment": 754
+      },
+      {
+        "year": 2025,
+        "enrollment": 1109
+      }
+    ],
+    "latest_enrollment": 1109,
+    "latest_year": 2025,
+    "pct_change_yoy": 0.4708222811671088
+  },
+  {
+    "id": "0500418",
+    "name": "FUTURE SCHOOL OF FORT SMITH",
+    "lat": 35.391497,
+    "lon": -94.419365,
+    "source": "NCES EDGE",
+    "note": "Single-campus charter LEA (SIS state_leaid 6640700). Joined via crosswalk_lea_nces.csv's LEAID (0500418), not name -- a name search for 'Future School' finds nothing because NCES's own NAME field has a typo, 'FURTURE SCHOOL OF FORT SMITH' (corrected here for display).",
+    "series": [
+      {
+        "year": 2016,
+        "enrollment": 62
+      },
+      {
+        "year": 2017,
+        "enrollment": 162
+      },
+      {
+        "year": 2018,
+        "enrollment": 225
+      },
+      {
+        "year": 2019,
+        "enrollment": 226
+      },
+      {
+        "year": 2020,
+        "enrollment": 229
+      },
+      {
+        "year": 2021,
+        "enrollment": 251
+      },
+      {
+        "year": 2022,
+        "enrollment": 241
+      },
+      {
+        "year": 2023,
+        "enrollment": 219
+      },
+      {
+        "year": 2024,
+        "enrollment": 235
+      },
+      {
+        "year": 2025,
+        "enrollment": 156
+      }
+    ],
+    "latest_enrollment": 156,
+    "latest_year": 2025,
+    "pct_change_yoy": -0.33617021276595743
+  },
+  {
+    "id": "0500402",
+    "name": "JACKSONVILLE LIGHTHOUSE ELEMENTARY ACADEMY",
+    "lat": 34.868155,
+    "lon": -92.108812,
+    "source": "NCES EDGE",
+    "note": "Representative point for the Arkansas Lighthouse Charter Schools LEA (SIS state_leaid 6050700), a multi-campus network (also operates Pine Bluff Lighthouse Elementary/Middle, Capital City Lighthouse Elementary, Flightline Upper Academy, College Prep Academy) -- shown at its Jacksonville Lighthouse Elementary campus. Joined via crosswalk_lea_nces.csv's LEAID (0500402), not name.",
+    "map_caveat": "This marker represents Arkansas Lighthouse Charter Schools, which also operates campuses in Pine Bluff, Little Rock (Capital City and Flightline Upper Academy), and College Prep Academy -- enrollment shown is for the whole network, not just this location.",
+    "series": [
+      {
+        "year": 2013,
+        "enrollment": 816
+      },
+      {
+        "year": 2014,
+        "enrollment": 913
+      },
+      {
+        "year": 2015,
+        "enrollment": 1004
+      },
+      {
+        "year": 2016,
+        "enrollment": 979
+      },
+      {
+        "year": 2017,
+        "enrollment": 912
+      },
+      {
+        "year": 2018,
+        "enrollment": 800
+      },
+      {
+        "year": 2019,
+        "enrollment": 857
+      },
+      {
+        "year": 2020,
+        "enrollment": 801
+      },
+      {
+        "year": 2021,
+        "enrollment": 1064
+      },
+      {
+        "year": 2022,
+        "enrollment": 962
+      },
+      {
+        "year": 2023,
+        "enrollment": 434
+      },
+      {
+        "year": 2024,
+        "enrollment": 426
+      },
+      {
+        "year": 2025,
+        "enrollment": 449
+      }
+    ],
+    "latest_enrollment": 449,
+    "latest_year": 2025,
+    "pct_change_yoy": 0.0539906103286385
+  },
+  {
+    "id": "0500394",
+    "name": "ARKANSAS VIRTUAL ACADEMY",
+    "lat": 34.739703,
+    "lon": -92.395167,
+    "source": "NCES EDGE",
+    "note": "Multi-campus (Jr/High variants share this LEA); shown at its primary campus, SIS state_leaid 6043700. Joined via crosswalk_lea_nces.csv's LEAID (0500394), not name.",
+    "map_caveat": "This marker represents Arkansas Virtual Academy, which also operates a separate High School campus -- enrollment shown is for the whole network, not just this location.",
+    "series": [
+      {
+        "year": 2013,
+        "enrollment": 1334
+      },
+      {
+        "year": 2014,
+        "enrollment": 1647
+      },
+      {
+        "year": 2015,
+        "enrollment": 1812
+      },
+      {
+        "year": 2016,
+        "enrollment": 2092
+      },
+      {
+        "year": 2017,
+        "enrollment": 2055
+      },
+      {
+        "year": 2018,
+        "enrollment": 2361
+      },
+      {
+        "year": 2019,
+        "enrollment": 2474
+      },
+      {
+        "year": 2020,
+        "enrollment": 3872
+      },
+      {
+        "year": 2021,
+        "enrollment": 3855
+      },
+      {
+        "year": 2022,
+        "enrollment": 3733
+      },
+      {
+        "year": 2023,
+        "enrollment": 3937
+      },
+      {
+        "year": 2024,
+        "enrollment": 5269
+      },
+      {
+        "year": 2025,
+        "enrollment": 5779
+      }
+    ],
+    "latest_enrollment": 5779,
+    "latest_year": 2025,
+    "pct_change_yoy": 0.09679256025811349
+  },
+  {
+    "id": "0500062",
+    "name": "KIPP DELTA COLLEGE PREPARATORY SCHOOL",
+    "lat": 34.523006,
+    "lon": -90.589891,
+    "source": "NCES EDGE",
+    "note": "Representative point for the KIPP Delta Public Schools LEA (SIS state_leaid 5440700), a multi-campus network spanning Helena and Blytheville -- shown at its Helena-area College Preparatory campus. Joined via crosswalk_lea_nces.csv's LEAID (0500062), not name.",
+    "map_caveat": "This marker represents KIPP Delta Public Schools, which also operates campuses in Blytheville -- enrollment shown is for the whole network, not just this location.",
+    "series": [
+      {
+        "year": 2013,
+        "enrollment": 1176
+      },
+      {
+        "year": 2014,
+        "enrollment": 1324
+      },
+      {
+        "year": 2015,
+        "enrollment": 1411
+      },
+      {
+        "year": 2016,
+        "enrollment": 1390
+      },
+      {
+        "year": 2017,
+        "enrollment": 1313
+      },
+      {
+        "year": 2018,
+        "enrollment": 1222
+      },
+      {
+        "year": 2019,
+        "enrollment": 1285
+      },
+      {
+        "year": 2020,
+        "enrollment": 1205
+      },
+      {
+        "year": 2021,
+        "enrollment": 1095
+      },
+      {
+        "year": 2022,
+        "enrollment": 1174
+      },
+      {
+        "year": 2023,
+        "enrollment": 1262
+      },
+      {
+        "year": 2024,
+        "enrollment": 1190
+      },
+      {
+        "year": 2025,
+        "enrollment": 1044
+      }
+    ],
+    "latest_enrollment": 1044,
+    "latest_year": 2025,
+    "pct_change_yoy": -0.1226890756302521
+  },
+  {
+    "id": "0500074",
+    "name": "LISA ACADEMY",
+    "lat": 34.751402,
+    "lon": -92.38821,
+    "source": "NCES EDGE",
+    "note": "Representative point for the LISA Academy LEA (SIS state_leaid 6041700), a large multi-campus network across Little Rock, Springdale, and Rogers-Bentonville -- shown at its original Little Rock campus. Joined via crosswalk_lea_nces.csv's LEAID (0500074), not name.",
+    "map_caveat": "This marker represents LISA Academy, which also operates campuses in Springdale and Rogers-Bentonville -- enrollment shown is for the whole network, not just this location.",
+    "series": [
+      {
+        "year": 2013,
+        "enrollment": 799
+      },
+      {
+        "year": 2014,
+        "enrollment": 1488
+      },
+      {
+        "year": 2015,
+        "enrollment": 1525
+      },
+      {
+        "year": 2016,
+        "enrollment": 2041
+      },
+      {
+        "year": 2017,
+        "enrollment": 2158
+      },
+      {
+        "year": 2018,
+        "enrollment": 2218
+      },
+      {
+        "year": 2019,
+        "enrollment": 2825
+      },
+      {
+        "year": 2020,
+        "enrollment": 3342
+      },
+      {
+        "year": 2021,
+        "enrollment": 3469
+      },
+      {
+        "year": 2022,
+        "enrollment": 3769
+      },
+      {
+        "year": 2023,
+        "enrollment": 4015
+      },
+      {
+        "year": 2024,
+        "enrollment": 4292
+      },
+      {
+        "year": 2025,
+        "enrollment": 4320
+      }
+    ],
+    "latest_enrollment": 4320,
+    "latest_year": 2025,
+    "pct_change_yoy": 0.0065237651444548
+  },
+  {
+    "id": "0514498",
+    "name": "GARFIELD SCHOLARS' ACADEMY",
+    "lat": 36.447976,
+    "lon": -93.971255,
+    "source": "Census Geocoder (address-based)",
+    "note": "Opened 2024-25 (SIS state_leaid 0448700); too new for NCES EDGE's SY2022-23 school-locations vintage -- NCES's own CCD LEA universe (crosswalk_lea_nces.csv) already has it under LEAID 0514498, just not yet geocoded. myschoolinfo.arkansas.gov's district page only lists a PO Box; the physical address (18432 Marshall St, Garfield, AR 72732) came from ADE's open-enrollment-charter locator (adedata.arkansas.gov/LEA/Home/oec) and was geocoded via the Census Geocoding Services API (onelineaddress, benchmark Public_AR_Current), exact match.",
+    "series": [
+      {
+        "year": 2024,
+        "enrollment": 73
+      },
+      {
+        "year": 2025,
+        "enrollment": 94
+      }
+    ],
+    "latest_enrollment": 94,
+    "latest_year": 2025,
+    "pct_change_yoy": 0.2876712328767123
+  },
+  {
+    "id": "0500417",
+    "name": "ARKANSAS CONNECTIONS ACADEMY HIGH",
+    "lat": 36.383173,
+    "lon": -94.170616,
+    "source": "NCES EDGE",
+    "note": "Single-campus charter LEA (SIS state_leaid 0444700). Joined via crosswalk_lea_nces.csv's LEAID (0500417), not name.",
+    "series": [
+      {
+        "year": 2016,
+        "enrollment": 343
+      },
+      {
+        "year": 2017,
+        "enrollment": 761
+      },
+      {
+        "year": 2018,
+        "enrollment": 1236
+      },
+      {
+        "year": 2019,
+        "enrollment": 1597
+      },
+      {
+        "year": 2020,
+        "enrollment": 2836
+      },
+      {
+        "year": 2021,
+        "enrollment": 3390
+      },
+      {
+        "year": 2022,
+        "enrollment": 3231
+      },
+      {
+        "year": 2023,
+        "enrollment": 3804
+      },
+      {
+        "year": 2024,
+        "enrollment": 4575
+      },
+      {
+        "year": 2025,
+        "enrollment": 5780
+      }
+    ],
+    "latest_enrollment": 5780,
+    "latest_year": 2025,
+    "pct_change_yoy": 0.2633879781420765
+  },
+  {
+    "id": "0500440",
+    "name": "WESTWIND SCHOOL FOR PERFORMING ARTS SCHOOL",
+    "lat": 34.823034,
+    "lon": -92.347151,
+    "source": "NCES EDGE",
+    "note": "Single-campus charter LEA (SIS state_leaid 6063700). Joined via crosswalk_lea_nces.csv's LEAID (0500440), not name.",
+    "series": [
+      {
+        "year": 2021,
+        "enrollment": 63
+      },
+      {
+        "year": 2022,
+        "enrollment": 83
+      },
+      {
+        "year": 2023,
+        "enrollment": 89
+      },
+      {
+        "year": 2024,
+        "enrollment": 86
+      },
+      {
+        "year": 2025,
+        "enrollment": 83
+      }
+    ],
+    "latest_enrollment": 83,
+    "latest_year": 2025,
+    "pct_change_yoy": -0.03488372093023256
+  },
+  {
+    "id": "0500407",
+    "name": "SIATECH HIGH CHARTER",
+    "lat": 34.686004,
+    "lon": -92.321394,
+    "source": "NCES EDGE",
+    "note": "This is Graduate Arkansas Charter (SIS state_leaid 6052700) -- NCES's school-level NAME field carries a legacy CMO name, 'SIATECH,' unrelated to the current authorizer name, which is why a name search for 'Graduate Arkansas' finds nothing. Joined via crosswalk_lea_nces.csv's LEAID (0500407), not name.",
+    "series": [
+      {
+        "year": 2013,
+        "enrollment": 92
+      },
+      {
+        "year": 2014,
+        "enrollment": 152
+      },
+      {
+        "year": 2015,
+        "enrollment": 166
+      },
+      {
+        "year": 2016,
+        "enrollment": 171
+      },
+      {
+        "year": 2017,
+        "enrollment": 188
+      },
+      {
+        "year": 2018,
+        "enrollment": 125
+      },
+      {
+        "year": 2019,
+        "enrollment": 119
+      },
+      {
+        "year": 2020,
+        "enrollment": 91
+      },
+      {
+        "year": 2021,
+        "enrollment": 141
+      },
+      {
+        "year": 2022,
+        "enrollment": 381
+      },
+      {
+        "year": 2023,
+        "enrollment": 490
+      },
+      {
+        "year": 2024,
+        "enrollment": 557
+      },
+      {
+        "year": 2025,
+        "enrollment": 807
+      }
+    ],
+    "latest_enrollment": 807,
+    "latest_year": 2025,
+    "pct_change_yoy": 0.4488330341113106
+  },
+  {
+    "id": "0514500",
+    "name": "INSTITUTE FOR THE CREATIVE ARTS",
+    "lat": 35.3920933,
+    "lon": -94.4296423,
+    "source": "OpenStreetMap Nominatim (address-based, street-level)",
+    "note": "Opened 2024-25 (SIS state_leaid 6641700); too new for NCES EDGE's SY2022-23 vintage -- NCES's CCD LEA universe already has it under LEAID 0514500, just not yet geocoded. Physical address (1101 Riverfront Drive, Fort Smith, AR 72901, confirmed via ADE and independent web sources) could not be resolved by the Census Geocoding Services API -- Riverfront Drive is a newly built/renamed downtown road not yet in TIGER's address-range data (even a house-number-less query for the street alone returned zero matches, and a different benchmark didn't help). Geocoded via OpenStreetMap Nominatim instead (user-approved fallback for this one entry); Nominatim matched the street but not the specific house number, so this coordinate is street-level, not the exact building footprint.",
+    "map_caveat": "This marker's position is approximate -- pinpointed to the street, not the exact building, due to a mapping-data gap for this newly built road.",
+    "series": [
+      {
+        "year": 2024,
+        "enrollment": 49
+      },
+      {
+        "year": 2025,
+        "enrollment": 100
+      }
+    ],
+    "latest_enrollment": 100,
+    "latest_year": 2025,
+    "pct_change_yoy": 1.0408163265306123
+  },
+  {
+    "id": "0500408",
+    "name": "PREMIER HIGH SCHOOL OF LITTLE ROCK",
+    "lat": 34.734999,
+    "lon": -92.289956,
+    "source": "NCES EDGE",
+    "note": "Representative point for the Premier High Schools of Arkansas LEA (SIS state_leaid 6053700), a multi-campus network (also Fort Smith, Texarkana, and an online campus) -- shown at its Little Rock campus. Joined via crosswalk_lea_nces.csv's LEAID (0500408), not name.",
+    "map_caveat": "This marker represents Premier High Schools of Arkansas, which also operates campuses in Fort Smith, Texarkana, and online -- enrollment shown is for the whole network, not just this location.",
+    "series": [
+      {
+        "year": 2013,
+        "enrollment": 90
+      },
+      {
+        "year": 2014,
+        "enrollment": 130
+      },
+      {
+        "year": 2015,
+        "enrollment": 116
+      },
+      {
+        "year": 2016,
+        "enrollment": 109
+      },
+      {
+        "year": 2017,
+        "enrollment": 114
+      },
+      {
+        "year": 2018,
+        "enrollment": 116
+      },
+      {
+        "year": 2019,
+        "enrollment": 95
+      },
+      {
+        "year": 2020,
+        "enrollment": 125
+      },
+      {
+        "year": 2021,
+        "enrollment": 125
+      },
+      {
+        "year": 2022,
+        "enrollment": 307
+      },
+      {
+        "year": 2023,
+        "enrollment": 534
+      },
+      {
+        "year": 2024,
+        "enrollment": 657
+      },
+      {
+        "year": 2025,
+        "enrollment": 748
+      }
+    ],
+    "latest_enrollment": 748,
+    "latest_year": 2025,
+    "pct_change_yoy": 0.1385083713850837
+  },
+  {
+    "id": "0500061",
+    "name": "IMBODEN AREA CHARTER SCHOOL",
+    "lat": 36.204336,
+    "lon": -91.180089,
+    "source": "NCES EDGE Public School Locations (SY2022-23 vintage), NCESSCH 050006100658",
+    "note": "Charter school with real SIS enrollment data (see districts.json id 0500061) but no district boundary polygon -- absent from NCES's current EDGE school-district boundary file.",
+    "series": [
+      {
+        "year": 2013,
+        "enrollment": 54
+      },
+      {
+        "year": 2014,
+        "enrollment": 64
+      },
+      {
+        "year": 2015,
+        "enrollment": 44
+      },
+      {
+        "year": 2016,
+        "enrollment": 56
+      },
+      {
+        "year": 2017,
+        "enrollment": 64
+      },
+      {
+        "year": 2018,
+        "enrollment": 59
+      },
+      {
+        "year": 2019,
+        "enrollment": 58
+      },
+      {
+        "year": 2020,
+        "enrollment": 61
+      },
+      {
+        "year": 2021,
+        "enrollment": 54
+      },
+      {
+        "year": 2022,
+        "enrollment": 63
+      },
+      {
+        "year": 2023,
+        "enrollment": 68
+      },
+      {
+        "year": 2024,
+        "enrollment": 70
+      },
+      {
+        "year": 2025,
+        "enrollment": 53
+      }
+    ],
+    "latest_enrollment": 53,
+    "latest_year": 2025,
+    "pct_change_yoy": -0.24285714285714285
+  },
+  {
+    "id": "0500398",
+    "name": "ESTEM MIDDLE SCHOOL",
+    "lat": 34.746078,
+    "lon": -92.271625,
+    "source": "NCES EDGE",
+    "note": "Representative point for the eStem Public Charter School LEA (SIS state_leaid 6047700), a multi-campus network (also an Elementary, a High School, and two East Village campuses) -- shown at its Middle School campus. Joined via crosswalk_lea_nces.csv's LEAID (0500398), not name.",
+    "map_caveat": "This marker represents eStem Public Charter School, which also operates an elementary school, a high school, and two East Village campuses -- enrollment shown is for the whole network, not just this location.",
+    "series": [
+      {
+        "year": 2013,
+        "enrollment": 1462
+      },
+      {
+        "year": 2014,
+        "enrollment": 1462
+      },
+      {
+        "year": 2015,
+        "enrollment": 1462
+      },
+      {
+        "year": 2016,
+        "enrollment": 1462
+      },
+      {
+        "year": 2017,
+        "enrollment": 1968
+      },
+      {
+        "year": 2018,
+        "enrollment": 3070
+      },
+      {
+        "year": 2019,
+        "enrollment": 3202
+      },
+      {
+        "year": 2020,
+        "enrollment": 3180
+      },
+      {
+        "year": 2021,
+        "enrollment": 3052
+      },
+      {
+        "year": 2022,
+        "enrollment": 2890
+      },
+      {
+        "year": 2023,
+        "enrollment": 2739
+      },
+      {
+        "year": 2024,
+        "enrollment": 2358
+      },
+      {
+        "year": 2025,
+        "enrollment": 2018
+      }
+    ],
+    "latest_enrollment": 2018,
+    "latest_year": 2025,
+    "pct_change_yoy": -0.1441899915182358
+  },
+  {
+    "id": "0500421",
+    "name": "IVY HILL ACADEMY OF SCHOLARSHIP",
+    "lat": 34.726001,
+    "lon": -92.2948,
+    "source": "NCES EDGE",
+    "note": "This is Scholarmade Achievement Place of Arkansas (SIS state_leaid 6060700) -- NCES's school-level names ('Ivy Hill Academy of Scholarship,' 'Nichols Intermediate Academy,' 'Prodigy Preparatory Academy of Service') carry no resemblance to the authorizer name 'Scholarmade,' which is why a name search finds nothing. Joined via crosswalk_lea_nces.csv's LEAID (0500421), not name. (ADE's own record for this LEA lists only a PO Box -- the NCES point is the only geocodable source found for it.)",
+    "series": [
+      {
+        "year": 2018,
+        "enrollment": 275
+      },
+      {
+        "year": 2019,
+        "enrollment": 333
+      },
+      {
+        "year": 2020,
+        "enrollment": 363
+      },
+      {
+        "year": 2021,
+        "enrollment": 390
+      },
+      {
+        "year": 2022,
+        "enrollment": 394
+      },
+      {
+        "year": 2023,
+        "enrollment": 346
+      },
+      {
+        "year": 2024,
+        "enrollment": 306
+      },
+      {
+        "year": 2025,
+        "enrollment": 341
+      }
+    ],
+    "latest_enrollment": 341,
+    "latest_year": 2025,
+    "pct_change_yoy": 0.11437908496732026
+  },
+  {
+    "id": "0500420",
+    "name": "THE EXCEL CENTER",
+    "lat": 34.68375,
+    "lon": -92.323315,
+    "source": "NCES EDGE",
+    "note": "Single-campus charter LEA (SIS state_leaid 6058700). Joined via crosswalk_lea_nces.csv's LEAID (0500420), not name.",
+    "series": [
+      {
+        "year": 2018,
+        "enrollment": 102
+      },
+      {
+        "year": 2019,
+        "enrollment": 93
+      },
+      {
+        "year": 2020,
+        "enrollment": 127
+      },
+      {
+        "year": 2021,
+        "enrollment": 72
+      },
+      {
+        "year": 2022,
+        "enrollment": 99
+      },
+      {
+        "year": 2023,
+        "enrollment": 222
+      },
+      {
+        "year": 2024,
+        "enrollment": 424
+      },
+      {
+        "year": 2025,
+        "enrollment": 290
+      }
+    ],
+    "latest_enrollment": 290,
+    "latest_year": 2025,
+    "pct_change_yoy": -0.3160377358490566
+  },
+  {
+    "id": "0514497",
+    "name": "SCHOOL FOR ADVANCED STUDIES-NW ARK",
+    "lat": 36.330978969593,
+    "lon": -94.116669801844,
+    "source": "Census Geocoder (address-based)",
+    "note": "Opened 2024-25 (SIS state_leaid 0446700); too new for NCES EDGE's SY2022-23 school-locations vintage -- NCES's own CCD LEA universe already has it under LEAID 0514497, just not yet geocoded. Physical address (121 W Poplar St, Rogers, AR 72756) confirmed via myschoolinfo.arkansas.gov, geocoded via the Census Geocoding Services API (onelineaddress, benchmark Public_AR_Current), exact match.",
+    "series": [
+      {
+        "year": 2024,
+        "enrollment": 87
+      },
+      {
+        "year": 2025,
+        "enrollment": 135
+      }
+    ],
+    "latest_enrollment": 135,
+    "latest_year": 2025,
+    "pct_change_yoy": 0.5517241379310345
+  },
+  {
+    "id": "0514499",
+    "name": "ACADEMIES OF MATH AND SCIENCE",
+    "lat": 34.690353691433,
+    "lon": -92.393365365833,
+    "source": "Census Geocoder (address-based)",
+    "note": "Opened 2024-25 (SIS state_leaid 6065700); too new for NCES EDGE's SY2022-23 school-locations vintage -- NCES's own CCD LEA universe already has it under LEAID 0514499, just not yet geocoded. Physical address (6423 Stagecoach Road, Little Rock, AR 72204) confirmed via myschoolinfo.arkansas.gov, geocoded via the Census Geocoding Services API (onelineaddress, benchmark Public_AR_Current), exact match.",
+    "series": [
+      {
+        "year": 2024,
+        "enrollment": 486
+      },
+      {
+        "year": 2025,
+        "enrollment": 606
+      }
+    ],
+    "latest_enrollment": 606,
+    "latest_year": 2025,
+    "pct_change_yoy": 0.24691358024691357
+  },
+  {
+    "id": "0500409",
+    "name": "NORTHWEST ARKANSAS CLASSICAL ACADEMY",
+    "lat": 36.361985,
+    "lon": -94.228119,
+    "source": "NCES EDGE",
+    "note": "This is College Preparatory Academies of Arkansas (SIS state_leaid 0442700) -- NCES's school-level names ('Northwest Arkansas Classical Academy,' 'Founders Classical Academy/Academies of Arkansas...') reflect a rebrand, unrelated in wording to the authorizer name. Multi-campus (also West Little Rock and Rogers campuses); shown at its Rogers-area flagship. Joined via crosswalk_lea_nces.csv's LEAID (0500409), not name.",
+    "map_caveat": "This marker represents College Preparatory Academies of Arkansas, which also operates campuses in West Little Rock and Rogers -- enrollment shown is for the whole network, not just this location.",
+    "series": [
+      {
+        "year": 2013,
+        "enrollment": 400
+      },
+      {
+        "year": 2014,
+        "enrollment": 522
+      },
+      {
+        "year": 2015,
+        "enrollment": 551
+      },
+      {
+        "year": 2016,
+        "enrollment": 556
+      },
+      {
+        "year": 2017,
+        "enrollment": 564
+      },
+      {
+        "year": 2018,
+        "enrollment": 660
+      },
+      {
+        "year": 2019,
+        "enrollment": 1064
+      },
+      {
+        "year": 2020,
+        "enrollment": 1048
+      },
+      {
+        "year": 2021,
+        "enrollment": 1086
+      },
+      {
+        "year": 2022,
+        "enrollment": 1551
+      },
+      {
+        "year": 2023,
+        "enrollment": 1719
+      },
+      {
+        "year": 2024,
+        "enrollment": 1648
+      },
+      {
+        "year": 2025,
+        "enrollment": 1536
+      }
+    ],
+    "latest_enrollment": 1536,
+    "latest_year": 2025,
+    "pct_change_yoy": -0.06796116504854369
+  },
+  {
+    "id": "0500078",
+    "name": "HAAS HALL ACADEMY",
+    "lat": 36.121926,
+    "lon": -94.143291,
+    "source": "NCES EDGE",
+    "note": "Representative point for the Haas Hall Academy LEA (SIS state_leaid 7240700), a multi-campus network (also Bentonville, the Lane, and Jones Center campuses) -- shown at its original Fayetteville campus. Joined via crosswalk_lea_nces.csv's LEAID (0500078), not name.",
+    "map_caveat": "This marker represents Haas Hall Academy, which also operates campuses in Bentonville, at the Lane, and at Jones Center -- enrollment shown is for the whole network, not just this location.",
+    "series": [
+      {
+        "year": 2013,
+        "enrollment": 320
+      },
+      {
+        "year": 2014,
+        "enrollment": 320
+      },
+      {
+        "year": 2015,
+        "enrollment": 352
+      },
+      {
+        "year": 2016,
+        "enrollment": 344
+      },
+      {
+        "year": 2017,
+        "enrollment": 674
+      },
+      {
+        "year": 2018,
+        "enrollment": 941
+      },
+      {
+        "year": 2019,
+        "enrollment": 1001
+      },
+      {
+        "year": 2020,
+        "enrollment": 1407
+      },
+      {
+        "year": 2021,
+        "enrollment": 1331
+      },
+      {
+        "year": 2022,
+        "enrollment": 1248
+      },
+      {
+        "year": 2023,
+        "enrollment": 1422
+      },
+      {
+        "year": 2024,
+        "enrollment": 1427
+      },
+      {
+        "year": 2025,
+        "enrollment": 1301
+      }
+    ],
+    "latest_enrollment": 1301,
+    "latest_year": 2025,
+    "pct_change_yoy": -0.08829712683952348
+  },
+  {
+    "id": "0500423",
+    "name": "FRIENDSHIP ASPIRE ACADEMY",
+    "lat": 34.189563,
+    "lon": -92.022917,
+    "source": "NCES EDGE",
+    "note": "Representative point for the Friendship Aspire Academies Arkansas LEA (SIS state_leaid 3544700), a multi-campus network across Pine Bluff and Little Rock -- shown at its Pine Bluff flagship campus. Joined via crosswalk_lea_nces.csv's LEAID (0500423), not name.",
+    "map_caveat": "This marker represents Friendship Aspire Academies Arkansas, which also operates campuses in Little Rock -- enrollment shown is for the whole network, not just this location.",
+    "series": [
+      {
+        "year": 2018,
+        "enrollment": 112
+      },
+      {
+        "year": 2019,
+        "enrollment": 239
+      },
+      {
+        "year": 2020,
+        "enrollment": 316
+      },
+      {
+        "year": 2021,
+        "enrollment": 405
+      },
+      {
+        "year": 2022,
+        "enrollment": 913
+      },
+      {
+        "year": 2023,
+        "enrollment": 1307
+      },
+      {
+        "year": 2024,
+        "enrollment": 1350
+      },
+      {
+        "year": 2025,
+        "enrollment": 1326
+      }
+    ],
+    "latest_enrollment": 1326,
+    "latest_year": 2025,
+    "pct_change_yoy": -0.017777777777777778
+  },
+  {
+    "id": "0500055",
+    "name": "ARKANSAS ARTS ACADEMY ELEMENTARY/MIDDLE SCHOOL",
+    "lat": 36.307773,
+    "lon": -94.132867,
+    "source": "NCES EDGE",
+    "note": "Representative point for the Arkansas Arts Academy LEA (SIS state_leaid 0440700), which also operates a separate High School campus -- shown at its Elementary/Middle campus. Joined via crosswalk_lea_nces.csv's LEAID (0500055), not name.",
+    "map_caveat": "This marker represents Arkansas Arts Academy, which also operates a separate High School campus -- enrollment shown is for the whole network, not just this location.",
+    "series": [
+      {
+        "year": 2013,
+        "enrollment": 791
+      },
+      {
+        "year": 2014,
+        "enrollment": 758
+      },
+      {
+        "year": 2015,
+        "enrollment": 774
+      },
+      {
+        "year": 2016,
+        "enrollment": 779
+      },
+      {
+        "year": 2017,
+        "enrollment": 792
+      },
+      {
+        "year": 2018,
+        "enrollment": 1025
+      },
+      {
+        "year": 2019,
+        "enrollment": 1113
+      },
+      {
+        "year": 2020,
+        "enrollment": 1204
+      },
+      {
+        "year": 2021,
+        "enrollment": 1191
+      },
+      {
+        "year": 2022,
+        "enrollment": 1090
+      },
+      {
+        "year": 2023,
+        "enrollment": 1004
+      },
+      {
+        "year": 2024,
+        "enrollment": 945
+      },
+      {
+        "year": 2025,
+        "enrollment": 927
+      }
+    ],
+    "latest_enrollment": 927,
+    "latest_year": 2025,
+    "pct_change_yoy": -0.01904761904761905
+  }
+]

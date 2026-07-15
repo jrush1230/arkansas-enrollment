@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arkansas School Districts — K-12 enrollment</title>
+<style>
+  :root {
+    --surface-1:      #fcfcfb;
+    --page-plane:     #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --border:         rgba(11,11,11,0.44);
+    --link:           #2a78d6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface-1:      #1a1a19;
+      --page-plane:     #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --border:         rgba(255,255,255,0.33);
+      --link:           #3987e5;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--page-plane);
+    color: var(--text-primary);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  /* Wider than every other view's .page (~880px, sized for readable prose/
+     chart line length) -- this page is a 7-column data table, not prose,
+     and 880px forces horizontal scroll at typical desktop/laptop widths
+     for no good reason. This override is scoped to this file only (each
+     view's .page rule lives in its own <style> block, not a shared
+     stylesheet), so it doesn't touch any other page's width. 1280px was
+     originally sized against a 9-column, ~1155px-wide table; collapsing
+     the three caveat columns into one dropped the table's intrinsic
+     width to ~735px, so 1280px is now comfortably more than needed
+     (confirmed: the table fits with zero horizontal scroll at 1024px too
+     now, not just 1440/1280) -- left as-is rather than re-tightened,
+     since a wider-than-strictly-necessary container costs nothing but
+     unused margin on wide displays, not a real problem to fix. */
+  .page { max-width: 1280px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  h1 { font-size: 22px; font-weight: 600; margin: 0 0 6px; }
+  .subtitle { color: var(--text-secondary); margin: 0 0 28px; max-width: 60ch; }
+
+  .view-nav { font-size: 13px; color: var(--text-muted); margin: 0 0 18px; }
+  .view-nav a { color: var(--link); }
+  .view-nav .current { color: var(--text-primary); font-weight: 600; }
+
+  .viz-root {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 24px 16px;
+    overflow-x: auto;
+  }
+
+  /* Same convention/style as statewide.html's .table-note -- explains the
+     Notes column's icons and the Trajectory sparkline's boundary-change
+     truncation, neither of which had any explanation anywhere on this
+     page before. */
+  .table-note {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin: 10px 0 0;
+    max-width: 68ch;
+  }
+
+  /* --- full data table (moved verbatim from district-rankings.html's inline
+     "View as table" section -- same idiom, just no longer gated behind an
+     expand/collapse toggle since this page's sole content is the table
+     itself). --- */
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  /* Every column except District is center-aligned, not right-aligned --
+     right-align made sense when these were mostly plain right-ragged
+     numbers reading like a ledger, but with the Notes column's small
+     marks, the Trajectory column's sparkline, and several narrow
+     year-over-year percentage columns now in the mix, centered reads
+     cleaner across the row. District (column 1) stays left-aligned --
+     it's the one identity/text column, not a value to compare down a
+     column, so left-align is still the right call there specifically.
+     Trajectory USED to be grouped with District as a left-aligned
+     "identity" column back when it showed a typology name as text, but
+     now that it's a sparkline (a visual, not text to read left-to-right)
+     it belongs with the rest of the centered columns instead -- see
+     .cell-typology-visual below for how it's actually centered, since
+     text-align alone doesn't center a block-level SVG. */
+  table.data-table th, table.data-table td {
+    text-align: center;
+    padding: 5px 7px;
+    border-bottom: 1px solid var(--gridline);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  table.data-table th:first-child, table.data-table td:first-child {
+    text-align: left;
+    font-variant-numeric: normal;
+  }
+  table.data-table th {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    user-select: none;
+  }
+  table.data-table th:hover { color: var(--text-primary); }
+  table.data-table th:focus-visible { outline: 2px solid var(--link); outline-offset: -2px; }
+  /* Fixed-width slot, rendered on every sortable header regardless of
+     sort state (renderHead() in school-districts.js always appends one) -- a
+     neutral "⇅" glyph at low opacity marks "this column is sortable" on
+     every column, and a solid "↑"/"↓" at full opacity marks the one
+     actually driving the current order. Because the slot's box width
+     never changes (it's always present, always this width), and only the
+     glyph/opacity inside it changes, no column ever grows or shrinks
+     when the active sort column changes -- see .col-sorted below for the
+     other half of that same no-shift guarantee. */
+  table.data-table th .sort-arrow {
+    display: inline-block;
+    width: 12px;
+    margin-left: 3px;
+    text-align: center;
+    opacity: 0.35;
+  }
+  table.data-table th .sort-arrow.active { opacity: 1; }
+  table.data-table td:first-child a { color: var(--link); text-decoration: none; }
+  table.data-table td:first-child a:hover { text-decoration: underline; }
+
+  /* Trajectory is the one non-sortable header (see renderHead() in
+     school-districts.js) -- no pointer cursor, no hover-brightens, since it
+     doesn't do anything on click, and this is the visual cue that it's
+     different from every other (sortable) header, not just the absence
+     of an arrow. */
+  table.data-table th.col-header-static {
+    cursor: default;
+  }
+  table.data-table th.col-header-static:hover { color: var(--text-muted); }
+
+  /* Active-sort-column indicator -- the small arrow was easy to miss on
+     its own, so the sorted column's header text is visually emphasized
+     (on top of the solid arrow, not instead of it) and every cell in
+     that column gets a subtle background tint, using the existing muted
+     page-plane token rather than a new color, so the whole column reads
+     as "this is what the table is ordered by" at a glance. The emphasis
+     is a text-shadow-based faux-bold, NOT font-weight -- font-weight
+     changes a string's rendered width, which combined with an
+     auto-layout table would grow/shrink this header (and every column
+     after it) each time the active sort column changed, exactly the
+     shifting this is designed to avoid. text-shadow adds visual weight
+     with zero layout impact. Cleared automatically each
+     renderHead()/renderBody() pass -- only the current sortKey's column
+     ever carries this class. */
+  table.data-table th.col-sorted {
+    color: var(--text-primary);
+    text-shadow: 0 0 0.6px currentColor, 0 0 0.6px currentColor;
+  }
+  table.data-table td.col-sorted {
+    background: var(--page-plane);
+  }
+
+  /* Combined Notes column (Thin baseline / Reversal magnitude / Boundary
+     changed folded into one column, since a district can carry more than
+     one at once -- checked against real data: 5 of 235 do). Marks render
+     only for ACTIVE flags (nothing for an inactive one -- with up to 3
+     possible per cell, showing "all clear" icons for each absent flag
+     would be noisier than showing nothing). Deliberately neutral
+     (existing muted/primary ink tokens, not a new color) since this is
+     presence/absence information, not an identity/magnitude encoding the
+     way typology or the gradient colors are elsewhere in this project.
+     Marks are decorative (aria-hidden); the real accessible content is
+     the single .visually-hidden text per cell, which doubles as the
+     cell's title attribute for sighted mouse hover over the cell's outer
+     padding. No flex `gap` here -- .mark-hit's own padding provides the
+     visual spacing between marks instead (see below), since a real flex
+     gap would be dead space that falls through to this combined title
+     rather than to either neighboring mark's own tooltip. */
+  td.cell-caveats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Each mark's actual hoverable footprint -- NOT the same box as the
+     visual dot/badge inside it. The visual marks are only 8-13px; a real
+     mouse aiming "at" one very often lands a pixel or two off, and
+     without this wrapper that near-miss falls through to the cell's
+     combined title above instead of the mark's own (the bug this was
+     built to fix -- see makeCaveatsMark() in school-districts.js for the full
+     root-cause writeup). 2px of horizontal padding on each side means
+     two adjacent marks' hit-zones meet in the middle of what used to be
+     a dead-space gap, so there's no untitled no-man's-land between them
+     -- only the cell's outer padding, genuinely away from every mark,
+     still falls through to the combined title. */
+  .mark-hit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2px;
+  }
+  /* The three Notes mark icons (see thinBaselineIcon()/
+     boundaryChangedIcon()/reversalIcon() in school-districts.js) -- real SVGs,
+     not CSS shapes, colored via currentColor so they track
+     var(--text-primary) automatically in both light and dark without a
+     separate dark-mode override. display:block avoids inline-SVG's
+     default baseline-alignment gap, the same reason .spark-svg needs it
+     for the Trajectory column. */
+  .mark-icon {
+    display: block;
+    color: var(--text-primary);
+    flex: none;
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* text-align:center (inherited from the base th/td rule) only centers
+     inline-level content -- .spark-svg is display:block, so it needs an
+     explicit flex-center here to actually land in the middle of the
+     cell, the same technique .cell-caveats already uses below. */
+  .cell-typology-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+  .spark-svg { display: block; overflow: visible; }
+  .spark-line {
+    fill: none;
+    stroke-width: 1.3;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .meta-links { margin-top: 28px; font-size: 13px; color: var(--text-muted); }
+  .meta-links a { color: var(--text-secondary); }
+</style>
+</head>
+<body>
+  <div class="page">
+    <nav class="view-nav">
+      <a href="index.html">Overview</a> · <a href="statewide.html">Statewide Trend</a> · <a href="map.html">Map</a> · <a href="district-rankings.html">District Rankings</a> · <span class="current">School Districts</span> · <a href="charter-schools.html">Charter Schools</a> · <a href="find-a-district.html">Find a District</a>
+    </nav>
+    <h1>School Districts</h1>
+    <p class="subtitle">
+      District-level data, sortable by column except Trajectory (a visual, not a value to rank by)
+      — all 235 current-boundary districts, unfiltered. A few fields (recovered_from_covid,
+      data_status, current_boundary_since) aren't shown here; see a district's own detail page for
+      those. The <a href="district-rankings.html">district rankings</a> are the simplified, filterable view of
+      the same data; this page is the complete-transparency one.
+    </p>
+
+    <div class="viz-root">
+      <table class="data-table" id="data-table">
+        <thead>
+          <tr id="table-head-row"></tr>
+        </thead>
+        <tbody id="data-table-body"></tbody>
+      </table>
+      <!-- Second sentence's CAGR/COVID drop/EFA change wording matches
+           shared.js's GLOSSARY.cagr/covidDrop/efaChange (also applied as
+           each of those headers' own hover tooltip, see school-districts.js's
+           renderHead()) -- keep in sync if either changes. -->
+      <p class="table-note">
+        Notes icons flag three caveats worth checking before trusting a row's numbers: a broken
+        line for a thin baseline (fewer than 6 years of pre-EFA data), a diamond for a boundary
+        change, and an arrow sized to its magnitude for a notable trend reversal — hover a mark for
+        its specific meaning. Trajectory sparklines cover 2013-2025 for most districts; for the 7
+        whose current boundary postdates 2013, the line starts at that boundary year instead, since
+        earlier years belonged to a different, smaller district. Baseline CAGR and EFA CAGR are each
+        era's average yearly rate of change, accounting for compounding — not the same as a simple
+        total percentage. COVID drop is percent change from the district's highest baseline-era
+        enrollment to its lowest point during the COVID shock (usually negative, but not always).
+        EFA change is the simple total percentage change across the EFA era, not an annualized rate
+        like CAGR.
+      </p>
+    </div>
+
+    <p class="meta-links">
+      Data sources, era definitions, and known limitations: <a href="methodology.html">Methodology</a>.
+    </p>
+  </div>
+
+  <script type="module" src="school-districts.js"></script>
+</body>
+</html>
