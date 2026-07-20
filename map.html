@@ -103,8 +103,8 @@
   .legend-chip.charter .chip-swatch { border-radius: 50%; background: var(--series-charter); }
   .legend-chip.boundary .chip-swatch {
     border-radius: 50%;
-    background: none;
-    border: 1.5px solid var(--text-primary);
+    background: #ffffff;
+    border: 1.5px solid #1a1a1a;
     width: 7px; height: 7px;
   }
 
@@ -120,7 +120,19 @@
   .district-poly-link { cursor: pointer; }
   .district-poly-link:focus { outline: none; }
   .district-poly-link:focus-visible .district-poly { stroke: var(--link); stroke-width: 3; }
-  .boundary-marker { fill: none; stroke: var(--text-primary); stroke-width: 1.5; opacity: 0.75; }
+  /* Boundary-change marker: a small white dot with a fixed dark outline
+     (not var(--text-primary), which would flip to white in dark mode and
+     erase the outline against pale fills there -- the outline's job is
+     contrast against the data-color ramp underneath it, not the page
+     background, so it stays the same dark tone in both modes). Prior
+     version was an unfilled ring in --text-primary at 75% opacity, which
+     nearly disappeared against the map's darker/more saturated fills
+     (confirmed 2026-07-20: essentially invisible against
+     accelerating_decline reds like Camden Fairview's #5c1414). White fill
+     reads clearly against every fill on the ramp since none of the
+     anchors (red/yellow/green, see shared.js GRADIENT_ANCHORS) are
+     light enough to wash it out. */
+  .boundary-marker { fill: #ffffff; stroke: #1a1a1a; stroke-width: 1.25; }
   .charter-point { cursor: pointer; }
   .charter-point:focus { outline: none; }
   .charter-point:focus-visible { stroke: var(--link) !important; stroke-width: 3 !important; }

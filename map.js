@@ -261,18 +261,21 @@ function renderMap(svg, tooltip, geo, charterPoints, mode) {
 
     polyLayer.appendChild(link);
 
-    // Boundary-change indicator: a distinct ring at the polygon's
+    // Boundary-change indicator: a distinct dot at the polygon's
     // centroid, visible on the map itself (not just discoverable via
     // hover/tooltip) -- the map-appropriate equivalent of the ranked
     // list's "Boundary changed" badge. Deliberately NOT a dashed
     // outline on the polygon itself, since that pattern is already
     // reserved for NO_DATA_STROKE's "insufficient history to classify"
     // meaning -- reusing it here for a different meaning (boundary
-    // changed, but fully classified) would conflate the two.
+    // changed, but fully classified) would conflate the two. r=4, one
+    // pixel smaller than the charter markers' r=5, so the two are
+    // distinguishable by size as well as by color (white fill here vs.
+    // charter's orange) even before the fill-color difference registers.
     if (d.boundary_change_within_series) {
       const [cx, cy] = path.centroid(f);
       markerLayer.appendChild(el("circle", {
-        class: "boundary-marker", cx, cy, r: 5,
+        class: "boundary-marker", cx, cy, r: 4,
       }));
     }
   }
