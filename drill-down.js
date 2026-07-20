@@ -488,10 +488,10 @@ function renderDistrict(d) {
   statNote.textContent =
     "Baseline CAGR and EFA CAGR are each era's average yearly rate of change, accounting for " +
     "compounding, not the same as a simple total percentage. COVID drop is percent change from " +
-    "the district's highest baseline-era enrollment to its lowest point during the COVID shock " +
-    "(usually negative, but not always). COVID recovery is whether enrollment had climbed back to " +
-    "within 2% of its pre-COVID peak by the first EFA year. EFA change is the simple total " +
-    "percentage change across the EFA era, not an annualized rate like CAGR.";
+    "the district's 2019-20 enrollment (the last year before the pandemic) to its lowest point " +
+    "during the COVID shock (usually negative, but not always). COVID recovery is whether " +
+    "enrollment had climbed back to within 2% of its 2019-20 enrollment by the first EFA year. " +
+    "EFA change is the simple total percentage change across the EFA era, not an annualized rate like CAGR.";
   viz.appendChild(statNote);
 
   // --- boundary-change note ---

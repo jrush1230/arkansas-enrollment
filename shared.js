@@ -1022,8 +1022,8 @@ export function districtTrajectoryText(district) {
 export const GLOSSARY = {
   cagr: "The average yearly rate of change, accounting for compounding, not the same as a simple total percentage change.",
   efaChange: "The simple total percentage change in enrollment from the start of the EFA era (2022-23) to the most recent year, not an annualized rate like CAGR.",
-  covidDrop: "Percent change from the district's highest baseline-era enrollment to its lowest point during the COVID shock (2020-21, 2021-22). Usually negative, but not always: a district whose COVID-year low never actually dropped below its own pre-COVID peak still shows a positive value here.",
-  covidRecovery: "Whether enrollment had climbed back to within 2% of its pre-COVID peak by the first EFA year (2022-23).",
+  covidDrop: "Percent change from the district's 2019-20 enrollment (the last year before the pandemic) to its lowest point during the COVID shock (2020-21, 2021-22). Usually negative, but not always: a district whose COVID-year low never actually dropped below its own 2019-20 enrollment still shows a positive value here.",
+  covidRecovery: "Whether enrollment had climbed back to within 2% of its 2019-20 enrollment (the last year before the pandemic) by the first EFA year (2022-23).",
   other: "The Division of Youth Services School System and the Arkansas School for the Deaf and Blind, state-run schools that are neither a regular district nor a charter.",
   predecessor: "A real school district later merged into a current district (e.g. Dollarway, absorbed into Pine Bluff in 2021), counted only for its own years before that merger.",
   // charter-schools.html's own cumulative sort column -- explicitly NOT
