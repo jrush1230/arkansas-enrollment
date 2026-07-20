@@ -133,7 +133,12 @@
       single-day snapshot should not be (it should diverge from SIS by roughly the same
       ~3.5–4% CCD does). SIS also matches ADE's own published figures and independent media
       reporting to the exact student (e.g., Springdale 21,097 and Little Rock 18,964, both
-      2025-26, matched exactly). What's confirmed only approximately: SIS's total resembles
+      2025-26, matched exactly). All 235 districts were individually cross-checked against ADE's
+      current "Enrollment Count by District" report for 2025-26, joined by state LEA code rather
+      than by name (via the crosswalk pipeline's <code>leaid</code>/<code>district_lea</code>
+      mapping, since the two sources use different code schemes), and every one matched exactly.
+      Earlier years have not been cross-checked district-by-district this way. What's confirmed
+      only approximately: SIS's total resembles
       the state's first-quarter average-daily-membership figure (<code>adm_q1</code>) within
       about 0.82% mean deviation, from a limited sample comparison: a resemblance, not a
       proven equivalence. What's not confirmed: the exact technical definition of what SIS's
