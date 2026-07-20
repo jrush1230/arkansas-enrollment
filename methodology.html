@@ -79,6 +79,8 @@
   .technical-pointer p { margin: 0; color: var(--text-secondary); }
 
   .meta-links { margin-top: 28px; font-size: 13px; color: var(--text-muted); }
+  .site-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--gridline); font-size: 13px; color: var(--text-muted); }
+  .site-footer a { color: var(--text-secondary); }
 </style>
 </head>
 <body>
@@ -98,24 +100,24 @@
     <p>
       Every enrollment figure in this tool comes from one source: the <strong>Arkansas
       Department of Education's own student data system</strong> (the Statewide Information
-      System, or SIS), as published in the state's public enrollment reports. We use the number
+      System, or SIS), as published in the state's public enrollment reports. I use the number
       the state itself publishes and treats as the official enrollment count for each district
       and each charter school system, for every school year from 2013–14 through 2025–26.
     </p>
     <p>
-      We should be upfront about one thing: <strong>we have not independently verified how
+      I should be upfront about one thing: <strong>I have not independently verified how
       Arkansas computes this number internally</strong>, and the state's own labeling is not a
       reliable guide. One ADE report that carries this figure is titled as an "October 1"
-      enrollment count, but our testing found it is identical — to the student — to a figure
+      enrollment count, but my testing found it is identical — to the student — to a figure
       that behaves like an <em>average</em> of enrollment over part of the year, not a
-      single-day headcount. What we can say with confidence:
+      single-day headcount. What I can say with confidence:
     </p>
     <ul>
       <li>It is <strong>not</strong> a single-day fall headcount of the kind the federal
       government publishes (see the next section) — it consistently runs a few percent below
       that kind of count.</li>
       <li>It closely tracks (within about 1%) the state's "average daily membership" figure for
-      the first quarter of the school year, but it is not exactly equal to it, and we do not
+      the first quarter of the school year, but it is not exactly equal to it, and I do not
       know its precise day-to-day definition.</li>
       <li>It <strong>reconciles exactly</strong> with the statewide totals Arkansas publishes.
       For every one of the thirteen years shown, the sum of every entity in this tool's data
@@ -123,18 +125,18 @@
       student</strong> (see "What has been verified" below).</li>
     </ul>
     <p>
-      We chose this number because it is what Arkansas itself publishes and stands behind — not
-      because we have audited its internal computation.
+      I chose this number because it is what Arkansas itself publishes and stands behind — not
+      because I have audited its internal computation.
     </p>
 
-    <h2>Why we use the state's numbers instead of the federal ones</h2>
+    <h2>Why I use the state's numbers instead of the federal ones</h2>
 
     <p>
       There is a second candidate source: the U.S. Department of Education's Common Core of
-      Data (CCD), which publishes a fall headcount for every district in the country. We
+      Data (CCD), which publishes a fall headcount for every district in the country. I
       compared the two, district by district, for every overlapping year. The federal count
       runs consistently about 3.5–4% <strong>higher</strong> than the state's figure — every
-      year, in a stable and predictable way. (One year, 2023–24, the two nearly converge; we
+      year, in a stable and predictable way. (One year, 2023–24, the two nearly converge; I
       found no explanation for that anomaly and flag it as unresolved.)
     </p>
     <p>
@@ -142,14 +144,14 @@
       number is a snapshot of who is enrolled on a single day in the fall; the state number
       behaves like membership measured over time, which runs lower whenever students leave
       during the year. But it does mean the two cannot be mixed in one time series without a
-      hidden few-percent jump wherever the sources switch. We tried two hybrid designs, found
+      hidden few-percent jump wherever the sources switch. I tried two hybrid designs, found
       both baked that bias into long-term trend measurements, and abandoned them in favor of
       using the state source alone.
     </p>
     <p>
       Two practical points also favored the state data. First, it matches what Arkansans
       actually see: the state's published district figures and news coverage of them agree with
-      our numbers exactly (for example, Springdale's 21,097 and Little Rock's 18,964 for
+      my numbers exactly (for example, Springdale's 21,097 and Little Rock's 18,964 for
       2025–26). Second, the federal file simply lost track of two real, continuously operating
       Arkansas districts (Cross County, and the Imboden Charter district), while the state data
       covers both without interruption.
@@ -196,7 +198,7 @@
     </ul>
     <p>
       For these seven, the years before the merger show the district <em>as it existed
-      then</em> — smaller, without the absorbed district's students. We never add the two
+      then</em> — smaller, without the absorbed district's students. I never add the two
       predecessors' enrollments together to fake a longer history, because real students are
       lost in every merger transition and a stitched-together number would invent a history no
       district actually had. On these districts' charts, the merger year is marked with a
@@ -254,16 +256,16 @@
     <p>
       <strong>Verified with limits:</strong> Individual district-level figures all come from
       the same state data file whose totals reconcile exactly, and every district-level spot
-      check we have made matches the state's published figure — but we have not individually
+      check I have made matches the state's published figure — but I have not individually
       cross-checked all 235 districts in all 13 years against a second publication. The
       comparison against federal data, and the finding that the state's figure is not a
-      single-day count, are our own analysis, reproducible from public data.
+      single-day count, are my own analysis, reproducible from public data.
     </p>
     <p>
       <strong>Not verified:</strong> The state's internal method for computing its enrollment
       figure (see the first section). The cause of the 2023–24 federal/state convergence
       anomaly. News-media attributions for a small number of figures were recorded second-hand
-      and match our data exactly. Several of these (Springdale's 21,097, Little Rock's 18,964,
+      and match my data exactly. Several of these (Springdale's 21,097, Little Rock's 18,964,
       the LEARNS Act's March 8, 2023 signing date, and the Pine Bluff–Dollarway merger) have
       since been independently re-confirmed against original external sources; the remainder
       have not.
@@ -293,6 +295,10 @@
     <p class="meta-links">
       Built by Joel Rush · a sidetown.io project.
     </p>
+
+    <footer class="site-footer">
+      Joel Rush · <a href="mailto:joelrush@gmail.com">joelrush@gmail.com</a>
+    </footer>
   </div>
 </body>
 </html>
