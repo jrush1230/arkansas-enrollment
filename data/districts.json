@@ -222,7 +222,7 @@
     "efa_cagr": 0.0045830154475197,
     "pct_change_efa_era": 0.013812154696132596,
     "covid_drop_pct": -0.0682414698162729,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -922,7 +922,7 @@
     "efa_cagr": 0.0039626793857134,
     "pct_change_efa_era": 0.011935208866155157,
     "covid_drop_pct": -0.0419753086419753,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -1062,7 +1062,7 @@
     "efa_cagr": -0.0303218888285795,
     "pct_change_efa_era": -0.08823529411764706,
     "covid_drop_pct": 0.0,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -1132,7 +1132,7 @@
     "efa_cagr": -0.0551385793512174,
     "pct_change_efa_era": -0.1564625850340136,
     "covid_drop_pct": -0.0264705882352941,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -1272,7 +1272,7 @@
     "efa_cagr": -0.0174178009599608,
     "pct_change_efa_era": -0.05134854771784232,
     "covid_drop_pct": -0.0162312959675374,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -1902,7 +1902,7 @@
     "efa_cagr": -0.0754029856969639,
     "pct_change_efa_era": -0.20958083832335328,
     "covid_drop_pct": -0.0153550863723608,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -2392,7 +2392,7 @@
     "efa_cagr": -0.0388512244130184,
     "pct_change_efa_era": -0.11208406304728546,
     "covid_drop_pct": -0.0370967741935483,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -2730,7 +2730,7 @@
     "efa_cagr": -0.0154019804136559,
     "pct_change_efa_era": -0.04549793191218581,
     "covid_drop_pct": -0.0263876251137397,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -2940,7 +2940,7 @@
     "efa_cagr": 0.0427047956360748,
     "pct_change_efa_era": 0.13366336633663367,
     "covid_drop_pct": -0.0193236714975845,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -3220,7 +3220,7 @@
     "efa_cagr": -0.0171789809176442,
     "pct_change_efa_era": -0.05065666041275797,
     "covid_drop_pct": -0.0520477815699658,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -3780,7 +3780,7 @@
     "efa_cagr": -0.0455339334968665,
     "pct_change_efa_era": -0.13047619047619047,
     "covid_drop_pct": -0.0232126276694521,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -4550,7 +4550,7 @@
     "efa_cagr": -0.0191223523300879,
     "pct_change_efa_era": -0.05627705627705628,
     "covid_drop_pct": -0.0413223140495867,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -5250,7 +5250,7 @@
     "efa_cagr": 0.0070013948580065,
     "pct_change_efa_era": 0.021151586368977675,
     "covid_drop_pct": -0.0617848970251716,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -5390,7 +5390,7 @@
     "efa_cagr": 0.0091916917898129,
     "pct_change_efa_era": 0.027829313543599257,
     "covid_drop_pct": -0.0036166365280289,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -6230,7 +6230,7 @@
     "efa_cagr": -0.0481530589453153,
     "pct_change_efa_era": -0.13761467889908258,
     "covid_drop_pct": -0.0265486725663716,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -6790,7 +6790,7 @@
     "efa_cagr": -0.0187475423403544,
     "pct_change_efa_era": -0.05519480519480519,
     "covid_drop_pct": -0.026956106870229,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -7350,7 +7350,7 @@
     "efa_cagr": -0.0638284359671813,
     "pct_change_efa_era": -0.17952314165497896,
     "covid_drop_pct": -0.013262599469496,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -7910,7 +7910,7 @@
     "efa_cagr": -0.0032223639105843,
     "pct_change_efa_era": -0.009635974304068522,
     "covid_drop_pct": -0.0180541624874623,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -8330,7 +8330,7 @@
     "efa_cagr": -0.0292632874298853,
     "pct_change_efa_era": -0.08524590163934426,
     "covid_drop_pct": -0.055722891566265,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -9170,7 +9170,7 @@
     "efa_cagr": -0.0281480635300311,
     "pct_change_efa_era": -0.08208955223880597,
     "covid_drop_pct": -0.0887850467289719,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -9310,7 +9310,7 @@
     "efa_cagr": -0.0417067629118055,
     "pct_change_efa_era": -0.11997447351627313,
     "covid_drop_pct": -0.031094527363184,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -9380,7 +9380,7 @@
     "efa_cagr": -0.0225725064127925,
     "pct_change_efa_era": -0.0662004662004662,
     "covid_drop_pct": -0.0321020228671943,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -9590,7 +9590,7 @@
     "efa_cagr": -0.0324740855297399,
     "pct_change_efa_era": -0.09429280397022333,
     "covid_drop_pct": -0.0312124849939975,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -10360,7 +10360,7 @@
     "efa_cagr": 0.005106638684535,
     "pct_change_efa_era": 0.015398282499259699,
     "covid_drop_pct": -0.0384946854352197,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -10780,7 +10780,7 @@
     "efa_cagr": 0.0256909138921672,
     "pct_change_efa_era": 0.07906976744186046,
     "covid_drop_pct": -0.1171875,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -10850,7 +10850,7 @@
     "efa_cagr": -0.0306764653703565,
     "pct_change_efa_era": -0.08923512747875353,
     "covid_drop_pct": -0.0532060027285129,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -10920,7 +10920,7 @@
     "efa_cagr": -0.0202507622385561,
     "pct_change_efa_era": -0.05953031130529765,
     "covid_drop_pct": -0.0373250388802488,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -11130,7 +11130,7 @@
     "efa_cagr": 0.0397761879805274,
     "pct_change_efa_era": 0.12413793103448276,
     "covid_drop_pct": -0.0421393841166936,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -11200,7 +11200,7 @@
     "efa_cagr": -0.0107874764504904,
     "pct_change_efa_era": -0.032014575741801145,
     "covid_drop_pct": -0.053998981151299,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -11690,7 +11690,7 @@
     "efa_cagr": -0.0126842958757373,
     "pct_change_efa_era": -0.03757225433526012,
     "covid_drop_pct": -0.039647577092511,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -12390,7 +12390,7 @@
     "efa_cagr": 0.0150776445239839,
     "pct_change_efa_era": 0.04591836734693878,
     "covid_drop_pct": -0.0213776722090261,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -12460,7 +12460,7 @@
     "efa_cagr": -0.0066600336588368,
     "pct_change_efa_era": -0.01984732824427481,
     "covid_drop_pct": -0.0014409221902017,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -13790,7 +13790,7 @@
     "efa_cagr": -0.0277280295866655,
     "pct_change_efa_era": -0.08089887640449438,
     "covid_drop_pct": -0.0163755458515283,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -14280,7 +14280,7 @@
     "efa_cagr": 0.0105668201145385,
     "pct_change_efa_era": 0.032036613272311214,
     "covid_drop_pct": -0.0066666666666666,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -15260,7 +15260,7 @@
     "efa_cagr": -0.0117272881685485,
     "pct_change_efa_era": -0.03477088948787062,
     "covid_drop_pct": -0.0018008747105737,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {
@@ -15330,7 +15330,7 @@
     "efa_cagr": -0.0057661907825382,
     "pct_change_efa_era": -0.0171990171990172,
     "covid_drop_pct": -0.0305882352941176,
-    "recovered_from_covid": false,
+    "recovered_from_covid": true,
     "geo": null,
     "series": [
       {

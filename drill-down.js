@@ -54,6 +54,37 @@ function fmtMagnitude(v) {
   return v ? v[0].toUpperCase() + v.slice(1) : "";
 }
 
+// recovered_from_covid (districts.json, classify_typology_v5.py) is now a
+// window check -- True if enrollment cleared 98% of the 2019-20 level at
+// ANY point in 2020-21/2021-22/2022-23, not only at the most recent point.
+// That means True no longer implies the district is STILL at/above that
+// level today: a district can recover briefly during the window and keep
+// declining afterward for its own, unrelated (often pre-COVID-rooted)
+// reasons -- Hope School District is exactly this case (recovered in
+// 2020-21, but sits well below threshold by 2025-26). Checked directly:
+// 86 of 155 recovered_from_covid=True districts (55.5%) are currently
+// below their own 2019-20-based threshold in their latest available year --
+// this is not a rare edge case, it's the majority pattern for districts
+// this field marks True, including several never touched by the window
+// widening itself (e.g. Cabot, Springdale, Rogers -- already True under
+// the old single-snapshot definition, but have since declined again for
+// their own reasons). A present-tense "has since recovered" would
+// therefore be actively misleading for most True districts, not just the
+// newly-flipped ones, so this checks the district's own latest series
+// point against the same 98%-of-2019-20 threshold classify_typology_v5.py
+// uses (RECOVERY_FRACTION there; kept in sync manually here since this is
+// the one threshold value duplicated into JS -- update both if either
+// changes) rather than assuming the field's own boolean settles tense.
+const COVID_RECOVERY_FRACTION = 0.98;
+
+function stillAboveCovidRecoveryThreshold(d) {
+  if (!Array.isArray(d.series) || !d.series.length) return null;
+  const baseline2019 = d.series.find((p) => p.year === "2019");
+  if (!baseline2019) return null;
+  const latest = d.series[d.series.length - 1];
+  return latest.enrollment >= COVID_RECOVERY_FRACTION * baseline2019.enrollment;
+}
+
 function summarySentence(d) {
   let s = `${shortName(d.name)} ${districtShapeClause(d)}.`;
   if (!d.typology) return s;
@@ -63,8 +94,15 @@ function summarySentence(d) {
   if (typeof d.covid_drop_pct === "number" && Math.abs(d.covid_drop_pct) >= 0.03) {
     const pctText = Math.abs(Math.round(d.covid_drop_pct * 100));
     if (d.covid_drop_pct < 0) {
-      s += ` Enrollment dropped ${pctText}% during the COVID shock and ` +
-        (d.recovered_from_covid ? "has since recovered to its pre-COVID level." : "has not yet recovered to its pre-COVID level.");
+      let recoveryText;
+      if (!d.recovered_from_covid) {
+        recoveryText = "has not yet recovered to its pre-COVID level.";
+      } else if (stillAboveCovidRecoveryThreshold(d)) {
+        recoveryText = "has since recovered to its pre-COVID level.";
+      } else {
+        recoveryText = "recovered to its pre-COVID level for a time, but enrollment has since fallen again.";
+      }
+      s += ` Enrollment dropped ${pctText}% during the COVID shock and ${recoveryText}`;
     } else {
       s += ` Enrollment rose ${pctText}% during the COVID shock years.`;
     }
@@ -490,8 +528,9 @@ function renderDistrict(d) {
     "compounding, not the same as a simple total percentage. COVID drop is percent change from " +
     "the district's 2019-20 enrollment (the last year before the pandemic) to its lowest point " +
     "during the COVID shock (usually negative, but not always). COVID recovery is whether " +
-    "enrollment had climbed back to within 2% of its 2019-20 enrollment by the first EFA year. " +
-    "EFA change is the simple total percentage change across the EFA era, not an annualized rate like CAGR.";
+    "enrollment climbed back to within 2% of its 2019-20 level at any point during the COVID " +
+    "shock or by the first EFA year (2020-21 through 2022-23). EFA change is the simple total " +
+    "percentage change across the EFA era, not an annualized rate like CAGR.";
   viz.appendChild(statNote);
 
   // --- boundary-change note ---
