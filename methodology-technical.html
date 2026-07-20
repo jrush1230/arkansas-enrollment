@@ -103,7 +103,7 @@
     <h1>Technical methodology</h1>
 
     <p class="lede">
-      The compact, field-level version — for the plain-language explanation, see the
+      The compact, field-level version: for the plain-language explanation, see the
       <a href="methodology.html">methodology</a> page.
     </p>
 
@@ -127,15 +127,15 @@
       CCD's fall headcount runs a stable ~3.5–4% <em>higher</em> than SIS across every year
       2013-14 through 2024-25 (except an unexplained 2023-24 convergence). This is a real
       measurement difference, not an error, though SIS's own exact day-to-day methodology
-      isn't fully pinned down. What's confirmed: SIS is not a CCD-style single-day headcount —
-      a differently-named ADE report ("Enrollment by District on October 1") was tested and
+      isn't fully pinned down. What's confirmed: SIS is not a CCD-style single-day headcount.
+      A differently-named ADE report ("Enrollment by District on October 1") was tested and
       found byte-identical to this same SIS figure across every year checked, which a true
       single-day snapshot should not be (it should diverge from SIS by roughly the same
       ~3.5–4% CCD does). SIS also matches ADE's own published figures and independent media
       reporting to the exact student (e.g., Springdale 21,097 and Little Rock 18,964, both
       2025-26, matched exactly). What's confirmed only approximately: SIS's total resembles
       the state's first-quarter average-daily-membership figure (<code>adm_q1</code>) within
-      about 0.82% mean deviation, from a limited sample comparison — a resemblance, not a
+      about 0.82% mean deviation, from a limited sample comparison: a resemblance, not a
       proven equivalence. What's not confirmed: the exact technical definition of what SIS's
       total column measures day-to-day; ADE's own "October 1" naming does not appear to
       describe this number's real methodology, given the byte-identical result above. SIS was
@@ -146,8 +146,8 @@
       workaround logic.
     </p>
     <p>
-      The full investigation — the year-by-year offset table and two abandoned CCD/SIS blend
-      designs — is documented in the upstream pipeline's working notes
+      The full investigation (the year-by-year offset table and two abandoned CCD/SIS blend
+      designs) is documented in the upstream pipeline's working notes
       (<a href="mailto:joelrush@gmail.com">available on request</a>).
     </p>
 
@@ -174,12 +174,12 @@
       district): Smackover Norphlet, Camden Fairview, Magnolia, Nevada (all start 2014),
       Hackett, West Memphis (both start 2015), and Pine Bluff (starts 2021). A related case,
       Jacksonville North Pulaski, defaults to a 2013 <code>current_boundary_since</code> but
-      has no real SIS rows before 2016-17 (the district's actual creation date) — its thin
+      has no real SIS rows before 2016-17 (the district's actual creation date), its thin
       baseline is caught by <code>baseline_years_thin</code>/<code>n_baseline_years</code>,
       not by <code>current_boundary_since</code>.</li>
       <li><strong>Pine Bluff is one of the 7 boundary-change districts above (2021), not a
       special case.</strong> An earlier version of this doc said Pine Bluff had zero
-      baseline-era years and <code>typology: null</code> — that was true before a fix pulled
+      baseline-era years and <code>typology: null</code>. That was true before a fix pulled
       its own pre-merger enrollment into a continuous record (context-only, not fed into
       classification, same treatment as the other 6). Pine Bluff now has a full 2013-2025
       series, <code>data_status: "ok"</code>, and a real <code>typology</code> like every
@@ -188,7 +188,7 @@
       missing.</strong> It's <code>null</code> for all 235 districts and was never populated.
       The map instead joins district polygons from a separate boundary file,
       <code>data/arkansas_districts.topojson</code> (Census TIGER 2024, simplified for the
-      web), to each district's <code>districts.json</code> record by GEOID at render time —
+      web), to each district's <code>districts.json</code> record by GEOID at render time,
       not a blocker for anything; every view, including the map, is fully functional.</li>
       <li><strong>The District Rankings row encodes several things at once, by design.</strong>
       Each row shows a rank number, a gradient-colored dot keyed to
@@ -208,7 +208,7 @@
     <div class="plain-pointer">
       <p>
         Prefer plain English? The <a href="methodology.html">methodology page</a> covers the
-        same ground for a general reader — where the numbers come from, what the eras mean,
+        same ground for a general reader: where the numbers come from, what the eras mean,
         and exactly what has and hasn't been verified.
       </p>
     </div>

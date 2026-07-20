@@ -175,19 +175,19 @@ function renderFootnote(points, seriesKey) {
   function verificationClause() {
     if (unconfirmedPoints.length === 0) {
       return `Verified against Arkansas's officially published statewide totals for all ${points.length} years ` +
-        `(${confirmedRange}) — ${sourceAttribution(confirmedPoints)} — no residual in any of those years.`;
+        `(${confirmedRange}, ${sourceAttribution(confirmedPoints)}) — no residual in any of those years.`;
     }
     if (confirmedPoints.length === 0) {
       // Defensive, not reachable with today's data (all 13 years are
       // already confirmed) -- but if ADE_CONFIRMED_YEARS were ever
       // emptied, this avoids the same crash in the other direction.
       return `${unconfirmedRange} ${unconfirmedPoints.length === 1 ? "is" : "are"} not verified against an ` +
-        `external ADE publication — ADE's archived Annual Statistical Reports likely have the figures, not yet retrieved.`;
+        `external ADE publication: ADE's archived Annual Statistical Reports likely have the figures, not yet retrieved.`;
     }
     return `Verified against Arkansas's officially published statewide totals for ${confirmedPoints.length} of ` +
-      `${points.length} years (${confirmedRange}) — ${sourceAttribution(confirmedPoints)} — no residual in any of ` +
+      `${points.length} years (${confirmedRange}, ${sourceAttribution(confirmedPoints)}) — no residual in any of ` +
       `those years. ${unconfirmedRange} ${unconfirmedPoints.length === 1 ? "is" : "are"} not verified against an ` +
-      `external ADE publication — ADE's archived Annual Statistical Reports likely have the figures, not yet retrieved.`;
+      `external ADE publication: ADE's archived Annual Statistical Reports likely have the figures, not yet retrieved.`;
   }
 
   if (seriesKey === "district") {
@@ -209,9 +209,9 @@ function renderFootnote(points, seriesKey) {
       : `${confirmedPoints.length} of ${points.length} years`;
     footnote.textContent =
       `This series sums every public charter school LEA reporting to SIS that year (${last.charterCount} in ${schoolYearLabel(last.year)}), ` +
-      `excluding predecessor districts absorbed by a merger (tracked separately — see the table's Predecessor ` +
-      `column). Growth reflects both enrollment growth at existing public charter schools and new ones opening ` +
-      `— the number of reporting entities changes year to year, it isn't a fixed panel. This series isn't independently verified ` +
+      `excluding predecessor districts absorbed by a merger (tracked separately: see the table's Predecessor ` +
+      `column). Growth reflects both enrollment growth at existing public charter schools and new ones opening. ` +
+      `The number of reporting entities changes year to year; it isn't a fixed panel. This series isn't independently verified ` +
       `against an external ADE publication on its own; it's verified indirectly, via the zero-residual check that ` +
       `District + Charter + Other + Predecessor reconciles exactly to the ADE-confirmed All total in ` +
       `${reconciledClause}. See the table for the full breakdown. See METHODOLOGY.md.`;

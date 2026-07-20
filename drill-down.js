@@ -337,7 +337,7 @@ function renderDistrict(d) {
   // hover that its plain-language meaning is right below it, now that
   // the summary sentence sits immediately adjacent instead of scrolled
   // past the chart.
-  typo.title = "Trajectory category — see the description alongside it";
+  typo.title = "Trajectory category: see the description alongside it";
   identity.appendChild(swatch);
   identity.appendChild(typo);
   // Order matches the ranked list/data table's established caveat order
@@ -487,7 +487,7 @@ function renderDistrict(d) {
   statNote.className = "stat-note";
   statNote.textContent =
     "Baseline CAGR and EFA CAGR are each era's average yearly rate of change, accounting for " +
-    "compounding — not the same as a simple total percentage. COVID drop is percent change from " +
+    "compounding, not the same as a simple total percentage. COVID drop is percent change from " +
     "the district's highest baseline-era enrollment to its lowest point during the COVID shock " +
     "(usually negative, but not always). COVID recovery is whether enrollment had climbed back to " +
     "within 2% of its pre-COVID peak by the first EFA year. EFA change is the simple total " +
@@ -500,7 +500,7 @@ function renderDistrict(d) {
     note.className = "boundary-note";
     note.textContent =
       `This district absorbed ${boundary.predecessor} in ${boundary.year}. Enrollment before ${boundary.year} on the ` +
-      `chart reflects ${shortName(d.name)}'s boundary as it existed before that merger — it does not include ` +
+      `chart reflects ${shortName(d.name)}'s boundary as it existed before that merger. It does not include ` +
       `${boundary.predecessor}'s students. The jump at ${boundary.year} marks the merger itself, not a sudden ` +
       `change in the underlying population. See METHODOLOGY.md for the full list of boundary-change districts.`;
     viz.appendChild(note);

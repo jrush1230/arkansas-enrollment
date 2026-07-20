@@ -108,7 +108,7 @@ function findYoyPair(charter, fromYear, toYear) {
 // genuinely verified explanation here, not an assumption.
 function yoyDashTitle(charter) {
   const firstYear = charter.series[0]?.year;
-  return `No data — ${charter.name} opened in ${schoolYearLabel(firstYear)}.`;
+  return `No data: ${charter.name} opened in ${schoolYearLabel(firstYear)}.`;
 }
 
 // Flags EFA-era change for a charter whose figure rests on only 1
@@ -122,7 +122,7 @@ function thinEvidenceTitle(charter) {
   const pairs = efaYearOverYear(charter);
   const n = pairs.length;
   const range = `${schoolYearLabel(pairs[0].fromYear)} → ${schoolYearLabel(pairs[n - 1].toYear)}`;
-  return `Based on only ${n} year-over-year comparison${n === 1 ? "" : "s"} (${range}), not the 3 most charters have — ` +
+  return `Based on only ${n} year-over-year comparison${n === 1 ? "" : "s"} (${range}), not the 3 most charters have. ` +
     `${charter.name} opened in ${schoolYearLabel(charter.series[0]?.year)}.`;
 }
 
