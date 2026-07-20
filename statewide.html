@@ -57,6 +57,18 @@
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 24px 24px 16px;
+    /* The "View as table" toggle's table (width:100%, table-layout:auto)
+       grows past its container on narrow viewports rather than shrinking
+       to fit, since table-layout:auto sizes columns from content and
+       ignores the percentage width once six columns' minimum content
+       widths exceed it -- confirmed 2026-07-20: table renders ~517px
+       wide inside a ~393px-wide .viz-root at 375-ish px viewport widths,
+       with nothing to contain the excess (overflow-x defaulted to
+       visible), so it spilled out and widened the whole page. Same fix
+       already applied to charter-schools.html and school-districts.html's
+       own .viz-root for the same reason -- this page's embedded toggle
+       was just never given the same treatment when it was added. */
+    overflow-x: auto;
   }
 
   .legend {
