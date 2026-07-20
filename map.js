@@ -128,7 +128,17 @@ function showTooltip(tooltip, root, xPix, yPix, buildContent) {
   const px = (xPix / VB_W) * rootRect.width;
   const py = (yPix / VB_H) * rootRect.height;
   tooltip.style.left = Math.min(px + 12, rootRect.width - 250) + "px";
-  tooltip.style.top = Math.max(py - 10, 8) + "px";
+  // Clamp against the tooltip's own just-rendered height, not a guessed
+  // constant (unlike the left clamp's "250", height varies a lot with
+  // content -- typology label length, whether a boundary note is
+  // present) -- confirmed 2026-07-20: southern-border districts (whose
+  // centroid sits near the bottom of the map's projected shape) pushed
+  // the tooltip up to 143px past its own container's bottom edge at
+  // narrow viewport widths, overlapping the caption text below the map.
+  // Only became visible at narrow widths because the container itself
+  // is shorter there relative to a still-multi-line-wrapping tooltip.
+  const maxTop = Math.max(8, rootRect.height - tooltip.offsetHeight - 8);
+  tooltip.style.top = Math.min(Math.max(py - 10, 8), maxTop) + "px";
 }
 
 function hideTooltip(tooltip) {
