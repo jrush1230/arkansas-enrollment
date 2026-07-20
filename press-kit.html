@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Press Kit — Arkansas K-12 enrollment</title>
+<style>
+  :root {
+    --surface-1:      #fcfcfb;
+    --page-plane:     #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --border:         rgba(11,11,11,0.44);
+    --link:           #2a78d6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface-1:      #1a1a19;
+      --page-plane:     #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --border:         rgba(255,255,255,0.33);
+      --link:           #3987e5;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--page-plane);
+    color: var(--text-primary);
+    font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  /* Same 720px prose width as methodology.html/index.html -- this page is
+     long-form reference content, not a data view. */
+  .page { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .view-nav { font-size: 13px; color: var(--text-muted); margin: 0 0 18px; }
+  .view-nav a { color: var(--link); }
+
+  h1 { font-size: 26px; font-weight: 700; margin: 0 0 14px; line-height: 1.25; }
+  .lede { font-size: 17px; font-weight: 600; color: var(--text-primary); margin: 0 0 16px; }
+  p { margin: 0 0 16px; color: var(--text-secondary); }
+  p a, li a { color: var(--link); }
+  strong { color: var(--text-primary); }
+
+  h2 {
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
+    margin: 36px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--gridline);
+  }
+
+  ul { margin: 0 0 16px; padding-left: 22px; color: var(--text-secondary); }
+  li { margin: 0 0 8px; }
+
+  .vintage-note { font-size: 13px; color: var(--text-muted); margin: -8px 0 16px; }
+
+  /* Same bordered-panel treatment methodology.html's technical-pointer and
+     index.html's "can't tell" box use, reused here for the screenshots. */
+  figure {
+    margin: 0 0 20px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--surface-1);
+  }
+  figure img { display: block; width: 100%; height: auto; }
+  figcaption {
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--gridline);
+  }
+
+  .technical-pointer {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 8px;
+  }
+  .technical-pointer p { margin: 0; color: var(--text-secondary); }
+
+  .meta-links { margin-top: 28px; font-size: 13px; color: var(--text-muted); }
+  .site-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--gridline); font-size: 13px; color: var(--text-muted); }
+  .site-footer a { color: var(--text-secondary); }
+</style>
+</head>
+<body>
+  <div class="page">
+    <nav class="view-nav">
+      <a href="index.html">Overview</a> · <a href="statewide.html">Statewide Trend</a> · <a href="map.html">Map</a> · <a href="district-rankings.html">District Rankings</a> · <a href="school-districts.html">School Districts</a> · <a href="charter-schools.html">Charter Schools</a> · <a href="find-a-district.html">Find a District</a>
+    </nav>
+
+    <h1>Press Kit</h1>
+
+    <p class="lede">
+      Background, current figures, and screenshots for reporters covering Arkansas K-12
+      enrollment.
+    </p>
+
+    <h2>Boilerplate</h2>
+
+    <p>
+      Arkansas Public School Enrollment 2013-2026 tracks fall-by-fall enrollment for all 235
+      current-boundary Arkansas public school districts and all 22 public charter school
+      systems, drawn from the state's own Student Information System (SIS). It covers
+      thirteen years, before, during, and after the state's LEARNS Act created Education
+      Freedom Accounts (EFAs) in 2023. Statewide totals are verified against Arkansas's
+      officially published figures for all thirteen years, to the student.
+    </p>
+
+    <h2>Current figures</h2>
+
+    <p class="vintage-note">
+      Reflects the 2025-26 school year, the dataset's most recent year. These numbers will
+      change as future school years are added; check the <a href="index.html">live site</a>
+      before publishing rather than treating this page as permanently current.
+    </p>
+    <ul>
+      <li><strong>434,055</strong> current district enrollment, down from 462,321 in 2013-14.</li>
+      <li><strong>30,950</strong> current charter enrollment, up from 9,507 in 2013-14.</li>
+      <li><strong>159 of 235</strong> districts are currently declining in the EFA era.</li>
+    </ul>
+
+    <h2>Screenshots</h2>
+
+    <figure>
+      <img src="press/overview.jpg" width="1328" height="738"
+           alt="Screenshot of the Arkansas Public School Enrollment 2013-2026 Overview page, showing headline enrollment statistics and links to the tool's six views.">
+      <figcaption>The Overview page: headline stats and the six views.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="press/map.jpg" width="1328" height="738"
+           alt="Screenshot of the interactive Arkansas district map, showing all 235 school districts colored by EFA-era enrollment change from red (decline) through yellow (near zero) to green (growth).">
+      <figcaption>The interactive map: every district colored by EFA-era enrollment change.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="press/district-rankings.jpg" width="1328" height="738"
+           alt="Screenshot of the District Rankings page, showing Arkansas school districts ranked by EFA-era enrollment change with trajectory sparklines.">
+      <figcaption>District Rankings: all 235 districts ranked by EFA-era change.</figcaption>
+    </figure>
+
+    <h2>Citation and license</h2>
+
+    <div class="technical-pointer">
+      <p>
+        Full citation format and license terms are on the methodology page's
+        <a href="methodology.html#how-to-cite-this">How to cite this</a> section.
+      </p>
+    </div>
+
+    <h2>Press contact</h2>
+
+    <p>
+      Press contact: <a href="mailto:joelrush@gmail.com">joelrush@gmail.com</a>.
+    </p>
+
+    <footer class="site-footer">
+      Questions or corrections: <a href="mailto:joelrush@gmail.com">joelrush@gmail.com</a>.
+    </footer>
+  </div>
+</body>
+</html>
