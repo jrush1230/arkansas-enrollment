@@ -361,13 +361,13 @@ function renderChart(points, seriesKey) {
 
     tooltip.innerHTML = "";
     const yearEl = document.createElement("div");
-    yearEl.className = "t-year";
+    yearEl.className = "tt-year";
     yearEl.textContent = schoolYearLabel(p.year);
     const valEl = document.createElement("div");
-    valEl.className = "t-value";
+    valEl.className = "tt-value";
     valEl.textContent = fmtInt(p[field]) + " students";
     const eraEl = document.createElement("div");
-    eraEl.className = "t-era";
+    eraEl.className = "tt-era";
     eraEl.textContent = eraLabel(p.era);
     tooltip.appendChild(yearEl);
     tooltip.appendChild(valEl);

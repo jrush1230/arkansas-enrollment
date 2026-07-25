@@ -21,6 +21,7 @@ import {
   glossaryAriaLabel,
   GLOSSARY,
 } from "./shared.js";
+import { renderSortableTable, downloadCsv } from "./table-shell.js";
 
 // Header labels are the actual width driver for several of these columns
 // now, not the data (typology aside, cell content is short numbers or the
@@ -251,94 +252,95 @@ async function main() {
   }));
   const COLUMNS = [...COLUMNS_BEFORE_YOY, ...yoyColumns, ...COLUMNS_AFTER_YOY];
 
-  function renderBody() {
-    const col = COLUMNS.find((c) => c.key === sortKey);
-    const rows = [...districts].sort((a, b) => compareRows(a, b, col, sortDir));
-    const mode = currentMode();
-    const tbody = document.getElementById("data-table-body");
-    tbody.textContent = "";
-    for (const d of rows) {
-      const tr = document.createElement("tr");
-      for (const c of COLUMNS) {
-        let td = document.createElement("td");
-        if (c.key === "name") {
-          const link = document.createElement("a");
-          link.href = `drill-down.html?id=${encodeURIComponent(d.id)}`;
-          link.textContent = shortName(d.name);
-          link.title = d.name; // full name still discoverable on hover
-          td.appendChild(link);
-        } else if (c.type === "typology") {
-          td = makeTypologyVisualCell(d, mode);
-        } else if (c.type === "pct") {
-          td.textContent = fmtPct(d[c.key]);
-        } else if (c.type === "efaYoy") {
-          td.textContent = fmtPct(efaYearOverYear(d)[c.pairIndex]?.pct);
-        } else if (c.key === "caveats") {
-          td = makeCaveatsCell(d);
-        } else {
-          td.textContent = d[c.key] ?? "—";
-        }
-        // Active-sort-column highlight -- see renderHead() for the header
-        // half of this (bold text); this is the body half (background
-        // tint), applied per-cell rather than at the <col>/table level
-        // since td is sometimes reassigned above (typology/caveats cells
-        // build their own <td> rather than reusing the loop's default).
-        if (c.key === sortKey) td.classList.add("col-sorted");
-        tr.appendChild(td);
-      }
-      tbody.appendChild(tr);
-    }
+  // Map this page's COLUMNS onto the shared shell's column shape. The shell owns
+  // the header buttons / sort mechanics; the per-column renderCell hooks keep the
+  // sparkline (Trajectory) and 3-mark Notes cells exactly as they were -- they
+  // return their own fully-built <td>, which the shell uses as-is.
+  function shellColumns() {
+    return COLUMNS.map((c) => {
+      if (c.key === "name") return {
+        key: "name", label: c.label, align: "left", sortable: true,
+        ariaLabel: glossaryAriaLabel(`Sort by ${c.label}`, c.term),
+        renderCell: (d) => {
+          const a = document.createElement("a");
+          a.href = `drill-down.html?id=${encodeURIComponent(d.id)}`;
+          a.textContent = shortName(d.name);
+          a.title = d.name;
+          return a;
+        },
+      };
+      if (c.type === "typology") return {
+        key: c.key, label: c.label, align: "center", sortable: false,
+        renderCell: (d) => makeTypologyVisualCell(d, currentMode()),
+      };
+      if (c.type === "caveats") return {
+        key: "caveats", label: c.label, align: "center", sortable: true,
+        ariaLabel: glossaryAriaLabel(`Sort by ${c.label}`, c.term),
+        renderCell: (d) => makeCaveatsCell(d),
+      };
+      if (c.type === "efaYoy") return {
+        key: c.key, label: c.label, align: "right", numeric: true, sortable: true,
+        ariaLabel: glossaryAriaLabel(`Sort by ${c.label}`, c.term),
+        title: c.term ? GLOSSARY[c.term] : undefined,
+        renderCell: (d) => fmtPct(efaYearOverYear(d)[c.pairIndex]?.pct),
+      };
+      return {
+        key: c.key, label: c.label, align: "right", numeric: true, sortable: true,
+        ariaLabel: glossaryAriaLabel(`Sort by ${c.label}`, c.term),
+        title: c.term ? GLOSSARY[c.term] : undefined,
+        renderCell: (d) => fmtPct(d[c.key]),
+      };
+    });
   }
 
-  function renderHead() {
-    const row = document.getElementById("table-head-row");
-    row.textContent = "";
-    for (const c of COLUMNS) {
-      const th = document.createElement("th");
-      th.textContent = c.label;
+  function renderTable() {
+    const col = COLUMNS.find((c) => c.key === sortKey);
+    const rows = [...districts].sort((a, b) => compareRows(a, b, col, sortDir));
+    renderSortableTable({
+      table: document.getElementById("data-table"),
+      columns: shellColumns(),
+      rows,
+      sortState: { key: sortKey, dir: sortDir },
+      onSort: (key) => {
+        if (sortKey === key) sortDir = sortDir === "asc" ? "desc" : "asc";
+        else { sortKey = key; sortDir = "asc"; }
+        renderTable();
+      },
+    });
+  }
 
-      // Trajectory (c.sortable === false) renders as a plain, inert
-      // header -- it no longer shows typologyLabel() text, so a click
-      // that reorders rows with no visible category name to explain the
-      // resulting order would be confusing (see the COLUMNS_BEFORE_YOY
-      // comment). No tabIndex/role/aria-label/listeners/arrow, and
-      // .col-header-static below strips the pointer cursor so it doesn't
-      // visually promise the same interaction every other header offers.
-      if (c.sortable === false) {
-        th.className = "col-header-static";
-        row.appendChild(th);
-        continue;
-      }
-
-      th.tabIndex = 0;
-      th.setAttribute("role", "button");
-      th.setAttribute("aria-label", glossaryAriaLabel(`Sort by ${c.label}`, c.term));
-      if (c.term) th.title = GLOSSARY[c.term];
-      const isActive = sortKey === c.key;
-      if (isActive) th.classList.add("col-sorted");
-      // Rendered unconditionally on every sortable header, not just the
-      // active one -- both to signal "this column is sortable" up front
-      // (a faint neutral glyph) and, since the slot's width in CSS never
-      // changes whether it's showing that neutral glyph or the solid
-      // active ↑/↓, to keep this from ever being the reason a column's
-      // width changes when the active sort column changes.
-      const arrow = document.createElement("span");
-      arrow.className = isActive ? "sort-arrow active" : "sort-arrow";
-      arrow.textContent = isActive ? (sortDir === "asc" ? "↑" : "↓") : "⇅";
-      arrow.setAttribute("aria-hidden", "true");
-      th.appendChild(arrow);
-      const activate = () => {
-        if (sortKey === c.key) sortDir = sortDir === "asc" ? "desc" : "asc";
-        else { sortKey = c.key; sortDir = "asc"; }
-        renderHead();
-        renderBody();
-      };
-      th.addEventListener("click", activate);
-      th.addEventListener("keydown", (evt) => {
-        if (evt.key === "Enter" || evt.key === " ") { evt.preventDefault(); activate(); }
-      });
-      row.appendChild(th);
-    }
+  // Download CSV -- the full 235-district table as a flat file, in the same
+  // sort order the reader currently sees. Columns mirror the visible table
+  // 1:1 EXCEPT Trajectory (a sparkline has no scalar to export) and the
+  // Notes column, which is expanded from its three icons into three
+  // spelled-out columns (Thin baseline "Yes"/blank, Reversal magnitude
+  // "Large"/blank, Boundary changed "2015"/blank) so the file is
+  // self-describing without the on-screen legend. Percentages are the same
+  // 1-decimal figures shown on screen, minus the "%" (the header carries the
+  // "(%)" unit instead); nulls export as an empty field, not "—". All
+  // in-page, from data already loaded -- no fetch, nothing sent anywhere.
+  function exportCsv() {
+    const pct = (v) => (v == null ? "" : (v * 100).toFixed(1));
+    const header = [
+      "District", "Baseline CAGR (%)", "COVID drop (%)",
+      ...yoyColumns.map((c) => `${c.label} (%)`),
+      "EFA CAGR (%)", "EFA change (%)",
+      "Thin baseline", "Reversal magnitude", "Boundary changed",
+    ];
+    const col = COLUMNS.find((c) => c.key === sortKey);
+    const rows = [...districts].sort((a, b) => compareRows(a, b, col, sortDir));
+    const body = rows.map((d) => [
+      d.name,
+      pct(d.baseline_cagr),
+      pct(d.covid_drop_pct),
+      ...yoyColumns.map((c) => pct(efaYearOverYear(d)[c.pairIndex]?.pct)),
+      pct(d.efa_cagr),
+      pct(d.pct_change_efa_era),
+      d.baseline_years_thin ? "Yes" : "",
+      d.reversal_magnitude ? fmtMagnitude(d.reversal_magnitude) : "",
+      d.boundary_change_within_series ? d.current_boundary_since : "",
+    ]);
+    downloadCsv("school-districts.csv", [header, ...body]);
   }
 
   // Live-theme-change listener is back (it was dead code and removed once
@@ -346,11 +348,11 @@ async function main() {
   // sparkline strokes are JS-computed (via shared.js's sparklineSvg(),
   // which resolves color through typologyColor(mode) internally) again,
   // so a live OS theme change needs a re-render to pick up the new mode.
-  renderHead();
-  renderBody();
+  renderTable();
+  document.getElementById("dl-csv").addEventListener("click", exportCsv);
 
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
-    renderBody();
+    renderTable();
   });
 }
 

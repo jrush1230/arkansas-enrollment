@@ -3,44 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Press Kit — Arkansas K-12 enrollment</title>
+<title>Press Kit — Arkansas K-12 Enrollment</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="app.css">
 <style>
   :root {
-    --surface-1:      #fcfcfb;
-    --page-plane:     #f9f9f7;
-    --text-primary:   #0b0b0b;
-    --text-secondary: #52514e;
-    --text-muted:     #898781;
-    --gridline:       #e1e0d9;
-    --border:         rgba(11,11,11,0.44);
     --link:           #2a78d6;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --surface-1:      #1a1a19;
-      --page-plane:     #0d0d0d;
-      --text-primary:   #ffffff;
-      --text-secondary: #c3c2b7;
-      --text-muted:     #898781;
-      --gridline:       #2c2c2a;
-      --border:         rgba(255,255,255,0.33);
       --link:           #3987e5;
     }
   }
 
-  * { box-sizing: border-box; }
   html, body {
-    margin: 0;
-    background: var(--page-plane);
-    color: var(--text-primary);
     font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
   }
   /* Same 720px prose width as methodology.html/index.html -- this page is
      long-form reference content, not a data view. */
   .page { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
 
-  .view-nav { font-size: 13px; color: var(--text-muted); margin: 0 0 18px; }
-  .view-nav a { color: var(--link); }
 
   h1 { font-size: 26px; font-weight: 700; margin: 0 0 14px; line-height: 1.25; }
   .lede { font-size: 17px; font-weight: 600; color: var(--text-primary); margin: 0 0 16px; }
@@ -68,8 +50,8 @@
      index.html's "can't tell" box use, reused here for the screenshots. */
   figure {
     margin: 0 0 20px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
+    border: 1px solid var(--gridline);
+    border-radius: 12px;
     overflow: hidden;
     background: var(--surface-1);
   }
@@ -83,23 +65,22 @@
 
   .technical-pointer {
     background: var(--surface-1);
-    border: 1px solid var(--border);
-    border-radius: 10px;
+    border: 1px solid var(--gridline);
+    border-radius: 12px;
     padding: 16px 18px;
     margin-top: 8px;
   }
   .technical-pointer p { margin: 0; color: var(--text-secondary); }
 
-  .meta-links { margin-top: 28px; font-size: 13px; color: var(--text-muted); }
-  .site-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--gridline); font-size: 13px; color: var(--text-muted); }
-  .site-footer a { color: var(--text-secondary); }
 </style>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to main content</a>
   <div class="page">
     <nav class="view-nav">
       <a href="index.html">Overview</a> · <a href="statewide.html">Statewide Trend</a> · <a href="map.html">Map</a> · <a href="district-rankings.html">District Rankings</a> · <a href="school-districts.html">School Districts</a> · <a href="charter-schools.html">Charter Schools</a> · <a href="find-a-district.html">Find a District</a>
     </nav>
+    <main id="main">
 
     <h1>Press Kit</h1>
 
@@ -167,6 +148,7 @@
       Press contact: <a href="mailto:joelrush@gmail.com">joelrush@gmail.com</a>.
     </p>
 
+    </main>
     <footer class="site-footer">
       Questions or corrections: <a href="mailto:joelrush@gmail.com">joelrush@gmail.com</a>.
     </footer>

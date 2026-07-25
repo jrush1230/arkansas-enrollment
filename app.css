@@ -1,0 +1,80 @@
+/* Arkansas K-12 Enrollment — shared base (Phase 0 extraction). */
+
+:root {
+  --surface-1:      #fcfcfb;
+  --page-plane:     #f9f9f7;
+  --text-primary:   #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted:     #898781;
+  --gridline:       #e1e0d9;
+  --border:         rgba(11,11,11,0.44);
+
+  /* Categorical palette — shared vocabulary across both sibling sites (keep byte-identical). */
+  --cat-1: #2a78d6;   /* blue   */
+  --cat-2: #eb6834;   /* orange */
+  --cat-3: #1baf7a;   /* teal   */
+  --cat-4: #008300;   /* green  */
+  --cat-5: #008300;   /* green (brightens in dark) */
+  --cat-6: #e87ba4;   /* pink   */
+  --cat-7: #eda100;   /* amber  */
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface-1:      #1a1a19;
+    --page-plane:     #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --gridline:       #2c2c2a;
+    --border:         rgba(255,255,255,0.33);
+  
+    --cat-1: #3987e5;
+    --cat-2: #d95926;
+    --cat-3: #199e70;
+    --cat-4: #008300;
+    --cat-5: #35a854;
+    --cat-6: #d55181;
+    --cat-7: #c98500;
+  }
+}
+
+/* Respect a reader's data-theme override the same way the fiscal sibling and
+   the Artifact conventions do -- an explicit toggle wins over the OS preference
+   in both directions. Present for parity; the static site ships no toggle
+   today, but any future one will Just Work. (Design unification Phase 1a.) */
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"]  { color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  background: var(--page-plane);
+  color: var(--text-primary);
+}
+
+.view-nav { font-size: 13px; color: var(--text-muted); margin: 0 0 18px; }
+.view-nav a { color: var(--link); }
+
+.meta-links { margin-top: 28px; font-size: 13px; color: var(--text-muted); }
+.site-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--gridline); font-size: 13px; color: var(--text-muted); }
+.site-footer a { color: var(--text-secondary); }
+
+/* Skip link -- first focusable element on every page, visible only on focus.
+   Every view is nav-then-content, so without this a keyboard user tabs the
+   view-nav links before reaching anything new. (Design unification Phase 1a,
+   copied verbatim from the fiscal sibling's app.css for furniture parity.) */
+.skip-link {
+  position: absolute; left: 8px; top: -48px; z-index: 100;
+  background: var(--surface-1); color: var(--link);
+  border: 1px solid var(--link); border-radius: 8px;
+  padding: 9px 14px; font-size: 14px; font-weight: 600; text-decoration: none;
+  transition: top 120ms;
+}
+.skip-link:focus { top: 8px; }
+/* the landmark itself must not draw a focus ring when targeted by the skip link */
+main:focus { outline: none; }
+
+/* Wordmark -- uppercase site label above the landing headline, matching the
+   fiscal sibling's .brand. (Design unification Phase 1b.) */
+.brand { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--text-secondary); margin: 0 0 6px; }

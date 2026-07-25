@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Arkansas Public School Enrollment 2013-2026</title>
+<title>Overview — Arkansas K-12 Enrollment</title>
 <!-- Social-preview metadata -- description text is the page's own
      .lede paragraph below, verbatim, not new copy: it already
      describes the tool in one verified sentence with no numbers that
@@ -95,15 +95,10 @@
     ]
   }
 </script>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="app.css">
 <style>
   :root {
-    --surface-1:      #fcfcfb;
-    --page-plane:     #f9f9f7;
-    --text-primary:   #0b0b0b;
-    --text-secondary: #52514e;
-    --text-muted:     #898781;
-    --gridline:       #e1e0d9;
-    --border:         rgba(11,11,11,0.44);
     --link:           #2a78d6;
     /* CANDIDATE (Part B, era-shading on the Statewide Trend preview) --
        same values as statewide.html's/drill-down.html's own tokens, not
@@ -113,30 +108,17 @@
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --surface-1:      #1a1a19;
-      --page-plane:     #0d0d0d;
-      --text-primary:   #ffffff;
-      --text-secondary: #c3c2b7;
-      --text-muted:     #898781;
-      --gridline:       #2c2c2a;
-      --border:         rgba(255,255,255,0.33);
       --band-covid:     rgba(230, 103, 103, 0.10);
       --band-efa:       rgba(25, 158, 112, 0.12);
       --link:           #3987e5;
     }
   }
 
-  * { box-sizing: border-box; }
   html, body {
-    margin: 0;
-    background: var(--page-plane);
-    color: var(--text-primary);
     font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
   }
   .page { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
 
-  .view-nav { font-size: 13px; color: var(--text-muted); margin: 0 0 18px; }
-  .view-nav a { color: var(--link); }
   .view-nav .current { color: var(--text-primary); font-weight: 600; }
 
   h1 { font-size: 26px; font-weight: 700; margin: 0 0 14px; line-height: 1.25; }
@@ -202,8 +184,8 @@
     align-items: stretch;
     width: 621px;
     box-sizing: border-box;
-    border: 1px solid var(--border);
-    border-radius: 10px;
+    border: 1px solid var(--gridline);
+    border-radius: 12px;
     overflow: hidden;
     background: var(--surface-1);
     color: inherit;
@@ -244,7 +226,7 @@
     overflow: hidden;
     padding: 16px;
     background: var(--page-plane);
-    border-right: 1px solid var(--border);
+    border-right: 1px solid var(--gridline);
   }
   .view-card .view-text {
     width: 300px;
@@ -297,7 +279,7 @@
       max-width: 320px;
       margin: 0 auto;
       border-right: none;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--gridline);
     }
     .view-card .view-text { width: 100%; }
   }
@@ -401,7 +383,7 @@
     font-size: 10.5px;
     color: var(--text-muted);
     background: var(--surface-1);
-    border: 1px solid var(--border);
+    border: 1px solid var(--gridline);
     border-radius: 999px;
     padding: 1px 7px;
     white-space: nowrap;
@@ -469,16 +451,13 @@
 
   .cant-tell {
     background: var(--surface-1);
-    border: 1px solid var(--border);
-    border-radius: 10px;
+    border: 1px solid var(--gridline);
+    border-radius: 12px;
     padding: 16px 18px;
   }
   .cant-tell p { margin: 0; color: var(--text-secondary); }
 
-  .meta-links { margin-top: 28px; font-size: 13px; color: var(--text-muted); }
   .meta-links a { color: var(--text-secondary); }
-  .site-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--gridline); font-size: 13px; color: var(--text-muted); }
-  .site-footer a { color: var(--text-secondary); }
 
   /* Hero stats -- the page's actual focal point on load, ahead of the
      prose below it. Large tabular-nums figures, no red/green coloring
@@ -513,11 +492,14 @@
 </style>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to main content</a>
   <div class="page">
     <nav class="view-nav">
       <span class="current">Overview</span> · <a href="statewide.html">Statewide Trend</a> · <a href="map.html">Map</a> · <a href="district-rankings.html">District Rankings</a> · <a href="school-districts.html">School Districts</a> · <a href="charter-schools.html">Charter Schools</a> · <a href="find-a-district.html">Find a District</a>
     </nav>
+    <main id="main">
 
+    <p class="brand">Arkansas K-12 Enrollment</p>
     <h1>Arkansas Public School Enrollment 2013-2026</h1>
 
     <div class="hero-stats">
@@ -676,6 +658,7 @@
       Data sources, era definitions, and known limitations: <a href="methodology.html">Methodology</a> · <a href="press-kit.html">Press Kit</a>.
     </p>
 
+    </main>
     <footer class="site-footer">
       Joel Rush is an Arkansas-based educator, entrepreneur, and data analyst whose
       work has included research and evaluation roles at the University of Arkansas

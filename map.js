@@ -331,11 +331,11 @@ function renderMap(svg, tooltip, geo, charterPoints, mode) {
 // behind two lines of description.
 function buildDistrictTooltip(tooltip, d) {
   const name = document.createElement("div");
-  name.className = "t-name";
+  name.className = "tt-name";
   name.textContent = d.name;
   tooltip.appendChild(name);
 
-  // Same .t-pct class the charter tooltip's own enrollment line uses
+  // Same .tt-pct class the charter tooltip's own enrollment line uses
   // (buildCharterTooltip() below) -- "a numeric magnitude line" role, not
   // strictly percent-only, kept for visual/tonal consistency between the
   // map's two point types. Deliberately no year-over-year clause here,
@@ -345,24 +345,24 @@ function buildDistrictTooltip(tooltip, d) {
   const enrollmentText = districtEnrollmentText(d);
   if (enrollmentText) {
     const enrollment = document.createElement("div");
-    enrollment.className = "t-pct";
+    enrollment.className = "tt-pct";
     enrollment.textContent = enrollmentText;
     tooltip.appendChild(enrollment);
   }
 
   const typo = document.createElement("div");
-  typo.className = "t-typology";
+  typo.className = "tt-typology";
   typo.textContent = districtShapeSentence(d);
   tooltip.appendChild(typo);
 
   const pct = document.createElement("div");
-  pct.className = "t-pct";
+  pct.className = "tt-pct";
   pct.textContent = `${fmtPct(d.pct_change_efa_era)} change in the EFA era`;
   tooltip.appendChild(pct);
 
   if (d.boundary_change_within_series) {
     const note = document.createElement("div");
-    note.className = "t-note";
+    note.className = "tt-note";
     note.textContent = `Boundary changed ${d.current_boundary_since}`;
     tooltip.appendChild(note);
   }
@@ -370,28 +370,28 @@ function buildDistrictTooltip(tooltip, d) {
 
 function buildCharterTooltip(tooltip, p) {
   const name = document.createElement("div");
-  name.className = "t-name";
+  name.className = "tt-name";
   name.textContent = p.name;
   const typo = document.createElement("div");
-  typo.className = "t-typology";
+  typo.className = "tt-typology";
   typo.textContent = "Charter school";
   tooltip.appendChild(name);
   tooltip.appendChild(typo);
   // Same wording/source as charterPointAriaLabel()'s own enrollment
   // clause (shared.js) -- reused, not hand-typed a second time, so the
   // visual tooltip and the keyboard/screen-reader label can't drift
-  // apart. Same .t-pct class the district tooltip's own pct_change_efa_era
+  // apart. Same .tt-pct class the district tooltip's own pct_change_efa_era
   // line uses, for the same "a numeric magnitude line" role.
   const enrollmentText = charterPointEnrollmentText(p);
   if (enrollmentText) {
     const pct = document.createElement("div");
-    pct.className = "t-pct";
+    pct.className = "tt-pct";
     pct.textContent = enrollmentText;
     tooltip.appendChild(pct);
   }
   if (p.map_caveat) {
     const note = document.createElement("div");
-    note.className = "t-note";
+    note.className = "tt-note";
     note.textContent = p.map_caveat;
     tooltip.appendChild(note);
   }

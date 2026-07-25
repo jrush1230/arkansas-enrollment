@@ -277,13 +277,13 @@ function renderChart(svg, tooltip, d, boundary) {
 
     tooltip.innerHTML = "";
     const yearEl = document.createElement("div");
-    yearEl.className = "t-year";
+    yearEl.className = "tt-year";
     yearEl.textContent = schoolYearLabel(p.year);
     const valEl = document.createElement("div");
-    valEl.className = "t-value";
+    valEl.className = "tt-value";
     valEl.textContent = fmtInt(p.enrollment) + " students";
     const eraEl = document.createElement("div");
-    eraEl.className = "t-era";
+    eraEl.className = "tt-era";
     eraEl.textContent = eraLabel(p.era) + (boundary && p.year < boundary.year ? ` (pre-merger)` : "");
     tooltip.appendChild(yearEl);
     tooltip.appendChild(valEl);
@@ -438,9 +438,9 @@ function renderDistrict(d) {
   if (boundary) legendItems.push(["seam", `Boundary change (${boundary.year})`]);
   for (const [cls, text] of legendItems) {
     const item = document.createElement("div");
-    item.className = "legend-item";
+    item.className = "key";
     const sw = document.createElement("span");
-    sw.className = `legend-swatch ${cls}`;
+    sw.className = `sw ${cls}`;
     item.appendChild(sw);
     item.appendChild(document.createTextNode(text));
     legend.appendChild(item);

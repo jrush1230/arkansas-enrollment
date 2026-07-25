@@ -1,0 +1,38 @@
+/* Arkansas K-12 Enrollment — shared line-chart chrome (extracted from statewide + drill-down; parallels fiscal charts.css). */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 0 0 18px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+.legend .key { display: flex; align-items: center; gap: 7px; }
+.legend .sw { width: 11px; height: 11px; border-radius: 3px; flex: none; }
+.legend .sw.baseline { background: var(--surface-1); border: 1px solid var(--baseline-axis); }
+.legend .sw.covid { background: var(--band-covid); border: 1px solid rgba(208,59,59,0.35); }
+.legend .sw.efa { background: var(--band-efa); border: 1px solid rgba(27,175,122,0.35); }
+.axis-label { fill: var(--text-muted); font-size: 11px; }
+.band-label { fill: var(--text-muted); font-size: 11px; }
+.gridline { stroke: var(--gridline); stroke-width: 1; }
+.baseline-rule { stroke: var(--baseline-axis); stroke-width: 1; }
+.line-mark { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.end-dot { stroke: var(--surface-1); stroke-width: 2; }
+.crosshair { stroke: var(--baseline-axis); stroke-width: 1; pointer-events: none; opacity: 0; }
+.hover-dot { stroke: var(--surface-1); stroke-width: 2; pointer-events: none; opacity: 0; }
+.tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--surface-1);
+    border: 1px solid var(--gridline);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12.5px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    opacity: 0;
+    transition: opacity 80ms ease;
+    white-space: nowrap;
+  }
+.tooltip .tt-year { color: var(--text-secondary); margin-bottom: 2px; }
+.tooltip .tt-value { color: var(--text-primary); font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; }
+.tooltip .tt-era { color: var(--text-muted); margin-top: 2px; }

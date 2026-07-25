@@ -23,6 +23,7 @@ import {
   makeCaveatsMark,
   multiCampusIcon,
 } from "./shared.js";
+import { renderSortableTable, downloadCsv } from "./table-shell.js";
 
 // multiCampusIcon() moved to shared.js -- promoted once the Charter Schools
 // preview candidate (index.js) became a second view needing the exact same
@@ -285,118 +286,173 @@ async function main() {
   let sortKey = "name";
   let sortDir = "asc";
 
-  function renderBody() {
+  // The three per-cell builders below carry the exact content renderBody()
+  // built for these columns before this page moved onto the shared table
+  // shell -- each returns its own fully-built <td> so the shell uses it
+  // as-is (adding only the col-<key>/col-sorted classes). They're separate
+  // functions here, rather than inline in shellColumns(), only because each
+  // needs a real <td> to hang a title + a .visually-hidden explanation span
+  // on for the "—"/thin-evidence cases; the plain-value columns (name,
+  // enrollment) stay inline as strings the shell wraps itself.
+
+  // Year-over-year pair cell: the pair's signed pct, or "—" with an
+  // opening-year explanation (title + screen-reader span) when this charter
+  // has no data for that pair (opened after the column's fromYear). `.num`
+  // is added explicitly -- the shell only auto-adds it to cells it builds
+  // from a string, not to a <td> a renderCell returns ready-made.
+  function makeEfaYoyCell(p, c) {
+    const td = document.createElement("td");
+    td.className = "num";
+    const pair = findYoyPair(p, c.fromYear, c.toYear);
+    td.textContent = fmtPct(pair?.pct);
+    if (!pair) {
+      const explanation = yoyDashTitle(p);
+      td.title = explanation;
+      const sr = document.createElement("span");
+      sr.className = "visually-hidden";
+      sr.textContent = explanation;
+      td.appendChild(sr);
+    }
+    return td;
+  }
+
+  // EFA-era change cell: the signed pct, plus a thin-evidence note (title +
+  // screen-reader span) for the charters whose figure rests on fewer than
+  // the full 3 year-over-year comparisons -- same rows the "—" cells above
+  // explain, same reasoning as the old renderBody()'s c.type === "pct" branch.
+  function makeEfaEraChangeCell(p) {
+    const td = document.createElement("td");
+    td.className = "num";
+    td.textContent = fmtPct(p.efa_era_change);
+    if (efaYearOverYear(p).length < 3 && p.efa_era_change != null) {
+      const explanation = thinEvidenceTitle(p);
+      td.title = explanation;
+      const sr = document.createElement("span");
+      sr.className = "visually-hidden";
+      sr.textContent = explanation;
+      td.appendChild(sr);
+    }
+    return td;
+  }
+
+  // Map this page's COLUMNS onto the shared shell's column shape. The shell
+  // owns the header buttons / sort mechanics / caret + aria-sort / focus
+  // return; the per-column renderCell hooks keep the sparkline (Trajectory),
+  // the Notes marks, and the two explained cells exactly as they were.
+  // align drives text-align + caret side: name left, Trajectory/Notes
+  // centre, every numeric column right (the intended restyle -- charters
+  // were all-centre before). term/GLOSSARY wiring matches the old
+  // renderHead(): aria-label + hover title carry the glossary definition
+  // for the one column (EFA-era change) that has a `term`.
+  function shellColumns() {
+    const mode = currentMode();
+    return COLUMNS.map((c) => {
+      if (c.key === "name") return {
+        key: "name", label: c.label, align: "left", sortable: true,
+        ariaLabel: glossaryAriaLabel(`Sort by ${c.label}`, c.term),
+        renderCell: (p) => p.name,
+      };
+      if (c.type === "sparkline") return {
+        key: c.key, label: c.label, align: "center", sortable: false,
+        renderCell: (p) => makeTrajectoryCell(p, mode),
+      };
+      if (c.type === "efaYoy") return {
+        key: c.key, label: c.label, align: "right", numeric: true, sortable: true,
+        ariaLabel: glossaryAriaLabel(`Sort by ${c.label}`, c.term),
+        title: c.term ? GLOSSARY[c.term] : undefined,
+        renderCell: (p) => makeEfaYoyCell(p, c),
+      };
+      if (c.key === "latest_enrollment") return {
+        key: c.key, label: c.label, align: "right", numeric: true, sortable: true,
+        ariaLabel: glossaryAriaLabel(`Sort by ${c.label}`, c.term),
+        // Bare number when this row's own latest_year matches the header's
+        // (true for all 22 today); the parenthetical year only reappears
+        // for a charter whose year DIFFERS, so a stale figure never reads
+        // as current under a header that no longer applies to it.
+        renderCell: (p) => p.latest_enrollment == null
+          ? "—"
+          : p.latest_year === majorityYear
+            ? fmtInt(p.latest_enrollment)
+            : `${fmtInt(p.latest_enrollment)} (${schoolYearLabel(p.latest_year)})`,
+      };
+      if (c.key === "efa_era_change") return {
+        key: c.key, label: c.label, align: "right", numeric: true, sortable: true,
+        ariaLabel: glossaryAriaLabel(`Sort by ${c.label}`, c.term),
+        title: c.term ? GLOSSARY[c.term] : undefined,
+        renderCell: (p) => makeEfaEraChangeCell(p),
+      };
+      if (c.key === "has_map_caveat") return {
+        key: c.key, label: c.label, align: "center", sortable: true,
+        ariaLabel: glossaryAriaLabel(`Sort by ${c.label}`, c.term),
+        renderCell: (p) => makeNotesCell(p),
+      };
+      // No column currently reaches this -- a plain right-aligned value,
+      // same shape the old renderBody()'s final else branch produced.
+      return {
+        key: c.key, label: c.label, align: "right", numeric: true, sortable: true,
+        ariaLabel: glossaryAriaLabel(`Sort by ${c.label}`, c.term),
+        renderCell: (p) => p[c.key] ?? "—",
+      };
+    });
+  }
+
+  function renderTable() {
     const col = COLUMNS.find((c) => c.key === sortKey);
     const rows = [...charters].sort((a, b) => compareRows(a, b, col, sortDir));
-    const mode = currentMode();
-    const tbody = document.getElementById("charter-table-body");
-    tbody.textContent = "";
-    for (const p of rows) {
-      const tr = document.createElement("tr");
-      for (const c of COLUMNS) {
-        let td = document.createElement("td");
-        if (c.key === "name") {
-          td.textContent = p.name;
-        } else if (c.type === "sparkline") {
-          td = makeTrajectoryCell(p, mode);
-        } else if (c.type === "efaYoy") {
-          const pair = findYoyPair(p, c.fromYear, c.toYear);
-          td.textContent = fmtPct(pair?.pct);
-          // Only the dash case gets an explanation -- a real value's own
-          // meaning is already covered by the column header + its
-          // glossary tooltip, same as every other populated cell in this
-          // table.
-          if (!pair) {
-            const explanation = yoyDashTitle(p);
-            td.title = explanation;
-            const sr = document.createElement("span");
-            sr.className = "visually-hidden";
-            sr.textContent = explanation;
-            td.appendChild(sr);
-          }
-        } else if (c.key === "latest_enrollment") {
-          // Bare number when this row's own latest_year matches the
-          // header's (true for all 22 today) -- the parenthetical only
-          // reappears per-row for a charter whose year DIFFERS from the
-          // header, so a stale figure doesn't silently read as current.
-          td.textContent = p.latest_enrollment == null
-            ? "—"
-            : p.latest_year === majorityYear
-              ? fmtInt(p.latest_enrollment)
-              : `${fmtInt(p.latest_enrollment)} (${schoolYearLabel(p.latest_year)})`;
-        } else if (c.type === "pct") {
-          td.textContent = fmtPct(p[c.key]);
-          // efa_era_change only -- flags rows where the figure rests on
-          // fewer than the full 3 year-over-year comparisons (the same 4
-          // charters the efaYoy dash cells above explain), so a reader
-          // doesn't mistake thin evidence for the same footing as every
-          // other charter's number.
-          if (c.key === "efa_era_change" && efaYearOverYear(p).length < 3 && p[c.key] != null) {
-            const explanation = thinEvidenceTitle(p);
-            td.title = explanation;
-            const sr = document.createElement("span");
-            sr.className = "visually-hidden";
-            sr.textContent = explanation;
-            td.appendChild(sr);
-          }
-        } else if (c.key === "has_map_caveat") {
-          td = makeNotesCell(p);
-        } else {
-          td.textContent = p[c.key] ?? "—";
-        }
-        if (c.key === sortKey) td.classList.add("col-sorted");
-        tr.appendChild(td);
-      }
-      tbody.appendChild(tr);
-    }
+    renderSortableTable({
+      table: document.getElementById("charter-table"),
+      columns: shellColumns(),
+      rows,
+      sortState: { key: sortKey, dir: sortDir },
+      onSort: (key) => {
+        if (sortKey === key) sortDir = sortDir === "asc" ? "desc" : "asc";
+        else { sortKey = key; sortDir = "asc"; }
+        renderTable();
+      },
+    });
   }
 
-  function renderHead() {
-    const row = document.getElementById("table-head-row");
-    row.textContent = "";
-    for (const c of COLUMNS) {
-      const th = document.createElement("th");
-      th.textContent = c.label;
-
-      if (c.sortable === false) {
-        th.className = "col-header-static";
-        row.appendChild(th);
-        continue;
-      }
-
-      th.tabIndex = 0;
-      th.setAttribute("role", "button");
-      th.setAttribute("aria-label", glossaryAriaLabel(`Sort by ${c.label}`, c.term));
-      if (c.term) th.title = GLOSSARY[c.term];
-      const isActive = sortKey === c.key;
-      if (isActive) th.classList.add("col-sorted");
-      const arrow = document.createElement("span");
-      arrow.className = isActive ? "sort-arrow active" : "sort-arrow";
-      arrow.textContent = isActive ? (sortDir === "asc" ? "↑" : "↓") : "⇅";
-      arrow.setAttribute("aria-hidden", "true");
-      th.appendChild(arrow);
-      const activate = () => {
-        if (sortKey === c.key) sortDir = sortDir === "asc" ? "desc" : "asc";
-        else { sortKey = c.key; sortDir = "asc"; }
-        renderHead();
-        renderBody();
-      };
-      th.addEventListener("click", activate);
-      th.addEventListener("keydown", (evt) => {
-        if (evt.key === "Enter" || evt.key === " ") { evt.preventDefault(); activate(); }
-      });
-      row.appendChild(th);
-    }
+  // Download CSV -- all 22 charters in the reader's current sort order.
+  // Columns mirror the visible table 1:1 EXCEPT Trajectory (a sparkline has
+  // no scalar to export) and the Notes column, which is expanded into a
+  // single "Multi-campus note" column carrying the charter's own full
+  // network sentence (map_caveat) for multi-campus charters, blank
+  // otherwise -- the same specific text the on-screen mark's tooltip shows,
+  // not a generic flag. Year-over-year and EFA-era percentages use this
+  // page's own signed format (matching the on-screen "+24.7"/"-15.0"),
+  // minus the "%" (the header carries the "(%)" unit); a "—" cell exports
+  // as an empty field. Enrollment is the raw integer (no thousands
+  // separator, for clean machine parsing). All in-page from loaded data --
+  // no fetch, nothing sent anywhere.
+  function exportCsv() {
+    const pct = (v) => (v == null ? "" : formatSignedPct(v));
+    const header = [
+      "Charter school",
+      ...yoyColumns.map((c) => `${c.label} (%)`),
+      enrollmentColumn.label,
+      "EFA-era change (%)",
+      "Multi-campus note",
+    ];
+    const col = COLUMNS.find((c) => c.key === sortKey);
+    const rows = [...charters].sort((a, b) => compareRows(a, b, col, sortDir));
+    const body = rows.map((p) => [
+      p.name,
+      ...yoyColumns.map((c) => pct(findYoyPair(p, c.fromYear, c.toYear)?.pct)),
+      p.latest_enrollment ?? "",
+      pct(p.efa_era_change),
+      p.map_caveat || "",
+    ]);
+    downloadCsv("charter-schools.csv", [header, ...body]);
   }
 
-  renderHead();
-  renderBody();
+  renderTable();
+  document.getElementById("dl-csv").addEventListener("click", exportCsv);
 
   // Sparkline strokes are JS-computed (CHARTER_POINT_COLOR[mode]), so a
   // live OS theme change needs a re-render to pick up the new mode --
   // same reasoning/pattern as school-districts.js's own listener.
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
-    renderBody();
+    renderTable();
   });
 }
 

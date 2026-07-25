@@ -3,52 +3,34 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Arkansas District Rankings — K-12 enrollment</title>
+<title>District Rankings — Arkansas K-12 Enrollment</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="app.css">
 <style>
   :root {
-    --surface-1:      #fcfcfb;
-    --page-plane:     #f9f9f7;
-    --text-primary:   #0b0b0b;
-    --text-secondary: #52514e;
-    --text-muted:     #898781;
-    --gridline:       #e1e0d9;
     --baseline-axis:  #c3c2b7;
-    --border:         rgba(11,11,11,0.44);
     --link:           #2a78d6;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --surface-1:      #1a1a19;
-      --page-plane:     #0d0d0d;
-      --text-primary:   #ffffff;
-      --text-secondary: #c3c2b7;
-      --text-muted:     #898781;
-      --gridline:       #2c2c2a;
       --baseline-axis:  #383835;
-      --border:         rgba(255,255,255,0.33);
       --link:           #3987e5;
     }
   }
 
-  * { box-sizing: border-box; }
   html, body {
-    margin: 0;
-    background: var(--page-plane);
-    color: var(--text-primary);
-    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+    font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
   }
   .page { max-width: 880px; margin: 0 auto; padding: 40px 24px 80px; }
 
-  h1 { font-size: 22px; font-weight: 600; margin: 0 0 6px; }
+  h1 { font-size: 26px; font-weight: 700; margin: 0 0 14px; line-height: 1.25; }
   .subtitle { color: var(--text-secondary); margin: 0 0 28px; max-width: 60ch; }
 
-  .view-nav { font-size: 13px; color: var(--text-muted); margin: 0 0 18px; }
-  .view-nav a { color: var(--link); }
   .view-nav .current { color: var(--text-primary); font-weight: 600; }
 
   .viz-root {
     background: var(--surface-1);
-    border: 1px solid var(--border);
+    border: 1px solid var(--gridline);
     border-radius: 12px;
     padding: 24px 24px 16px;
   }
@@ -110,7 +92,7 @@
     color: var(--text-secondary);
     font-size: 12.5px;
     background: var(--page-plane);
-    border: 1px solid var(--border);
+    border: 1px solid var(--gridline);
     border-radius: 8px;
     padding: 10px 12px;
     margin: 0 0 16px;
@@ -240,7 +222,7 @@
     position: absolute;
     pointer-events: none;
     background: var(--surface-1);
-    border: 1px solid var(--border);
+    border: 1px solid var(--gridline);
     border-radius: 8px;
     padding: 7px 10px;
     font-size: 12px;
@@ -333,10 +315,7 @@
     text-underline-offset: 2px;
   }
 
-  .meta-links { margin-top: 28px; font-size: 13px; color: var(--text-muted); }
   .meta-links a { color: var(--text-secondary); }
-  .site-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--gridline); font-size: 13px; color: var(--text-muted); }
-  .site-footer a { color: var(--text-secondary); }
 
   /* Trajectory AND Notes both hide below 560px, the same "less
      information, not broken layout" tradeoff Baseline change/COVID shock
@@ -367,8 +346,10 @@
 </style>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to main content</a>
   <div class="page">
     <nav class="view-nav"><a href="index.html">Overview</a> · <a href="statewide.html">Statewide Trend</a> · <a href="map.html">Map</a> · <span class="current">District Rankings</span> · <a href="school-districts.html">School Districts</a> · <a href="charter-schools.html">Charter Schools</a> · <a href="find-a-district.html">Find a District</a></nav>
+    <main id="main">
     <h1>District Rankings</h1>
     <p class="subtitle">
       All 235 current-boundary districts, ranked by EFA-era enrollment change. Sorted most-declining
@@ -443,6 +424,7 @@
       Data sources, era definitions, and known limitations: <a href="methodology.html">Methodology</a> · <a href="press-kit.html">Press Kit</a>.
     </p>
 
+    </main>
     <footer class="site-footer">
       Questions or corrections: <a href="mailto:joelrush@gmail.com">joelrush@gmail.com</a>.
     </footer>

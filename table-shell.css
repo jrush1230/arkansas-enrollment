@@ -1,0 +1,73 @@
+/* table-shell.css -- shared sortable data-table shell (the fiscal table grammar).
+   Vendored identically into the fiscal and enrollment repos; canonical copy in
+   the fiscal repo. Owns the generic table chrome only. Page-specific cell
+   internals (sparklines, caveat marks, prelim pills, wealth notes, etc.) stay
+   in each page's own stylesheet. Alignment is driven by the ta-* classes the
+   renderer (table-shell.js) adds from each column's `align`. */
+
+.table-card { margin: 6px 0 0; }
+
+/* Bordered, rounded, keyboard-scrollable region. position:relative is
+   load-bearing: it makes this box the containing block for the sticky header
+   and any inline-SVG cell content (sparklines, mark icons), so their overflow
+   stays inside the scroll region instead of leaking to the page. Without it a
+   plain overflow-x:auto box lets SVG-bearing rows scroll the whole page
+   sideways on narrow viewports. */
+.table-scroll { position: relative; overflow-x: auto; border: 1px solid var(--gridline); border-radius: 10px; }
+.table-scroll:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+
+table.data { border-collapse: collapse; width: 100%; font-size: 13px; white-space: nowrap; }
+table.data th, table.data td { padding: 9px 11px; text-align: right; }   /* numeric default */
+table.data thead th {
+  position: sticky; top: 0; z-index: 1;
+  background: var(--page-plane); color: var(--text-muted);
+  font-weight: 600; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.02em;
+  border-bottom: 1px solid var(--border); user-select: none; padding: 0;
+  white-space: normal; vertical-align: bottom;
+}
+table.data button.th-sort {
+  font: inherit; color: inherit; text-transform: inherit; letter-spacing: inherit;
+  background: none; border: 0; padding: 9px 11px; width: 100%; cursor: pointer;
+  text-align: inherit; display: inline-flex; align-items: flex-end; justify-content: flex-end; gap: 5px;
+}
+/* Per-column alignment (ta-* added by the renderer from column.align). Default
+   -- no class -- is right, for numeric columns. */
+table.data th.ta-left,   table.data td.ta-left   { text-align: left; }
+table.data th.ta-center, table.data td.ta-center { text-align: center; }
+table.data th.ta-left button.th-sort   { justify-content: flex-start; text-align: left; }
+table.data th.ta-center button.th-sort { justify-content: center; text-align: center; }
+table.data button.th-sort:hover { color: var(--text-primary); }
+table.data button.th-sort:focus-visible { outline: 2px solid var(--link); outline-offset: -2px; border-radius: 4px; }
+/* Non-sortable static header (no button). */
+table.data th.col-header-static { padding: 9px 11px; cursor: default; color: var(--text-muted); }
+/* Identity/name column -- both sites key their identity column "name". */
+td.col-name { white-space: nowrap; color: var(--text-primary); font-weight: 600; }
+td.col-name a { color: inherit; text-decoration: none; }
+td.col-name a:hover, td.col-name a:focus-visible { color: var(--link); text-decoration: underline; }
+table.data tbody tr:nth-child(even) td { background: color-mix(in srgb, var(--page-plane) 55%, transparent); }
+td.num { font-variant-numeric: tabular-nums; color: var(--text-secondary); }
+/* Sorted column in primary ink -- colour only, no width-shifting faux-bold. */
+th.col-sorted, td.col-sorted { color: var(--text-primary); }
+.sort-arrow { margin: 0; color: var(--text-muted); font-size: 10px; }
+.sort-arrow.active { color: var(--link); }
+
+/* Downloads row -- a right-aligned action bar that sits inside .table-card,
+   above the .table-scroll box. Shared by both enrollment table pages (School
+   Districts, Charter Schools) for their "Download CSV" button. The button is
+   plain furniture, styled from the same tokens as the rest of the shell --
+   --border (kept on interactive controls, per the Phase 2 border convention),
+   --surface-1 fill, secondary→primary ink on hover -- so it needs no per-page
+   override. A single ~140px button can't widen the row past any tested
+   viewport, so this adds no horizontal-overflow risk to the contained table. */
+.downloads { display: flex; justify-content: flex-end; margin: 0 0 10px; }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font: inherit; font-size: 12px; font-weight: 600;
+  color: var(--text-secondary); background: var(--surface-1);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 7px 13px; cursor: pointer;
+  transition: color 120ms, border-color 120ms;
+}
+.dl-btn:hover { color: var(--text-primary); border-color: var(--text-muted); }
+.dl-btn:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.dl-ico { font-size: 13px; line-height: 1; }
