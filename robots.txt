@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://arkansas-enrollment.sidetownlabs.com/sitemap.xml

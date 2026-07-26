@@ -4,6 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Map — Arkansas K-12 Enrollment</title>
+<meta name="description" content="An interactive map of enrollment change across Arkansas school districts.">
+<link rel="canonical" href="https://arkansas-enrollment.sidetownlabs.com/map.html">
+<meta property="og:site_name" content="Sidetown Labs">
+<meta property="og:title" content="Map — Arkansas K-12 Enrollment">
+<meta property="og:description" content="An interactive map of enrollment change across Arkansas school districts.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://arkansas-enrollment.sidetownlabs.com/map.html">
+<meta property="og:image" content="https://arkansas-enrollment.sidetownlabs.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Arkansas K-12 Enrollment — a Sidetown Labs project">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Map — Arkansas K-12 Enrollment">
+<meta name="twitter:description" content="An interactive map of enrollment change across Arkansas school districts.">
+<meta name="twitter:image" content="https://arkansas-enrollment.sidetownlabs.com/og-image.png">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="app.css">
 <style>
@@ -223,5 +238,12 @@
   <script src="vendor/d3-geo.min.js"></script>
   <script src="vendor/topojson-client.min.js"></script>
   <script type="module" src="map.js"></script>
+<script>
+  // GoatCounter (cookieless, no-consent analytics). 'enroll' prefixes every
+  // path so all three Sidetown Labs sites share one dashboard distinguishably.
+  window.goatcounter = { path: function(p) { return 'enroll' + p } };
+</script>
+<script data-goatcounter="https://sidetownlabs.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

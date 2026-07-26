@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found — Arkansas K-12 Enrollment</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<style>
+  :root {
+    --paper: #FBFAF8; --ink: #181B1E; --muted: #53595F; --accent: #2B7EC9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --paper: #111417; --ink: #F6F5F2; --muted: #9FA5AC; --accent: #60AAF3; }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  main { max-width: 560px; }
+  .caret { width: 18px; height: 38px; background: var(--accent); margin-bottom: 28px; }
+  h1 { font-size: 34px; font-weight: 600; letter-spacing: -0.6px; margin-bottom: 12px; }
+  p { font-size: 17px; line-height: 1.55; color: var(--muted); margin-bottom: 26px; }
+  nav { display: flex; flex-wrap: wrap; gap: 10px 22px; }
+  a { color: var(--accent); font-weight: 500; text-decoration: none; font-size: 16px; }
+  a:hover, a:focus-visible { text-decoration: underline; }
+  .site { margin-top: 40px; font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <div class="caret" aria-hidden="true"></div>
+  <h1>Page not found</h1>
+  <p>That address doesn&rsquo;t exist on this site &mdash; the link may be stale or mistyped. Everything that does exist is one step from these pages:</p>
+  <nav>
+    <a href="/">Overview</a>
+    <a href="/statewide.html">Statewide Trend</a>
+    <a href="/district-rankings.html">District Rankings</a>
+    <a href="/find-a-district.html">Find a District</a>
+    <a href="/methodology.html">Methodology</a>
+  </nav>
+  <div class="site">Arkansas K-12 Enrollment &middot; a <a href="https://sidetownlabs.com/">Sidetown Labs</a> project</div>
+</main>
+<script>
+  window.goatcounter = { path: function(p) { return 'enroll' + p } };
+</script>
+<script data-goatcounter="https://sidetownlabs.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
