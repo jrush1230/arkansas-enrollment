@@ -58,6 +58,7 @@ html, body {
 .meta-links { margin-top: 28px; font-size: 13px; color: var(--text-muted); }
 .site-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--gridline); font-size: 13px; color: var(--text-muted); }
 .site-footer a { color: var(--text-secondary); }
+.companion { margin: 10px 0 0; font-size: 13px; }
 
 /* Skip link -- first focusable element on every page, visible only on focus.
    Every view is nav-then-content, so without this a keyboard user tabs the
