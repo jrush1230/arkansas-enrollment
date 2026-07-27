@@ -65,8 +65,7 @@ async function main() {
   // separate predecessor bucket below (corrected 2026-07-26: this comment
   // and the district footnote both used to say predecessors were included,
   // which contradicted the mapping directly beneath it and overstated the
-  // 2013-14 district point by 2,678 -- see qa/landing_page_claim_check.md
-  // finding F2); charter =
+  // 2013-14 district point by 2,678); charter =
   // charter schools; other = DYS + Arkansas School for the Deaf and Blind;
   // predecessor = real school districts that later merged into a current
   // district, counted here only for their own pre-merger years (e.g.
@@ -157,10 +156,9 @@ function renderFootnote(points, seriesKey) {
   //     (465,421, live re-fetch 2026-07-15).
   // Corrected 2026-07-26: this was a single `year >= 2016` threshold, which
   // silently credited 2025-26 to the Report Card system. Independent
-  // support for the 2024-25 upper bound: the in-repo MySchoolInfo extract
-  // (data/processed/msi/enrollment_staffing.csv) carries ADE's published
-  // statewide figure for 2016-17 through 2024-25 and no later year. See
-  // qa/landing_page_claim_check.md finding F3.
+  // support for the 2024-25 upper bound: ADE's own MySchoolInfo
+  // published-enrollment extract carries the statewide figure for 2016-17
+  // through 2024-25 and no later year.
   // Which portal covers which years is a fixed historical fact, not
   // something derivable at render time, so it stays hardcoded here rather
   // than carried as a per-year source field the data doesn't have. The

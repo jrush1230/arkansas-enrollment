@@ -10,10 +10,10 @@
   --border:         rgba(11,11,11,0.44);
 
   /* Brand caret — the one coloured element of the Sidetown Labs wordmark.
-     Values are the brand spec's own (~/Documents/sidetownlabs/README.md
-     "accent caret"), not the site's --link, because the mark is not to be
-     recoloured per site. Shared vocabulary across both sibling sites and
-     the homepage (keep byte-identical). */
+     Values are the brand spec's own "accent caret", light and dark, not the
+     site's --link, because the mark is not to be recoloured per site.
+     Shared vocabulary across both sibling sites and the homepage (keep
+     byte-identical). */
   --brand-caret: #2B7EC9;
 
   /* Categorical palette — shared vocabulary across both sibling sites (keep byte-identical). */
@@ -62,9 +62,9 @@ html, body {
 }
 
 /* ── Sidetown Labs wordmark header ──────────────────────────────────────────
-   Ships on every page of both sibling sites and reproduces the homepage's
-   header (~/Documents/sidetownlabs/site/index.html): same 64px row, same 23px
-   wordmark, same caret geometry from the brand spec. Keep this block
+   Ships on every page of both sibling sites and reproduces the header on
+   sidetownlabs.com: same 64px row, same 23px wordmark, same caret geometry
+   from the brand spec. Keep this block
    byte-identical between the two repos -- it is brand furniture, not
    site-specific chrome. (Design unification Phase 1b; the review's "single
    highest-leverage change for family consistency".)
