@@ -9,6 +9,13 @@
   --gridline:       #e1e0d9;
   --border:         rgba(11,11,11,0.44);
 
+  /* Brand caret — the one coloured element of the Sidetown Labs wordmark.
+     Values are the brand spec's own (~/Documents/sidetownlabs/README.md
+     "accent caret"), not the site's --link, because the mark is not to be
+     recoloured per site. Shared vocabulary across both sibling sites and
+     the homepage (keep byte-identical). */
+  --brand-caret: #2B7EC9;
+
   /* Categorical palette — shared vocabulary across both sibling sites (keep byte-identical). */
   --cat-1: #2a78d6;   /* blue   */
   --cat-2: #eb6834;   /* orange */
@@ -27,7 +34,9 @@
     --text-muted:     #898781;
     --gridline:       #2c2c2a;
     --border:         rgba(255,255,255,0.33);
-  
+
+    --brand-caret: #60AAF3;
+
     --cat-1: #3987e5;
     --cat-2: #d95926;
     --cat-3: #199e70;
@@ -51,6 +60,64 @@ html, body {
   background: var(--page-plane);
   color: var(--text-primary);
 }
+
+/* ── Sidetown Labs wordmark header ──────────────────────────────────────────
+   Ships on every page of both sibling sites and reproduces the homepage's
+   header (~/Documents/sidetownlabs/site/index.html): same 64px row, same 23px
+   wordmark, same caret geometry from the brand spec. Keep this block
+   byte-identical between the two repos -- it is brand furniture, not
+   site-specific chrome. (Design unification Phase 1b; the review's "single
+   highest-leverage change for family consistency".)
+
+   Two deliberate deviations from the homepage's version:
+
+   1. NOT sticky. The homepage header is position:sticky, but these are data
+      sites: school-districts / charter-schools / the fiscal tables all use
+      sticky <th> at top:0, and a sticky site header would either overlap them
+      or force a 64px offset into every table's sticky math. The wordmark is
+      an identity marker, not a navigation control, so it scrolls away.
+   2. No nav or theme button inside it. Each site keeps its existing
+      .view-nav exactly as-is, directly below -- the brief's requirement, and
+      it avoids two competing navigation rows.
+
+   Width: the inner element carries the page's OWN container class (.page or
+   .page-wide), so the wordmark aligns with that page's h1 at every width
+   without any per-page plumbing. The two-class selector below outranks the
+   per-page `.page { padding: ... }` rules that pages declare in their own
+   inline <style> after this sheet loads, so source order doesn't matter. */
+@font-face {
+  /* Latin subset of the Space Grotesk variable font, weights 300-700, so both
+     the 600 "sidetown" and the 450 "labs" are real instances rather than
+     synthesised. Self-hosted (22 KB) rather than fetched from Google Fonts:
+     these are no-build static sites, and a render-blocking third-party
+     request on all 20 data pages is a bad trade for one 23px wordmark.
+     Licence: SIL OFL 1.1, shipped beside it as space-grotesk-OFL.txt. */
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("space-grotesk-latin.woff2") format("woff2");
+}
+.site-header { background: var(--page-plane); border-bottom: 1px solid var(--gridline); }
+.site-header .page,
+.site-header .page-wide { display: flex; align-items: center; min-height: 64px; padding-block: 0; }
+.wordmark {
+  display: inline-flex; align-items: baseline;
+  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  font-size: 23px; line-height: 1; letter-spacing: -0.028em;
+  color: var(--text-primary); text-decoration: none; white-space: nowrap;
+}
+/* Caret geometry is the brand spec's, expressed in em so it tracks font-size:
+   width 0.37em, height 0.783em, one caret-width (0.348em) of space before the
+   "s". The 0.0833em bottom offset is the spec's "8px above baseline at 96px". */
+.wordmark .caret {
+  display: inline-block; flex: none; vertical-align: baseline;
+  width: 0.37em; height: 0.783em; margin-right: 0.348em; margin-bottom: 0.0833em;
+  background: var(--brand-caret);
+}
+.wordmark .st { font-weight: 600; }
+.wordmark .lb { font-weight: 450; color: var(--text-secondary); }
+.wordmark:focus-visible { outline: 2px solid var(--brand-caret); outline-offset: 4px; }
 
 .view-nav { font-size: 13px; color: var(--text-muted); margin: 0 0 18px; }
 .view-nav a { color: var(--link); }

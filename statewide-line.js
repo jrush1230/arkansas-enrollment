@@ -59,7 +59,14 @@ async function main() {
   const fullTotals = await loadFullStatewideTotals();
 
   // Per year: all = every SIS entity; district = the 235 regular districts
-  // (predecessor entities included pre-merger, see build script); charter =
+  // on their CURRENT boundaries only -- full_235_equivalent sums the rows
+  // whose district_lea is one of the 235 current-boundary codes, so a
+  // predecessor's own pre-merger rows are NOT in here; they are the
+  // separate predecessor bucket below (corrected 2026-07-26: this comment
+  // and the district footnote both used to say predecessors were included,
+  // which contradicted the mapping directly beneath it and overstated the
+  // 2013-14 district point by 2,678 -- see qa/landing_page_claim_check.md
+  // finding F2); charter =
   // charter schools; other = DYS + Arkansas School for the Deaf and Blind;
   // predecessor = real school districts that later merged into a current
   // district, counted here only for their own pre-merger years (e.g.
@@ -138,32 +145,57 @@ function renderFootnote(points, seriesKey) {
   const confirmedRange = yearRangeLabel(confirmedPoints);
   const unconfirmedRange = yearRangeLabel(unconfirmedPoints);
 
-  // Two ADE sources feed ADE_CONFIRMED_YEARS
-  // (build_full_statewide_totals.py): 2016-17 onward via
-  // myschoolinfo.arkansas.gov's State Report Card system; 2013-14 through
-  // 2015-16 (added 2026-07-13) via a different official ADE portal,
-  // adedata.arkansas.gov's "Enrollment Count by State" report -- the
-  // Report Card portal has no data that far back. This is a fixed
-  // historical fact about which portal covers which years, not something
-  // derived at render time, so the 2016 threshold is hardcoded here
-  // (matching the same split already documented in that script's own
-  // comment) rather than carried as a per-year source field the data
-  // doesn't have. Handles a future partial-confirmation state gracefully
-  // too: whichever of the two sub-ranges is actually non-empty within
-  // whatever's confirmed gets its own clause; the other is omitted
-  // rather than printed with a "0 years" clause.
-  const REPORT_CARD_START_YEAR = 2016;
+  // Two ADE portals feed ADE_CONFIRMED_YEARS
+  // (build_full_statewide_totals.py), and the split between them is NOT a
+  // single threshold:
+  //   - myschoolinfo.arkansas.gov's State Report Card system covers
+  //     2016-17 through 2024-25.
+  //   - adedata.arkansas.gov's "Enrollment Count by State" report covers
+  //     the three earliest years, 2013-14 through 2015-16 (the Report Card
+  //     portal has no data that far back; added 2026-07-13), AND the
+  //     current year, 2025-26, which was confirmed there directly
+  //     (465,421, live re-fetch 2026-07-15).
+  // Corrected 2026-07-26: this was a single `year >= 2016` threshold, which
+  // silently credited 2025-26 to the Report Card system. Independent
+  // support for the 2024-25 upper bound: the in-repo MySchoolInfo extract
+  // (data/processed/msi/enrollment_staffing.csv) carries ADE's published
+  // statewide figure for 2016-17 through 2024-25 and no later year. See
+  // qa/landing_page_claim_check.md finding F3.
+  // Which portal covers which years is a fixed historical fact, not
+  // something derivable at render time, so it stays hardcoded here rather
+  // than carried as a per-year source field the data doesn't have. The
+  // Enrollment Count set is non-contiguous, so its clause is rendered from
+  // contiguous runs ("2013-14 through 2015-16 and 2025-26"). Still degrades
+  // gracefully on a future partial-confirmation state: a portal with no
+  // confirmed years left in it is omitted rather than printed with a
+  // "0 years" clause.
+  const REPORT_CARD_FIRST_YEAR = 2016;
+  const REPORT_CARD_LAST_YEAR = 2024;
+  function runsLabel(pts) {
+    if (pts.length === 0) return null;
+    const runs = [];
+    for (const year of pts.map((p) => p.year).sort((a, b) => a - b)) {
+      const current = runs[runs.length - 1];
+      if (current && year === current[1] + 1) current[1] = year;
+      else runs.push([year, year]);
+    }
+    const parts = runs.map(([first, last]) =>
+      first === last ? schoolYearLabel(first) : `${schoolYearLabel(first)} through ${schoolYearLabel(last)}`);
+    if (parts.length === 1) return parts[0];
+    return `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
+  }
   function sourceAttribution(pts) {
-    const reportCard = pts.filter((p) => p.year >= REPORT_CARD_START_YEAR);
-    const enrollmentCount = pts.filter((p) => p.year < REPORT_CARD_START_YEAR);
+    const inReportCardWindow = (p) => p.year >= REPORT_CARD_FIRST_YEAR && p.year <= REPORT_CARD_LAST_YEAR;
+    const reportCard = pts.filter(inReportCardWindow);
+    const enrollmentCount = pts.filter((p) => !inReportCardWindow(p));
     const clauses = [];
     if (reportCard.length) {
-      clauses.push(`${schoolYearLabel(reportCard[0].year)} onward via ADE's State Report Card system`);
+      clauses.push(`${runsLabel(reportCard)} via ADE's State Report Card system`);
     }
     if (enrollmentCount.length) {
-      clauses.push(`${yearRangeLabel(enrollmentCount)} via ADE's Enrollment Count by State report`);
+      clauses.push(`${runsLabel(enrollmentCount)} via ADE's Enrollment Count by State report`);
     }
-    return clauses.join(", ");
+    return clauses.join("; ");
   }
 
   // The "Verified against ... / N of M years not verified" pairing is
@@ -192,17 +224,20 @@ function renderFootnote(points, seriesKey) {
 
   if (seriesKey === "district") {
     footnote.textContent =
-      `This series sums the ${last.totalN} regular public school districts tracked in this tool, including each ` +
-      `predecessor entity's reported enrollment for years before its successor's current boundary took effect ` +
-      `(e.g. Norphlet counts toward Smackover Norphlet before their 2014 merger). ${verificationClause()} ` +
-      `See the table for the District/Charter/Other/Predecessor breakdown. See METHODOLOGY.md.`;
+      `This series sums the ${last.totalN} regular public school districts tracked in this tool, on their current ` +
+      `boundaries. Districts that later merged into one of the ${last.totalN} are counted separately for their own ` +
+      `pre-merger years (e.g. Norphlet before its 2014 merger into Smackover Norphlet), in the Predecessor column. ` +
+      `${verificationClause()} ` +
+      `See the table for the District/Charter/Other/Predecessor breakdown. See the methodology ` +
+      `page for how these totals were verified.`;
   } else if (seriesKey === "all") {
     footnote.textContent =
       `This is the full statewide total: public school districts, charter schools, a small number of other public ` +
       `schools (the Division of Youth Services School System and the Arkansas School for the Deaf and Blind), and, ` +
       `for years before their own merger, predecessor districts later absorbed into a current district (e.g. ` +
       `Dollarway before its 2021 merger into Pine Bluff). ${verificationClause()} ` +
-      `See the table for the District/Charter/Other/Predecessor breakdown. See METHODOLOGY.md.`;
+      `See the table for the District/Charter/Other/Predecessor breakdown. See the methodology ` +
+      `page for how these totals were verified.`;
   } else {
     const reconciledClause = confirmedPoints.length === points.length
       ? `all ${points.length} years`
@@ -214,7 +249,8 @@ function renderFootnote(points, seriesKey) {
       `The number of reporting entities changes year to year; it isn't a fixed panel. This series isn't independently verified ` +
       `against an external ADE publication on its own; it's verified indirectly, via the zero-residual check that ` +
       `District + Charter + Other + Predecessor reconciles exactly to the ADE-confirmed All total in ` +
-      `${reconciledClause}. See the table for the full breakdown. See METHODOLOGY.md.`;
+      `${reconciledClause}. See the table for the full breakdown. See the methodology page ` +
+      `for how these totals were verified.`;
   }
 }
 

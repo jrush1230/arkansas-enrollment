@@ -541,7 +541,7 @@ function renderDistrict(d) {
       `This district absorbed ${boundary.predecessor} in ${boundary.year}. Enrollment before ${boundary.year} on the ` +
       `chart reflects ${shortName(d.name)}'s boundary as it existed before that merger. It does not include ` +
       `${boundary.predecessor}'s students. The jump at ${boundary.year} marks the merger itself, not a sudden ` +
-      `change in the underlying population. See METHODOLOGY.md for the full list of boundary-change districts.`;
+      `change in the underlying population. See the methodology page for the full list of boundary-change districts.`;
     viz.appendChild(note);
   }
 
