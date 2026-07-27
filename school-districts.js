@@ -231,8 +231,8 @@ function compareRows(a, b, col, dir) {
   // Ozark Mountain and Searcy/Searcy County. Those 6 row positions are the
   // only ones that move; the other 229 are unchanged. shortName() is already
   // imported here for the cell itself, so this compares exactly what the
-  // reader sees. district-rankings.js makes the same call (70e7b17); this
-  // brings the two tables back into agreement.
+  // reader sees. district-rankings.js makes the same call; this brings the two
+  // tables back into agreement.
   if (col.type === "string") cmp = shortName(String(av)).localeCompare(shortName(String(bv)));
   else if (col.type === "bool" || col.type === "boundary") cmp = av === bv ? 0 : av ? 1 : -1;
   else cmp = av - bv;

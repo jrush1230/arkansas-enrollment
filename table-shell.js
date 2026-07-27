@@ -1,9 +1,10 @@
-// table-shell v1.0 -- canonical copy: fiscal repo (NOT YET VENDORED THERE; the
-// fiscal tables still carry their own inline copy of this grammar, so today this
-// file lives only in the enrollment repo. Vendoring it is the outstanding half
-// of the extraction 0f4bdb6 started.) Bump this version in BOTH repos, in the
-// same commit, on any change once it is vendored -- the version line is the
-// drift alarm.
+// table-shell v1.1 -- shared VENDORED module. The fiscal site holds the
+// canonical copy; the enrollment site carries a byte-identical vendor of it.
+// A change to one is a change to both, in the same commit, with this version
+// line bumped -- the version line is the drift alarm. v1.1 IS that vendoring:
+// the extraction that produced this module deferred the fiscal copy, so for a
+// while the file lived only on the enrollment side and the alarm had nothing
+// to compare against. No mechanic changed between v1.0 and v1.1.
 //
 // table-shell.js -- shared sortable data-table renderer (the fiscal table shell).
 // Owns the RENDER + sort-interaction MECHANICS only (header
@@ -117,8 +118,10 @@ export function renderSortableTable({ table, columns, rows, sortState, onSort })
 }
 
 // ---------------------------------------------------------------------------
-// CSV download helpers (shared by the enrollment table pages' "Download CSV"
-// button; additive to this module -- the render path above is unchanged).
+// CSV download helpers (used by the enrollment table pages' "Download CSV"
+// button; additive to this module -- the render path above is unchanged). The
+// fiscal table pages keep their own CSV writers: theirs emit LF and no BOM, so
+// adopting these would change the bytes of a file readers already download.
 // Nothing is fetched or sent anywhere: each page builds its rows in-page from
 // data it has already loaded, so this stays pure presentation, same as the
 // render code.

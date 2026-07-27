@@ -1,9 +1,10 @@
-/* table-shell v1.0 -- canonical copy: fiscal repo (NOT YET VENDORED THERE; the
-   fiscal tables still carry their own inline copy of this grammar, so today
-   this file lives only in the enrollment repo. Vendoring it is the outstanding
-   half of the extraction 0f4bdb6 started.) Bump this version in BOTH repos, in
-   the same commit, on any change once it is vendored -- the version line is the
-   drift alarm. */
+/* table-shell v1.1 -- shared VENDORED module. The fiscal site holds the
+   canonical copy; the enrollment site carries a byte-identical vendor of it.
+   A change to one is a change to both, in the same commit, with this version
+   line bumped -- the version line is the drift alarm. v1.1 IS that vendoring:
+   the extraction that produced this module deferred the fiscal copy, so for a
+   while the file lived only on the enrollment side and the alarm had nothing
+   to compare against. No rule changed between v1.0 and v1.1. */
 /* table-shell.css -- shared sortable data-table shell (the fiscal table grammar).
    Owns the generic table chrome only. Page-specific cell
    internals (sparklines, caveat marks, prelim pills, wealth notes, etc.) stay
@@ -57,8 +58,10 @@ th.col-sorted, td.col-sorted { color: var(--text-primary); }
 .sort-arrow.active { color: var(--link); }
 
 /* Downloads row -- a right-aligned action bar that sits inside .table-card,
-   above the .table-scroll box. Shared by both enrollment table pages (School
-   Districts, Charter Schools) for their "Download CSV" button. The button is
+   above the .table-scroll box. Used by the enrollment site's table pages for
+   their "Download CSV" button; the fiscal site's table pages have their own,
+   visually distinct two-button download cluster and do not use this row -- so
+   these rules ship there unused, on purpose. The button is
    plain furniture, styled from the same tokens as the rest of the shell --
    --border (kept on interactive controls, per the Phase 2 border convention),
    --surface-1 fill, secondary→primary ink on hover -- so it needs no per-page
