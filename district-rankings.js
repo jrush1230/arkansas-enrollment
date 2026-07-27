@@ -15,6 +15,7 @@ import {
   glossaryAriaLabel,
   GLOSSARY,
 } from "./shared.js";
+import { renderSortableTable, downloadCsv } from "./table-shell.js";
 
 // Magnitude bucket filter -- Declining/Stable/Growing are now defined by
 // pct_change_efa_era's own value, not by typology-ramp membership. The old
@@ -87,10 +88,10 @@ function fmtMagnitude(v) {
 // the sentence already says that in words, so the two lines aren't
 // repeating each other. sparklineBoundaryNote() (shared.js) appends the
 // sparkline's boundary-change omission sentence for the 7 exception
-// districts -- the row's own sparkline (see buildRow()) is decorative
-// (aria-hidden), so this tooltip/the aria-label below are the only place
-// that omission is ever stated, same shared wording the data table's
-// cell label uses for the identical visual.
+// districts -- the row's own sparkline (see the Trajectory cell below) is
+// decorative (aria-hidden), so this tooltip/the row link's aria-label are
+// the only place that omission is ever stated, same shared wording the
+// data table's cell label uses for the identical visual.
 function tooltipText(d) {
   const segments = [districtShapeSentence(d)];
   const badgeText = badgeTexts(d);
@@ -102,18 +103,21 @@ function tooltipText(d) {
   return segments.join(" ");
 }
 
-// One shared tooltip element for the whole list (same idiom as the
+// One shared tooltip element for the whole table (same idiom as the
 // statewide line's single #tooltip div) rather than one per row -- shown on
 // whichever row is currently hovered or focused. Same content
-// districtAriaLabel()/the row's own aria-label already carry for
+// districtAriaLabel()/the row link's own aria-label already carry for
 // keyboard/screen-reader users, so this is a second rendering of one
-// channel, not a separate one.
-function showRowTooltip(li, d) {
+// channel, not a separate one. Positioned against #rank-table-wrap, the
+// wrapper AROUND .table-scroll rather than the scroll box itself -- that
+// box is overflow-x:auto, so a tooltip inside it would be clipped at the
+// box edge and would slide sideways with the table.
+function showRowTooltip(rowEl, d) {
   const tooltip = document.getElementById("row-tooltip");
-  const wrap = document.getElementById("rank-list-wrap");
+  const wrap = document.getElementById("rank-table-wrap");
   tooltip.textContent = tooltipText(d);
   const wrapRect = wrap.getBoundingClientRect();
-  const rowRect = li.getBoundingClientRect();
+  const rowRect = rowEl.getBoundingClientRect();
   tooltip.style.left = "6px";
   tooltip.style.top = `${rowRect.bottom - wrapRect.top + 2}px`;
   tooltip.style.opacity = "1";
@@ -123,7 +127,7 @@ function hideRowTooltip() {
   document.getElementById("row-tooltip").style.opacity = "0";
 }
 
-// Single source of truth for badge text, shared by the visual pills and
+// Single source of truth for badge text, shared by the row tooltip and
 // the aria-label -- badge info was visual-only before this fix (never
 // reached districtAriaLabel() in any prior round), a real gap for
 // screen-reader users on any of the 7 boundary-change districts or the
@@ -145,119 +149,116 @@ function badgeTexts(d) {
   if (d.baseline_years_thin) texts.push("Thin baseline");
   if (d.reversal_magnitude) texts.push(`${fmtMagnitude(d.reversal_magnitude)} reversal`);
   // Disclosure, not a warning: this district's baseline may reflect a
-  // different (pre-merger, smaller) boundary than today's -- see
-  // METHODOLOGY.md. Doesn't imply anything about classification
+  // different (pre-merger, smaller) boundary than today's -- see the
+  // methodology page. Doesn't imply anything about classification
   // correctness, unlike the other two badges which flag data thinness.
   if (d.boundary_change_within_series) texts.push(`Boundary changed ${d.current_boundary_since}`);
   return texts;
 }
 
-function buildRow(d, rank, mode) {
-  const li = document.createElement("li");
-
-  // The row is a real link (drill-down.html?id=<leaid>) rather than a
-  // plain li/tabindex, closing the "not built yet" gap from when this
-  // view was first built -- also gives every row genuine link semantics
-  // (Enter/click navigates) instead of the fake-interactive li it used to
-  // be, which is a small accessibility improvement on top of the wiring.
-  const a = document.createElement("a");
-  a.className = "rank-row";
-  a.href = `drill-down.html?id=${encodeURIComponent(d.id)}`;
+// Full accessible text for the row, carried by the District cell's link
+// (which is the row's only focusable element, so it is where a keyboard
+// user actually lands). districtAriaLabel() is shared across
+// map.js/drill-down.js too, so the badge text and the sparkline's
+// boundary-change note are appended HERE rather than added inside that
+// shared function -- extending the shared function would silently change
+// those other two views' aria-labels as a side effect. Reuses
+// sparklineBoundaryNote(d) verbatim (not a second, hand-typed copy of the
+// same sentence) so the tooltip and this aria-label can't drift apart.
+function rowAriaLabel(d) {
   const badgeText = badgeTexts(d);
-  // districtAriaLabel() is shared across map.js/drill-down.js too, so the
-  // sparkline's boundary-change note is appended HERE rather than added
-  // inside that shared function -- this task is scoped to the ranked
-  // list, and extending the shared function would have silently changed
-  // those other two views' aria-labels as a side effect. Reuses
-  // sparklineBoundaryNote(d) verbatim (not a second, hand-typed copy of
-  // the same sentence) so the tooltip and this aria-label can't drift
-  // apart -- same accessibility parity this project maintains for every
-  // prior tooltip addition.
   const extras = [badgeText.length ? `${badgeText.join(". ")}.` : "", sparklineBoundaryNote(d).trim()]
     .filter(Boolean)
     .join(" ");
-  a.setAttribute("aria-label", extras ? `${districtAriaLabel(d)} ${extras}` : districtAriaLabel(d));
-  a.addEventListener("mouseenter", () => showRowTooltip(a, d));
-  a.addEventListener("mouseleave", hideRowTooltip);
-  a.addEventListener("focus", () => showRowTooltip(a, d));
-  a.addEventListener("blur", hideRowTooltip);
+  return extras ? `${districtAriaLabel(d)} ${extras}` : districtAriaLabel(d);
+}
 
-  if (rank) {
-    const rankEl = document.createElement("span");
-    rankEl.className = "rank-num";
-    rankEl.textContent = String(rank);
-    a.appendChild(rankEl);
-  }
+// ---------------------------------------------------------------------------
+// Cells
+// ---------------------------------------------------------------------------
 
-  // Magnitude, not shape: same pctChangeColor() gradient the map's fill
-  // uses, keyed to this row's own pct_change_efa_era -- not typologyColor(),
-  // which school-districts.js's typology column still uses unchanged (that page
-  // has its own copy of this import, this file no longer needs it).
-  // dataset.typology is kept as metadata (unrelated to which color
-  // renders) since any future styling here might still key off it.
+// District cell: the magnitude swatch plus the drill-down link. Magnitude,
+// not shape: the same pctChangeColor() gradient the map's fill uses, keyed
+// to this row's own pct_change_efa_era -- not typologyColor(), which
+// school-districts.js's Trajectory column still uses unchanged.
+// dataset.typology is kept as metadata (unrelated to which color renders)
+// since any future styling here might still key off it.
+function makeNameCell(d) {
+  const td = document.createElement("td");
+  const inner = document.createElement("span");
+  inner.className = "name-inner";
+
   const swatch = document.createElement("span");
   swatch.className = "row-swatch";
   swatch.dataset.typology = d.typology ?? "";
-  swatch.style.background = pctChangeColor(d.pct_change_efa_era, mode);
-  a.appendChild(swatch);
+  swatch.style.background = pctChangeColor(d.pct_change_efa_era, currentMode());
+  swatch.setAttribute("aria-hidden", "true");
+  inner.appendChild(swatch);
 
-  const name = document.createElement("span");
-  name.className = "row-name";
-  name.textContent = shortName(d.name);
-  a.appendChild(name);
+  const a = document.createElement("a");
+  a.href = `drill-down.html?id=${encodeURIComponent(d.id)}`;
+  a.textContent = shortName(d.name);
+  // Full name in the native tooltip, since the visible text ellipsises at
+  // narrow widths -- same title-on-the-link treatment school-districts.js
+  // gives its own District cell.
+  a.title = d.name;
+  a.setAttribute("aria-label", rowAriaLabel(d));
+  inner.appendChild(a);
 
-  // Notes icons -- the same shared.js icon builders (thinBaselineIcon()/
-  // boundaryChangedIcon()/reversalIcon()) and per-mark hover-title
-  // wrapper (makeCaveatsMark()) the data table's Notes column uses, not
-  // reimplemented. Only active flags render (nothing for a clean row,
-  // same "no all-clear placeholder" convention the data table's cell
-  // already established); the container still holds its fixed width even
-  // when empty, same reason the ring this replaces did, so
-  // .row-trajectory/.row-pct don't shift between rows. Every mark is
-  // purely visual (aria-hidden, inherited from makeCaveatsMark()) -- this
-  // row's own aria-label (badgeText, built above) remains the sole
-  // accessible channel; these per-mark titles are an ADDITIONAL
-  // sighted-hover channel on top of it, the same relationship the data
-  // table established between its cell-level label and per-mark
-  // tooltips, not a replacement for the row's screen-reader text.
-  const notes = document.createElement("span");
-  notes.className = "row-notes";
+  td.appendChild(inner);
+  return td;
+}
+
+// Notes cell -- the same shared.js icon builders (thinBaselineIcon()/
+// boundaryChangedIcon()/reversalIcon()) and per-mark hover-title wrapper
+// (makeCaveatsMark()) the School Districts table's Notes column uses, not
+// reimplemented. Only active flags render (nothing for a clean row, the
+// same "no all-clear placeholder" convention that table already
+// established). Every mark is purely visual (aria-hidden, inherited from
+// makeCaveatsMark()) -- the District link's aria-label (badgeTexts(),
+// above) remains the sole accessible channel, exactly as it was on the
+// ranked-list rows; these per-mark titles are an ADDITIONAL sighted-hover
+// channel on top of it, not a replacement.
+function makeCaveatsCell(d) {
+  const td = document.createElement("td");
+  td.className = "cell-caveats";
   if (d.baseline_years_thin) {
-    notes.appendChild(makeCaveatsMark(thinBaselineIcon(), "Thin baseline"));
+    td.appendChild(makeCaveatsMark(thinBaselineIcon(), "Thin baseline"));
   }
   if (d.reversal_magnitude) {
-    notes.appendChild(makeCaveatsMark(
+    td.appendChild(makeCaveatsMark(
       reversalIcon(d.reversal_magnitude),
       `${fmtMagnitude(d.reversal_magnitude)} reversal`
     ));
   }
   if (d.boundary_change_within_series) {
-    notes.appendChild(makeCaveatsMark(boundaryChangedIcon(), `Boundary changed: ${d.current_boundary_since}`));
+    td.appendChild(makeCaveatsMark(boundaryChangedIcon(), `Boundary changed: ${d.current_boundary_since}`));
   }
-  a.appendChild(notes);
+  return td;
+}
 
-  // Trajectory sparkline -- same shared.js function, same 2013-2025
-  // window, same per-district scaling, same boundary-change-district
-  // handling as the data table's Trajectory column; imported rather than
-  // reimplemented (see shared.js). Purely decorative (aria-hidden) --
-  // the row's own tooltip/aria-label (districtShapeSentence() + CAGR
-  // detail + badge text, above) is the accessible channel for what this
-  // line shows, the same division of labor the data table's cell already
-  // uses (visual sparkline + separate title/visually-hidden text).
-  const trajectory = document.createElement("span");
-  trajectory.className = "row-trajectory";
-  const spark = sparklineSvg(d, mode);
+// Trajectory sparkline -- same shared.js function, same 2013-2025 window,
+// same per-district scaling, same boundary-change-district handling as the
+// School Districts table's Trajectory column; imported rather than
+// reimplemented. Purely decorative (aria-hidden) -- the row tooltip and
+// the District link's aria-label are the accessible channel for what this
+// line shows, the same division of labor the ranked list already used.
+function makeTrajectoryCell(d) {
+  const td = document.createElement("td");
+  td.className = "cell-typology-visual";
+  const spark = sparklineSvg(d, currentMode());
   spark.setAttribute("aria-hidden", "true");
-  trajectory.appendChild(spark);
-  a.appendChild(trajectory);
+  td.appendChild(spark);
+  return td;
+}
 
-  const pct = document.createElement("span");
-  pct.className = "row-pct";
-  pct.textContent = fmtPct(d.pct_change_efa_era);
-  a.appendChild(pct);
-
-  li.appendChild(a);
-  return li;
+// How many of the three caveat flags are active on a district -- the sort
+// key for the Notes column, same derivation (and same reasoning) as
+// school-districts.js's caveatCount().
+function caveatCount(d) {
+  return (d.baseline_years_thin ? 1 : 0) +
+    (d.reversal_magnitude ? 1 : 0) +
+    (d.boundary_change_within_series ? 1 : 0);
 }
 
 async function main() {
@@ -274,40 +275,137 @@ async function main() {
   // (see 12_build_districts_json.py -- EFA-era coverage is universal) --
   // so a null-typology district is always correctly bucketable by its own
   // actual percentage, typology-independent by construction, nothing to
-  // special-case. (An earlier round also had a typology-based category
-  // filter axis here, which did need a null-typology bypass -- that axis
-  // was removed entirely, taking the bypass with it.) badgeTexts() still
-  // always flags "Not yet classified" in the row's aria-label regardless
-  // of classification.
+  // special-case. badgeTexts() still always flags "Not yet classified" in
+  // the row's aria-label regardless of classification.
 
   let activeBucketKey = "all";
   let searchText = "";
-  // "decline" = most-negative pct_change_efa_era first (default); "growth"
-  // reverses it. Applied after filtering, same as the fixed order was.
-  let sortDirection = "decline";
+  // Sort state, in the shared shell's grammar (key + asc/desc) rather than
+  // the old single decline/growth toggle. "rank" ascending is the same
+  // order that toggle's default produced -- steepest EFA-era decline
+  // first -- and "rank" descending is the same order its "growth" state
+  // produced, so the page opens on, and can still reach, exactly the two
+  // orderings it had before. What is new is that District, Notes and EFA
+  // change now sort too, which is what putting this view on the shared
+  // table shell buys.
+  let sortKey = "rank";
+  let sortDir = "asc";
 
   function matchesSearch(d) {
     return d.name.toLowerCase().includes(searchText.trim().toLowerCase());
   }
 
-  function filteredDistricts() {
+  // Rank is assigned over the FILTERED set, not all 235 -- the ranked list
+  // always renumbered from 1 inside a filter, and that is the more useful
+  // reading ("steepest decline among the districts I'm looking at").
+  // Assigned once per filter change, from the EFA-change ordering alone,
+  // so it is a stable property of the row: sorting by District or Notes
+  // reorders the rows but each keeps the rank it earned. Nulls sort last
+  // here for the same reason they do in every other numeric column, though
+  // no district has a null pct_change_efa_era today.
+  function rankedRows() {
     const bucket = MAGNITUDE_BUCKETS[activeBucketKey];
-    return districts
-      .filter((d) => bucket.matches(d.pct_change_efa_era) && matchesSearch(d))
-      .sort((a, b) =>
-        sortDirection === "decline"
-          ? a.pct_change_efa_era - b.pct_change_efa_era
-          : b.pct_change_efa_era - a.pct_change_efa_era
-      );
+    const rows = districts.filter((d) => bucket.matches(d.pct_change_efa_era) && matchesSearch(d));
+    const byChange = [...rows].sort((a, b) => {
+      const av = a.pct_change_efa_era, bv = b.pct_change_efa_era;
+      if (av == null && bv == null) return 0;
+      if (av == null) return 1;
+      if (bv == null) return -1;
+      return av - bv;
+    });
+    const ranks = new Map();
+    byChange.forEach((d, i) => ranks.set(d.id, i + 1));
+    return rows.map((d) => ({ d, rank: ranks.get(d.id) }));
   }
 
-  function renderList() {
+  function compareRows(a, b) {
+    let cmp;
+    if (sortKey === "rank") {
+      cmp = a.rank - b.rank;
+    } else if (sortKey === "name") {
+      // Sorts on the SHORT name -- the text the cell actually shows -- not
+      // on the full district_name. The two disagree for three real pairs
+      // (Ouachita/Ouachita River, Ozark/Ozark Mountain, Searcy/Searcy
+      // County): full-name order puts "OUACHITA RIVER SCHOOL DISTRICT"
+      // before "OUACHITA SCHOOL DISTRICT", which on screen reads as
+      // "OUACHITA RIVER" above "OUACHITA" -- an order the visible column
+      // contradicts. school-districts.js sorts on the full name and has the
+      // same three inversions; that is fixed in its own commit rather than
+      // silently here, so the two pages agree again afterwards.
+      cmp = shortName(a.d.name).localeCompare(shortName(b.d.name));
+    } else if (sortKey === "caveats") {
+      cmp = caveatCount(a.d) - caveatCount(b.d);
+    } else {
+      const av = a.d[sortKey], bv = b.d[sortKey];
+      const aNull = av == null, bNull = bv == null;
+      if (aNull && bNull) return 0;
+      if (aNull) return 1;  // nulls always sort last, regardless of direction
+      if (bNull) return -1;
+      cmp = av - bv;
+    }
+    return sortDir === "asc" ? cmp : -cmp;
+  }
+
+  // Column config in the shared shell's shape. Trajectory is the only
+  // non-sortable column, same call school-districts.js makes for the same
+  // visual: a sparkline has no scalar to rank by.
+  const columns = [
+    {
+      key: "rank", label: "Rank", align: "right", numeric: true,
+      ariaLabel: glossaryAriaLabel("Sort by Rank", "efaChange"),
+      title: GLOSSARY.efaChange,
+      renderCell: (r) => String(r.rank),
+    },
+    {
+      key: "name", label: "District", align: "left",
+      renderCell: (r) => makeNameCell(r.d),
+    },
+    {
+      key: "caveats", label: "Notes", align: "center",
+      renderCell: (r) => makeCaveatsCell(r.d),
+    },
+    {
+      key: "typology", label: "Trajectory", align: "center", sortable: false,
+      renderCell: (r) => makeTrajectoryCell(r.d),
+    },
+    {
+      key: "pct_change_efa_era", label: "EFA change", align: "right", numeric: true,
+      ariaLabel: glossaryAriaLabel("Sort by EFA change", "efaChange"),
+      title: GLOSSARY.efaChange,
+      renderCell: (r) => fmtPct(r.d.pct_change_efa_era),
+    },
+  ];
+
+  // The shell renders rows; it does not own per-row interaction, so the
+  // hover/focus tooltip wiring is re-attached here after every render.
+  // focusin/focusout (not focus/blur) because the focusable element is the
+  // District link INSIDE the row -- those two bubble, focus/blur do not.
+  function attachRowTooltips(table, rows) {
+    table.querySelectorAll("tbody tr").forEach((tr, i) => {
+      const d = rows[i].d;
+      tr.addEventListener("mouseenter", () => showRowTooltip(tr, d));
+      tr.addEventListener("mouseleave", hideRowTooltip);
+      tr.addEventListener("focusin", () => showRowTooltip(tr, d));
+      tr.addEventListener("focusout", hideRowTooltip);
+    });
+  }
+
+  function renderTable() {
     hideRowTooltip(); // a row mid-render may be removed by the new filter/sort without a mouseleave/blur ever firing
-    const list = document.getElementById("rank-list");
-    list.textContent = "";
-    const rows = filteredDistricts();
-    const mode = currentMode();
-    rows.forEach((d, i) => list.appendChild(buildRow(d, i + 1, mode)));
+    const table = document.getElementById("rank-table");
+    const rows = rankedRows().sort(compareRows);
+    renderSortableTable({
+      table,
+      columns,
+      rows,
+      sortState: { key: sortKey, dir: sortDir },
+      onSort: (key) => {
+        if (sortKey === key) sortDir = sortDir === "asc" ? "desc" : "asc";
+        else { sortKey = key; sortDir = "asc"; }
+        renderTable();
+      },
+    });
+    attachRowTooltips(table, rows);
 
     document.getElementById("result-count").textContent =
       `Showing ${rows.length} of ${districts.length} districts`;
@@ -317,7 +415,7 @@ async function main() {
   // straight from STABLE_THRESHOLD -- one place defines the number, same
   // pattern as everywhere else in this file that avoids re-listing a
   // constant. Colors come from GRADIENT_ANCHORS, not typologyColor() --
-  // this is the magnitude channel, same one the map's fill and this row's
+  // this is the magnitude channel, same one the map's fill and the row's
   // own swatch already use, not the categorical one.
   function renderBucketToggle() {
     const container = document.getElementById("bucket-toggle");
@@ -340,61 +438,54 @@ async function main() {
       btn.addEventListener("click", () => {
         activeBucketKey = key;
         renderBucketToggle();
-        renderList();
+        renderTable();
       });
       container.appendChild(btn);
     }
   }
 
-  function renderAllColors() {
-    // Re-derive swatch/pill backgrounds on a live OS theme change without
-    // a data reload.
-    renderBucketToggle();
-    renderList();
+  // Download CSV -- the districts currently shown, in the order currently
+  // shown, same convention school-districts.js's export uses. Columns
+  // mirror the visible table 1:1 EXCEPT Trajectory (a sparkline has no
+  // scalar to export) and Notes, which is expanded from its icons into
+  // three spelled-out columns (Thin baseline "Yes"/blank, Reversal
+  // magnitude "Large"/blank, Boundary changed "2015"/blank) so the file is
+  // self-describing without the on-screen legend. The percentage is the
+  // same 1-decimal figure shown on screen, minus the "%" (the header
+  // carries the "(%)" unit instead); a null exports as an empty field, not
+  // "—". All in-page, from data already loaded -- no fetch, nothing sent
+  // anywhere.
+  function exportCsv() {
+    const pct = (v) => (v == null ? "" : (v * 100).toFixed(1));
+    const header = [
+      "Rank", "District", "EFA change (%)",
+      "Thin baseline", "Reversal magnitude", "Boundary changed",
+    ];
+    const body = rankedRows().sort(compareRows).map(({ d, rank }) => [
+      rank,
+      d.name,
+      pct(d.pct_change_efa_era),
+      d.baseline_years_thin ? "Yes" : "",
+      d.reversal_magnitude ? fmtMagnitude(d.reversal_magnitude) : "",
+      d.boundary_change_within_series ? d.current_boundary_since : "",
+    ]);
+    downloadCsv("district-rankings.csv", [header, ...body]);
   }
 
   document.getElementById("search-input").addEventListener("input", (evt) => {
     searchText = evt.target.value;
-    renderList();
+    renderTable();
   });
-
-  const sortBtn = document.getElementById("sort-direction-btn");
-  // Native hover tooltip -- set once, doesn't depend on sort direction so
-  // it doesn't need to live inside updateSortButton()'s per-toggle
-  // rebuild. The aria-label DOES get rebuilt every toggle (below), so the
-  // glossary definition is appended fresh via glossaryAriaLabel() each
-  // time rather than read back from a previous call -- see that
-  // function's own comment for why an explicit aria-label can't just get
-  // a visually-hidden child span appended instead.
-  sortBtn.title = GLOSSARY.efaChange;
-  function updateSortButton() {
-    const declining = sortDirection === "decline";
-    sortBtn.classList.toggle("ascending", !declining);
-    sortBtn.setAttribute(
-      "aria-label",
-      glossaryAriaLabel(`Sort by EFA change: steepest ${declining ? "decline" : "growth"} first`, "efaChange")
-    );
-  }
-  // Called once here too, not just from the click handler below -- the
-  // static HTML's own aria-label (district-rankings.html) is a plausible-looking
-  // default that happens to match sortDirection's initial value, but it
-  // never carried the glossary definition, so a keyboard/screen-reader
-  // user who never clicks this button (a real, not hypothetical, case --
-  // that's exactly who a hover-only tooltip fails to reach) got an
-  // incomplete aria-label until the first toggle. Found while testing
-  // this glossary addition, not a pre-existing intentional gap.
-  updateSortButton();
-  sortBtn.addEventListener("click", () => {
-    sortDirection = sortDirection === "decline" ? "growth" : "decline";
-    updateSortButton();
-    renderList();
-  });
+  document.getElementById("dl-csv").addEventListener("click", exportCsv);
 
   renderBucketToggle();
-  renderList();
+  renderTable();
 
+  // Re-derive swatch/pill/sparkline colors on a live OS theme change
+  // without a data reload.
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
-    renderAllColors();
+    renderBucketToggle();
+    renderTable();
   });
 }
 

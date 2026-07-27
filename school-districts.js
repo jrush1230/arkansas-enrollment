@@ -222,7 +222,18 @@ function compareRows(a, b, col, dir) {
   if (bNull) return -1;
 
   let cmp;
-  if (col.type === "string") cmp = String(av).localeCompare(String(bv));
+  // The District column sorts on the SHORT name -- the text the cell
+  // actually shows (shellColumns() renders shortName(d.name)) -- not on the
+  // full district_name it used to compare. The two disagree for three real
+  // pairs: full-name order puts "OUACHITA RIVER SCHOOL DISTRICT" before
+  // "OUACHITA SCHOOL DISTRICT", which renders as "OUACHITA RIVER" above
+  // "OUACHITA", an order the visible column contradicts. Same for Ozark/
+  // Ozark Mountain and Searcy/Searcy County. Those 6 row positions are the
+  // only ones that move; the other 229 are unchanged. shortName() is already
+  // imported here for the cell itself, so this compares exactly what the
+  // reader sees. district-rankings.js makes the same call (70e7b17); this
+  // brings the two tables back into agreement.
+  if (col.type === "string") cmp = shortName(String(av)).localeCompare(shortName(String(bv)));
   else if (col.type === "bool" || col.type === "boundary") cmp = av === bv ? 0 : av ? 1 : -1;
   else cmp = av - bv;
   return dir === "asc" ? cmp : -cmp;

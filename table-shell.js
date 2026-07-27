@@ -1,6 +1,12 @@
+// table-shell v1.0 -- canonical copy: fiscal repo (NOT YET VENDORED THERE; the
+// fiscal tables still carry their own inline copy of this grammar, so today this
+// file lives only in the enrollment repo. Vendoring it is the outstanding half
+// of the extraction 0f4bdb6 started.) Bump this version in BOTH repos, in the
+// same commit, on any change once it is vendored -- the version line is the
+// drift alarm.
+//
 // table-shell.js -- shared sortable data-table renderer (the fiscal table shell).
-// Vendored identically into the fiscal and enrollment repos; canonical copy in
-// the fiscal repo. Owns the RENDER + sort-interaction MECHANICS only (header
+// Owns the RENDER + sort-interaction MECHANICS only (header
 // buttons, caret placement, aria-sort, focus-return, zebra/sorted classes,
 // keyboard-scrollable region). It does NOT own the data, the sort comparison,
 // or any page-specific cell content -- the caller passes already-sorted rows,

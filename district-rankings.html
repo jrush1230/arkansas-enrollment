@@ -21,11 +21,12 @@
 <meta name="twitter:image" content="https://arkansas-enrollment.sidetownlabs.com/og-image.png">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="table-shell.css">
 <style>
   .page { max-width: 880px; }
 
-  /* --- filters --- */
-  .filters { margin: 0 0 18px; }
+  /* --- filters (unchanged from the ranked-list version) --- */
+  .filters { margin: 0 0 10px; }
   .search-row { margin: 0 0 10px; }
   .search-input {
     width: 100%;
@@ -75,7 +76,7 @@
     flex: none;
   }
 
-  .result-count { color: var(--text-muted); font-size: 13px; margin: 0 0 14px; }
+  .result-count { color: var(--text-muted); font-size: 13px; margin: 0 0 10px; }
 
   .methodology-note {
     color: var(--text-secondary);
@@ -88,104 +89,64 @@
     max-width: 68ch;
   }
 
-  /* --- ranked list header row --- */
-  /* Plain divs/spans mirroring the row's own flex layout (same widths,
-     same gap) so labels land above their counterparts -- not a <table>,
-     no column/grid semantics, just text positioned via the same flexbox
-     rules the rows already use. Text treatment matches school-districts.html's
-     th style (muted, uppercase, 10.5px, letter-spaced), which this view
-     no longer has a local copy of. */
-  .rank-list-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0 6px 6px;
-  }
-  .rank-list-header span {
-    color: var(--text-muted);
-    font-weight: 600;
-    font-size: 10.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-  }
-  .header-rank { width: 28px; flex: none; text-align: center; }
-  .header-swatch { width: 10px; flex: none; }
-  .header-name { flex: 1 1 auto; min-width: 0; }
-  /* Empty spacer matching .row-notes' width -- the row's Notes icons have
-     no label of their own (their meaning lives in the per-mark hover
-     titles and the row's aria-label, same as everything else that moved
-     off the default row), but the column still needs to hold its place
-     in the fixed-width sequence so .header-trajectory/.header-pct-btn
-     after it stay aligned with .row-trajectory/.row-pct below. Width
-     matches .row-notes exactly -- see that rule for how it's sized. */
-  .header-notes { width: 54px; flex: none; }
-  /* Empty spacer, same convention as .header-swatch/.header-notes above
-     -- the sparkline is a purely visual indicator with no header label of
-     its own (same treatment the row-swatch dot and Notes icons already
-     get), not a labeled column like the data table's "Trajectory" text
-     header. Width matches .row-trajectory exactly, same alignment
-     contract every other column pair in this header/row already keeps. */
-  .header-trajectory { width: 72px; flex: none; }
-  /* The sort control lives here now, not as a separate icon-only button
-     above the header -- merging them answers directly to "does the label
-     need a cue tying it to the sort control": it doesn't need a cue, it
-     IS the control. */
-  /* width matches .row-pct exactly so .header-name grows to the same
-     final size as .row-name does in a real row (both have exactly one
-     flex-grow item; if this box were sized to its own content instead,
-     it would eat into that shared growth budget and shift every label
-     after .header-name out of alignment with its row counterpart). The
-     label text is wider than 62px, so it overflows the box symmetrically
-     left and right (justify-content: center) rather than being clipped --
-     overflow:visible is the default and nothing here forces a wrap;
-     nothing sits to the right of this box in the row, and the sparkline
-     column to its left has no header TEXT of its own to collide with (a
-     real collision that forced a temporary flex-start/wide-padding
-     workaround here existed only while Baseline change/COVID shock's
-     text headers sat in this same spot -- both removed, so this reverts
-     to the plain centered form). */
-  .header-pct-btn {
-    flex: none;
-    width: 62px;
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    font: inherit;
-    color: var(--text-muted);
-    font-weight: 600;
-    font-size: 10.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-  }
-  .header-pct-btn:hover { color: var(--text-primary); }
-  .header-pct-btn:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
-  .header-pct-btn svg { width: 10px; height: 10px; display: block; flex: none; }
-  .header-pct-btn.ascending svg { transform: rotate(180deg); }
+  /* --- table (shared shell) --- */
+  /* The shell lets header labels wrap (white-space: normal) because its
+     first consumer is a 12-column table where wrapping is what keeps the
+     columns narrow. This table has five columns inside an 880px page, so
+     there is room for every label on one line, and wrapping "EFA change"
+     across two lines only pushes the sort caret away from its label. */
+  table.data thead th { white-space: nowrap; }
+  /* Positioning context for the row tooltip. Deliberately a wrapper AROUND
+     .table-scroll, not .table-scroll itself: that box is overflow-x:auto,
+     so a tooltip positioned inside it would be clipped and would scroll
+     sideways with the table. */
+  .rank-table-wrap { position: relative; }
 
-  /* --- ranked list --- */
-  .rank-list-wrap { position: relative; }
-  ul.rank-list { list-style: none; margin: 0; padding: 0; }
-  .rank-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 6px;
-    border-bottom: 1px solid var(--gridline);
-    /* .rank-row is now an <a> (links to the drill-down page) instead of a
-       plain <li> -- these three undo the browser's default link styling
-       so it still reads as a row, not a blue underlined link. */
-    text-decoration: none;
-    color: inherit;
+  /* --- enrollment-specific cell internals (the same rules
+         school-districts.html carries for the identical cells; the mark
+         and sparkline builders are the shared shared.js ones, not
+         reimplementations) --- */
+  /* District cell: magnitude swatch + drill-down link on one line, with
+     District acting as the table's slack column.
+
+     width:100% + max-width:0 is the pair that does the second part.
+     max-width:0 releases the floor the shell's `white-space: nowrap` would
+     otherwise set at the longest district name (~248px -- more than a
+     320px viewport can spare once Rank and EFA change are paid for), and
+     width:100% then claims everything the other columns don't need.
+     Without the max-width the table overflows its own scroll box at 390px;
+     without the width the slack goes to Rank and EFA change instead and
+     District ends up narrower than it was as a list row.
+
+     The marks-and-link row is an inner flex box rather than the <td>
+     itself (see the Notes-cell comment below for what happens when a
+     middle cell stops being a table-cell), which also gives the link a
+     min-width:0 parent so it ellipsises instead of overflowing. */
+  td.col-name { width: 100%; max-width: 0; }
+  td.col-name .name-inner { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  td.col-name a { overflow: hidden; text-overflow: ellipsis; }
+  .row-swatch {
+    width: 10px; height: 10px;
+    border-radius: 3px;
+    flex: none;
   }
-  .rank-row:hover .row-name { text-decoration: underline; }
-  .rank-row:focus-visible { outline: 2px solid var(--link); outline-offset: -1px; }
+  /* The marks are centred by the shell's own ta-center rule, NOT by making
+     the <td> a flex container the way school-districts.html does it. That
+     page can get away with `td { display: flex }` because its Notes column
+     is last; here Notes sits third of five, and a display:flex cell in the
+     middle of a row stops being a table-cell -- Chrome wraps it in an
+     anonymous cell and the row grows from 39px to 56px (measured). Keeping
+     the <td> a real cell and centring the inline-flex marks inside it gives
+     the same visual at the sibling table's row height. */
+  .mark-hit { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; padding: 0 2px; }
+  .mark-icon { display: block; color: var(--text-primary); flex: none; }
+  .cell-typology-visual {
+    display: flex; align-items: center; justify-content: center;
+    padding-top: 3px; padding-bottom: 3px;
+  }
+  .spark-svg { display: block; overflow: visible; }
+  .spark-line { fill: none; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
+
   /* white-space: nowrap (this tooltip's original treatment, matching
      statewide.html's statewide-line tooltip) is only safe for BOUNDED
      content -- statewide.html's tooltip is a fixed year/value/era label that
@@ -222,74 +183,37 @@
     max-width: 320px;
     z-index: 5;
   }
-  .rank-num {
-    color: var(--text-muted);
-    font-size: 12px;
-    font-variant-numeric: tabular-nums;
-    width: 28px;
-    flex: none;
-    text-align: center;
-  }
-  .row-swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; }
-  .row-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  /* Notes icons -- the same three shared.js SVG mark icons (thin
-     baseline / boundary changed / reversal magnitude) the data table's
-     Notes column uses, not reimplemented (see shared.js for the design
-     writeup: distinct silhouettes, currentColor so they track
-     var(--text-primary) automatically in both themes). Full text for
-     each still lives in the row's aria-label AND now each mark's own
-     per-mark hover title (makeCaveatsMark(), shared.js) -- never in this
-     container itself. Fixed 54px width holds its place even when empty
-     (0 marks) so .row-trajectory/.row-pct don't shift between rows, same
-     reason the ring this replaces held its width at opacity:0. 54px =
-     3 marks x 18px (14px icon + .mark-hit's own 2px padding each side,
-     no separate flex gap needed -- the padding IS the inter-mark
-     spacing, same technique school-districts.html's .cell-caveats uses), the
-     data table's own real worst case (Hackett has all three). */
-  .row-notes {
-    width: 54px;
-    flex: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .row-notes .mark-hit {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 2px;
-  }
-  .row-notes .mark-icon {
-    display: block;
-    color: var(--text-primary);
-    flex: none;
-  }
-  /* Trajectory sparkline -- imported from shared.js (sparklineSvg()),
-     the exact same function/window/scaling/boundary-district handling as
-     the data table's Trajectory column, not a reimplementation. Purely
-     decorative (aria-hidden in district-rankings.js); the row's existing
-     tooltip/aria-label is the accessible channel, same division of labor
-     the data table's cell already uses. .spark-svg/.spark-line class
-     names come from the SVG shared.js's sparklineSvg() builds, not from
-     any style defined in this file -- matched here only for
-     display:block (the same reason .cell-typology-visual needs it in
-     school-districts.html: inline SVG has a small baseline-alignment gap by
-     default). */
-  .row-trajectory { width: 72px; flex: none; display: flex; align-items: center; }
-  .row-trajectory .spark-svg { display: block; overflow: visible; }
-  .row-trajectory .spark-line {
-    fill: none;
-    stroke-width: 1.3;
-    stroke-linejoin: round;
-    stroke-linecap: round;
-  }
-  .row-pct {
-    font-variant-numeric: tabular-nums;
-    font-weight: 600;
-    font-size: 13.5px;
-    width: 62px;
-    flex: none;
-    text-align: center;
+
+  .table-note { color: var(--text-muted); font-size: 12px; margin: 12px 0 0; max-width: 68ch; }
+
+  /* Trajectory AND Notes both hide below 560px -- the same "less
+     information, not broken layout" tradeoff the ranked list made at this
+     same breakpoint, kept when this view moved onto the table shell.
+     .table-scroll would otherwise "handle" the narrow width by scrolling
+     internally, which is the right answer on School Districts (a
+     12-column full-transparency table nobody expects to fit a phone) and
+     the wrong one here: the EFA change percentage is this page's headline
+     number, and at 390px it lands off the right edge of the scroll box, so
+     the default mobile view would show a ranked list with the value it
+     ranks by hidden. Both hidden indicators are decorative -- the District
+     link's aria-label carries the full detail (shape, CAGR, every active
+     caveat) regardless of whether either renders -- and the empirical
+     numbers behind this breakpoint (District column down to 60px at 375px,
+     4px at 320px with both visible) are unchanged from the ranked-list
+     measurement on 2026-07-13. */
+  @media (max-width: 560px) {
+    table.data th.col-caveats,  table.data td.col-caveats,
+    table.data th.col-typology, table.data td.col-typology {
+      display: none;
+    }
+    /* Every pixel the other two columns don't take is a pixel of district
+       name the reader gets, so at these widths the header labels go back
+       to wrapping (the shell's own default -- "EFA CHANGE" over two lines
+       costs a row of header height and buys ~50px of name) and the cell
+       padding drops from 11px to 6px a side. Measured at 390px: District
+       goes from 115px to 190px, enough for "LAFAYETTE COUNTY" whole. */
+    table.data thead th { white-space: normal; }
+    table.data th, table.data td, table.data button.th-sort { padding-left: 6px; padding-right: 6px; }
   }
 
   /* --- link out to the full data table (its own page, school-districts.html,
@@ -302,33 +226,6 @@
     color: var(--link);
     text-decoration: underline;
     text-underline-offset: 2px;
-  }
-
-  /* Trajectory AND Notes both hide below 560px, the same "less
-     information, not broken layout" tradeoff Baseline change/COVID shock
-     needed before removal (and school-districts.html's own Trajectory column
-     already makes at its own narrow-width point) -- checked empirically
-     (2026-07-13, iframe-based exact-width rendering, not assumed).
-     Trajectory alone needed this breakpoint (72px + gap claims much less
-     width than the two removed text columns did, so 560px was lower than
-     their own 640px). Notes was added to the SAME rule after replacing
-     the old 8px caveat ring with the data table's icon set (up to 54px
-     for a 3-flag row): re-measured with both indicators live and found
-     the row is genuinely cramped at 375px with Notes still visible below
-     560px (District down to 60px, and 4px -- unreadable, not just tight
-     -- at 320px), even though nothing technically overflows. Hiding both
-     together at the same breakpoint restores District to a comfortable
-     ~114px at 375px and a workable ~58px at 320px (matching the same
-     "tight but zero overflow" bar Trajectory's own narrow-width fallback
-     already accepted), with zero horizontal overflow confirmed at every
-     width down to 320px either way. Both indicators are decorative --
-     the row's aria-label carries the full detail (shape, CAGR, every
-     active caveat) regardless of whether either renders. */
-  @media (max-width: 560px) {
-    .header-trajectory, .row-trajectory,
-    .header-notes, .row-notes {
-      display: none;
-    }
   }
 </style>
 </head>
@@ -347,12 +244,12 @@
     <h1>District Rankings</h1>
     <p class="subtitle">
       All 235 current-boundary districts, ranked by EFA-era enrollment change. Sorted most-declining
-      first by default. Click the EFA change header to reverse it.
+      first by default; sortable by column except Trajectory (a visual, not a value to rank by).
     </p>
 
-    <div class="viz-root">
+    <div class="table-card">
       <!-- Wording of the CAGR sentence matches shared.js's GLOSSARY.cagr
-           (also applied as the header row's "EFA change" hover tooltip,
+           (also applied as the EFA change header's own hover tooltip,
            for the pct_change_efa_era field itself) -- keep in
            sync if either changes. COVID drop/COVID recovery are NOT
            defined here: neither field is shown anywhere on this page
@@ -372,6 +269,10 @@
         compounding, not the same as a simple total percentage change.
       </p>
 
+      <div class="downloads">
+        <button class="dl-btn" id="dl-csv" type="button"><span class="dl-ico" aria-hidden="true">↓</span> Download CSV</button>
+      </div>
+
       <div class="filters">
         <div class="search-row">
           <input type="text" class="search-input" id="search-input" placeholder="Search district name…" aria-label="Search district name">
@@ -385,34 +286,20 @@
 
       <p class="result-count" id="result-count"></p>
 
-      <div class="rank-list-header">
-        <span class="header-rank" aria-hidden="true">Rank</span>
-        <span class="header-swatch" aria-hidden="true"></span>
-        <span class="header-name" aria-hidden="true">District</span>
-        <span class="header-notes" aria-hidden="true"></span>
-        <span class="header-trajectory" aria-hidden="true"></span>
-        <button
-          type="button"
-          id="sort-direction-btn"
-          class="header-pct-btn"
-          aria-label="Sort by EFA change: steepest decline first"
-        >
-          <span aria-hidden="true">EFA change</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 5v14" />
-            <path d="M18 13l-6 6" />
-            <path d="M6 13l6 6" />
-          </svg>
-        </button>
-      </div>
-
-      <div class="rank-list-wrap" id="rank-list-wrap">
-        <ul class="rank-list" id="rank-list" role="list"></ul>
+      <div class="rank-table-wrap" id="rank-table-wrap">
+        <div class="table-scroll" tabindex="-1" role="region" aria-label="District rankings table, horizontally scrollable">
+          <table class="data" id="rank-table"></table>
+        </div>
         <div class="row-tooltip" id="row-tooltip" role="tooltip"></div>
       </div>
 
-      <a class="table-link" href="school-districts.html">View the full School Districts table</a>
+      <p class="table-note">
+        Rank is a district's position by EFA-era enrollment change among the districts currently
+        shown — steepest decline is 1 — and stays with its row when you sort by another column.
+      </p>
     </div>
+
+    <a class="table-link" href="school-districts.html">View the full School Districts table</a>
 
     <p class="meta-links">
       Data sources, era definitions, and known limitations: <a href="methodology.html">Methodology</a> · <a href="press-kit.html">Press Kit</a>.

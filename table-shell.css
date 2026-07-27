@@ -1,6 +1,11 @@
+/* table-shell v1.0 -- canonical copy: fiscal repo (NOT YET VENDORED THERE; the
+   fiscal tables still carry their own inline copy of this grammar, so today
+   this file lives only in the enrollment repo. Vendoring it is the outstanding
+   half of the extraction 0f4bdb6 started.) Bump this version in BOTH repos, in
+   the same commit, on any change once it is vendored -- the version line is the
+   drift alarm. */
 /* table-shell.css -- shared sortable data-table shell (the fiscal table grammar).
-   Vendored identically into the fiscal and enrollment repos; canonical copy in
-   the fiscal repo. Owns the generic table chrome only. Page-specific cell
+   Owns the generic table chrome only. Page-specific cell
    internals (sparklines, caveat marks, prelim pills, wealth notes, etc.) stay
    in each page's own stylesheet. Alignment is driven by the ta-* classes the
    renderer (table-shell.js) adds from each column's `align`. */
