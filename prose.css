@@ -1,0 +1,31 @@
+/* Arkansas K-12 Enrollment — long-form prose layer (Phase 0 extraction).
+
+   Loaded by the four prose-first pages only (index, methodology,
+   methodology-technical, press-kit), after app.css and before the page's own
+   <style> block. These are bare element selectors, so they deliberately do
+   NOT live in app.css: the data views render <p> inside table cells, legends
+   and caveat boxes that have never carried this margin/colour, and hoisting
+   them sitewide would restyle those. The fiscal sibling can keep the same
+   rules in its app.css because every one of its pages is prose-width.
+
+   Only rules that were byte-identical on all four pages are here. Three
+   near-misses stay inline on purpose, because normalizing them is a visible
+   change and therefore Phase 2's call, not this pass's:
+     - `strong` (--text-primary on the three methodology-family pages; index
+       has <strong> with no rule, so it inherits --text-secondary)
+     - `ul`     (same three pages; index's two lists run at browser default)
+     - `li`     (8px bottom margin, but 10px on methodology-technical) */
+
+p { margin: 0 0 16px; color: var(--text-secondary); }
+p a, li a { color: var(--link); }
+
+h2 {
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  margin: 36px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--gridline);
+}

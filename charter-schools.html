@@ -23,18 +23,6 @@
 <link rel="stylesheet" href="app.css">
 <link rel="stylesheet" href="table-shell.css">
 <style>
-  :root {
-    --link:           #2a78d6;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --link:           #3987e5;
-    }
-  }
-
-  html, body {
-    font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
-  }
   /* Same override school-districts.html uses and for the same reason -- a
      multi-column table reads better without the ~880px prose-width
      constraint every other (non-table) view uses. Widened from an
@@ -55,12 +43,7 @@
      same page). Below the width this needs, the same overflow-x:auto on
      .viz-root below contains the scroll, same as every other table view
      in this project. */
-  .page { max-width: 1400px; margin: 0 auto; padding: 40px 24px 80px; }
-
-  h1 { font-size: 26px; font-weight: 700; margin: 0 0 14px; line-height: 1.25; }
-  .subtitle { color: var(--text-secondary); margin: 0 0 28px; max-width: 60ch; }
-
-  .view-nav .current { color: var(--text-primary); font-weight: 600; }
+  .page { max-width: 1400px; }
 
   /* Same convention as every other view's persistent note -- explains
      the Trajectory sparkline and, per shared.js's GLOSSARY comment, the
@@ -125,19 +108,6 @@
     color: var(--text-primary);
     flex: none;
   }
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-
-  .meta-links a { color: var(--text-secondary); }
 </style>
 </head>
 <body>

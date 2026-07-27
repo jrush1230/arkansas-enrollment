@@ -22,29 +22,15 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="app.css">
 <style>
-  :root {
-    --link:           #2a78d6;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --link:           #3987e5;
-    }
-  }
-
-  html, body {
-    font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
-  }
   /* Same narrow 720px width index.html uses (not the 880px most other
      views use) -- this page's whole purpose is one centered action, and
      the same "focused hero, not a wide multi-column layout" reasoning
      that picked 720px for the landing page's own hero applies here even
      more directly. */
-  .page { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+  .page { max-width: 720px; }
 
-  .view-nav .current { color: var(--text-primary); font-weight: 600; }
-
-  h1 { font-size: 26px; font-weight: 700; margin: 0 0 14px; line-height: 1.25; }
-  .subtitle { font-size: 16px; color: var(--text-secondary); margin: 0 0 28px; max-width: 60ch; }
+  /* one step up from the shared .subtitle -- this page is a single search box */
+  .subtitle { font-size: 16px; }
 
   /* Real prominence, not the landing page's old small embedded form --
      this page exists for exactly one action, so the search box gets the
@@ -116,8 +102,6 @@
   .find-search-result .result-multi-label { color: var(--text-secondary); margin-bottom: 6px; }
   .find-search-result ul { list-style: none; margin: 0; padding: 0; }
   .find-search-result li { margin: 4px 0; }
-
-  .meta-links a { color: var(--text-secondary); }
 </style>
 </head>
 <body>

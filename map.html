@@ -23,32 +23,15 @@
 <link rel="stylesheet" href="app.css">
 <style>
   :root {
-    --link:           #2a78d6;
     --series-charter: var(--cat-2);
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --link:           #3987e5;
       --series-charter: var(--cat-2);
     }
   }
 
-  html, body {
-    font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
-  }
-  .page { max-width: 880px; margin: 0 auto; padding: 40px 24px 80px; }
-
-  h1 { font-size: 26px; font-weight: 700; margin: 0 0 14px; line-height: 1.25; }
-  .subtitle { color: var(--text-secondary); margin: 0 0 28px; max-width: 60ch; }
-
-  .view-nav .current { color: var(--text-primary); font-weight: 600; }
-
-  .viz-root {
-    background: var(--surface-1);
-    border: 1px solid var(--gridline);
-    border-radius: 12px;
-    padding: 24px 24px 16px;
-  }
+  .page { max-width: 880px; }
 
   /* --- continuous gradient legend: fill is now pct_change_efa_era, not
      typology, so the legend is a color bar + tick labels rather than
@@ -158,8 +141,6 @@
     margin: 14px 0 0;
     max-width: 68ch;
   }
-
-  .meta-links a { color: var(--text-secondary); }
 </style>
 </head>
 <body>

@@ -24,8 +24,6 @@
 <link rel="stylesheet" href="charts.css">
 <style>
   :root {
-    --baseline-axis:  #c3c2b7;
-    --link:            #2a78d6;   /* chrome, not a data series */
     --series-all: var(--cat-1);   /* categorical slot 1 (blue) */
     --series-district: var(--cat-3);   /* categorical slot 2 (aqua) */
     --series-charter: var(--cat-2);   /* categorical slot 8 (orange) */
@@ -34,8 +32,6 @@
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --baseline-axis:  #383835;
-      --link:            #3987e5;
       --series-all: var(--cat-1);
       --series-district: var(--cat-3);
       --series-charter: var(--cat-2);
@@ -44,16 +40,10 @@
     }
   }
 
-  html, body {
-    font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
-  }
   /* Data pages keep the 880px narrow tier intentionally: the charts want the
      extra width. This diverges from the fiscal base's 720px prose width by
      design and is not to be normalized to 720. */
-  .page { max-width: 880px; margin: 0 auto; padding: 40px 24px 80px; }
-
-  h1 { font-size: 26px; font-weight: 700; margin: 0 0 14px; line-height: 1.25; }
-  .subtitle { color: var(--text-secondary); margin: 0 0 28px; max-width: 60ch; }
+  .page { max-width: 880px; }
 
   .viz-root {
     background: var(--surface-1);
@@ -156,10 +146,6 @@
     letter-spacing: 0.02em;
   }
 
-  .meta-links a { color: var(--text-secondary); }
-
-  .view-nav .current { color: var(--text-primary); font-weight: 600; }
-
   .table-note {
     color: var(--text-muted);
     font-size: 12px;
@@ -167,22 +153,10 @@
     max-width: 68ch;
   }
 
-  /* Same convention as school-districts.html's own .visually-hidden -- carries
-     glossary definition text (attachGlossaryNote(), shared.js) for
-     keyboard/screen-reader users on the Other/Predecessor headers below,
-     invisible but present for assistive tech, not display:none (which
-     would remove it from the accessible tree entirely). */
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
+  /* The Other/Predecessor table headers below carry glossary definition text
+     (attachGlossaryNote(), shared.js) for keyboard/screen-reader users. It is
+     hidden with the shared .visually-hidden in app.css -- deliberately not
+     display:none, which would remove it from the accessible tree entirely. */
 </style>
 </head>
 <body>

@@ -104,9 +104,9 @@
 </script>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="prose.css">
 <style>
   :root {
-    --link:           #2a78d6;
     /* CANDIDATE (Part B, era-shading on the Statewide Trend preview) --
        same values as statewide.html's/drill-down.html's own tokens, not
        reinvented. */
@@ -117,32 +117,10 @@
     :root {
       --band-covid:     rgba(230, 103, 103, 0.10);
       --band-efa:       rgba(25, 158, 112, 0.12);
-      --link:           #3987e5;
     }
   }
 
-  html, body {
-    font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
-  }
-  .page { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
-
-  .view-nav .current { color: var(--text-primary); font-weight: 600; }
-
-  h1 { font-size: 26px; font-weight: 700; margin: 0 0 14px; line-height: 1.25; }
-  .lede { font-size: 17px; font-weight: 600; color: var(--text-primary); margin: 0 0 16px; }
-  p { margin: 0 0 16px; color: var(--text-secondary); }
-  p a, li a { color: var(--link); }
-
-  h2 {
-    font-size: 15px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    color: var(--text-muted);
-    margin: 36px 0 14px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--gridline);
-  }
+  .page { max-width: 720px; }
 
   /* Third structural round for this list. Round 1: a 2-column grid of
      200x110 stacked (preview-on-top) cards. Round 2: a 2-column grid of
@@ -463,8 +441,6 @@
     padding: 16px 18px;
   }
   .cant-tell p { margin: 0; color: var(--text-secondary); }
-
-  .meta-links a { color: var(--text-secondary); }
 
   /* Hero stats -- the page's actual focal point on load, ahead of the
      prose below it. Large tabular-nums figures, no red/green coloring
